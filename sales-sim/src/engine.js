@@ -954,7 +954,7 @@
       const motF = Math.exp(-3 * (p.mot - 0.55));
       const keep = Math.max(q.keep, C.KEEP_FLOOR);
       const early = p.tenure < 4 ? p.newChurn : 1;
-      const tenF = p.tenure < 6 ? 1.45 : p.tenure < 12 ? 0.4 : 0.15;
+      const tenF = p.tenure < 6 ? 2.0 : p.tenure < 12 ? 0.4 : 0.15;
       if (p.role === 'sdr') prob = C.SDR_CHURN * motF * tenF * (1.4 - 0.9 * Math.min(1, p.pct)) * q.churn * keep * early * sdrMod * (1 + 2.5 * p.burnout * p.burnout);
       else prob = C.REP_CHURN * motF * (p.pct < 0.4 ? 1.5 : 1) * q.churn * keep * early * repMod * (1 + 3 * p.burnout * p.burnout);
       prob *= pModProd(p, 'churn', m);

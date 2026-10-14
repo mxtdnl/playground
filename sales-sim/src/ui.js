@@ -150,7 +150,7 @@
     for (const t of ticks) s += '<line class="grid" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y(t) + '" y2="' + y(t) + '"/><text x="' + (padL - 6) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + esc(fmt(t)) + '</text>';
     const every = n > 14 ? 2 : 1;
     const every2 = opts.mini || W < 520 ? Math.ceil(n / (opts.mini ? 2 : 5)) : every;
-    opts.labels.forEach((l, i) => { if (i % every2 === 0 || i === n - 1) s += '<text x="' + x(i) + '" y="' + (H - 6) + '" text-anchor="middle">' + esc(l) + '</text>'; });
+    opts.labels.forEach((l, i) => { if (i % every2 === 0 || (i === n - 1 && (n - 1) % every2 >= every2 / 2)) s += '<text x="' + x(i) + '" y="' + (H - 6) + '" text-anchor="middle">' + esc(l) + '</text>'; });
     if (opts.divider != null) s += '<line class="divider" x1="' + x(opts.divider) + '" x2="' + x(opts.divider) + '" y1="' + padT + '" y2="' + (H - padB) + '"/><text x="' + (x(opts.divider) + 4) + '" y="' + (padT + 10) + '" class="lbl-ink">You start</text>';
     if (opts.base != null) s += '<line class="base" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y(opts.base) + '" y2="' + y(opts.base) + '"/>';
     const endLabels = [];
@@ -434,10 +434,10 @@
       + '<div class="legend"><span><i style="background:var(--series)"></i>Your office</span><span><i style="background:var(--series-2)"></i>If you had done nothing</span><span><i style="background:var(--series-3)"></i>A sequenced plan (benchmark)</span><span><i style="background:var(--muted)"></i>£200k average</span></div>'
       + '<p class="hint" style="margin-top:8px">The benchmark plan starts with call reviews, buddying, 1:1s, re-seating and protected calling hours, then adds hiring, onboarding and career-path changes over the next three months. It is one reasonable plan, not the answer.</p></section>';
     h += '<section class="panel"><div class="panel-head"><h2>What was happening underneath</h2><span class="label">Hidden during play</span></div><p class="hint" style="margin-bottom:10px">These are the numbers the model tracked but you never saw directly. Dashed lines show where each one started.</p><div class="multiples" id="minis"></div></section>';
-    h += '<section class="panel"><div class="panel-head"><h2>What your actions did</h2><span class="label">Estimated by re-running the year without each one</span></div>';
+    h += '<section class="panel"><div class="panel-head"><h2>What your actions did</h2><span class="label">Estimated by re-running the year without each one, six times</span></div>';
     if (!d.contributions.length) h += '<p class="muted">You did not start anything.</p>';
     else h += '<div class="table-wrap"><table class="contrib"><thead><tr><th>Action</th><th style="text-align:right">Revenue over the year</th><th style="text-align:right">Leavers</th></tr></thead><tbody>'
-      + d.contributions.map((c) => '<tr><td>' + esc(c.name) + (c.trap ? ' <span class="flag">Quick boost, slow harm</span>' : '') + '</td><td class="n">' + signedK(c.revenue) + '</td><td class="n">' + (c.leavers > 0 ? '+' : '') + c.leavers + '</td></tr>').join('')
+      + d.contributions.map((c) => '<tr><td>' + esc(c.name) + (c.trap ? ' <span class="flag">Quick boost, slow harm</span>' : '') + '</td><td class="n">' + signedK(c.revenue) + '</td><td class="n">' + (c.leavers > 0 ? '+' : c.leavers < 0 ? '\u2212' : '') + Math.abs(c.leavers) + '</td></tr>').join('')
       + '</tbody></table></div><p class="hint" style="margin-top:8px">Effects interact, so these do not add up to the total. Small numbers are mostly noise.</p>';
     h += '</section>';
     const abandoned = g.done.filter((x) => x.abandoned).map((x) => S.ARCH_BY_ID[x.id].name);

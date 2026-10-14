@@ -216,7 +216,7 @@ details.past summary { cursor: pointer; font-weight: 500; }
 .mini h3 { font-size: 0.95rem; margin-bottom: 2px; }
 .mini .chart text { font-size: 10px; }
 .table-wrap { overflow-x: auto; }
-table.contrib { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 480px; }
+table.contrib { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 table.contrib th { text-align: left; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8rem; color: var(--muted); border-bottom: 2px solid var(--ink); padding: 6px; }
 table.contrib td { padding: 6px; border-bottom: 1px solid var(--line); }
 table.contrib td.n { font-family: var(--font-data); text-align: right; white-space: nowrap; }
