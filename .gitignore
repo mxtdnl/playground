@@ -1,2 +1,10 @@
-sales-sim/tests/screenshots/
+# Universal ignores only. Project-specific rules belong in <project>/.gitignore.
 node_modules/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
