@@ -1,0 +1,128 @@
+<title>Bournemouth Floor Turnaround</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A classroom simulation: act as a consultant to a struggling 21-person sales office and try to improve its performance through people, culture and management alone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/*CSS*/
+</style>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 34 34" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="6" fill="var(--ink)"/><path d="M17 8c-4.4 0-7 3.3-7 7.6v4.2L8 23h18l-2-3.2v-4.2C24 11.3 21.4 8 17 8z" fill="var(--brass)"/><circle cx="17" cy="25.5" r="2" fill="var(--brass)"/></svg>
+      <div>
+        <div class="brand-name">Floor Turnaround</div>
+        <div class="brand-sub">Bournemouth sales office &middot; consultant simulation</div>
+      </div>
+    </div>
+    <div class="top-right">
+      <span class="pill" id="mode-pill"><span class="dot"></span><span id="mode-text">Checking for Claude&hellip;</span></span>
+      <span class="pill" id="month-pill" hidden></span>
+    </div>
+  </header>
+
+  <main id="screen-brief">
+    <div class="brief">
+      <div class="brief-copy">
+        <span class="label">Your brief</span>
+        <h1>Fix the floor without touching the price list</h1>
+        <p class="lede">You are a consultant brought in to a 21-person satellite sales office. Revenue has averaged &pound;200k a month for six months. SDRs leave at two or three a month, a few stars carry everyone else, and the four teams barely talk to each other. You have twelve months.</p>
+        <div class="rules">
+          <div class="rule">
+            <h3>You can change</h3>
+            <ul>
+              <li>How people share knowledge and learn</li>
+              <li>How managers manage, coach and communicate</li>
+              <li>Culture, mood, recognition and the office itself</li>
+              <li>Hours, wellbeing and workload</li>
+              <li>How you recruit, onboard and replace leavers</li>
+            </ul>
+          </div>
+          <div class="rule no">
+            <h3>You cannot change</h3>
+            <ul>
+              <li>Pricing, discounts or the product</li>
+              <li>Pay, commission or bonuses</li>
+              <li>Targets, strategy or marketing</li>
+              <li>Headcount: you can only replace leavers</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:8px">How a month works</h3>
+          <ol class="howto">
+            <li><span>If something happens on the floor, decide how to respond.</span></li>
+            <li><span>Write your plan in plain English. There is no menu of options: you have to come up with the ideas.</span></li>
+            <li><span>Check how your plan was understood, then run the month and read what happened.</span></li>
+          </ol>
+        </div>
+        <table class="facts">
+          <tr><td>Structure</td><td>Overall manager (Mark, in a separate office). SDR team of 7 run by Kate. Three mixed teams run by Steve, Laura and Rob, each with a closer, an own-business rep and an inbound rep.</td></tr>
+          <tr><td>Last six months</td><td class="num">Apr 185k &middot; May 210k &middot; Jun 195k &middot; Jul 205k &middot; Aug 220k &middot; Sep 185k</td></tr>
+          <tr><td>Expectations</td><td>SDRs: about 12 meetings a month each. Closers: about 4 deals a month. Own-business reps: about 4 new deals a month. Inbound: 30&ndash;40% conversion.</td></tr>
+          <tr><td>Culture review</td><td class="num">Clarity 7.3 &middot; Consistency 6.2 &middot; Care 6.3 &middot; Cohesion 5.7</td></tr>
+          <tr><td>Each month you have</td><td>About 60 hours of spare management time and &pound;8,000 of discretionary budget.</td></tr>
+        </table>
+      </div>
+      <aside class="start-card" aria-label="Start the simulation">
+        <h2>Start</h2>
+        <div class="field"><label class="label" for="team-name">Team or group name</label><input type="text" id="team-name" maxlength="40" placeholder="e.g. Group 3"></div>
+        <div class="field"><label class="label" for="seed">Scenario number</label><input type="text" id="seed" maxlength="12" inputmode="numeric"><span class="hint">Give every group the same number so they face the same luck.</span></div>
+        <label class="check"><input type="checkbox" id="facilitator"> <span>Facilitator view: show the hidden culture numbers during play</span></label>
+        <button class="btn primary big" id="start-btn">Start month one</button>
+        <div id="resume-box" hidden class="stack">
+          <p class="hint" id="resume-text"></p>
+          <div class="row"><button class="btn" id="resume-btn">Resume saved game</button><button class="btn ghost" id="discard-btn">Discard it</button></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <main id="screen-game" hidden>
+    <div class="kpis" id="kpis"></div>
+    <div class="board">
+      <div class="floor-col">
+        <section class="panel">
+          <div class="panel-head"><h2>Monthly revenue</h2><span class="label">Dashed line: &pound;200k average</span></div>
+          <div class="chart-wrap" id="rev-chart"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h2>The floor</h2><span class="label" id="floor-sub">Last month vs target</span></div>
+          <div id="floor"></div>
+        </section>
+        <section class="panel report" id="report"></section>
+        <section class="panel" id="hidden-panel" hidden></section>
+      </div>
+      <div class="plan-col">
+        <div id="event"></div>
+        <section class="panel">
+          <div class="panel-head"><h2 id="plan-title">Your plan</h2><span class="label" id="plan-month"></span></div>
+          <div class="stack">
+            <label for="plan-text" class="hint">Write what you will change, in your own words. Say who will do it, how often, and how you will know it is working. You can read several plans before running the month.</label>
+            <textarea id="plan-text" placeholder="e.g. From Monday, each new SDR shadows Priya for two hours a week, and Kate checks meetings booked per SDR every Friday."></textarea>
+            <div class="row between"><button class="btn primary" id="read-btn">Read my plan</button><span class="hint">Ctrl + Enter also works</span></div>
+            <div id="interp"></div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h2>This month</h2></div>
+          <div class="stack" id="running"></div>
+          <div class="run">
+            <label class="check"><input type="checkbox" id="survey"> <span>Run a pulse survey this month (about 6 hours of management time)</span></label>
+            <button class="btn primary big" id="run-btn">Run month</button>
+            <span class="hint" id="run-hint"></span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <main id="screen-debrief" hidden></main>
+</div>
+<script id="engine">
+//ENGINE
+</script>
+<script id="ui">
+//UI
+</script>
