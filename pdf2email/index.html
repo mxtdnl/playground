@@ -1,0 +1,183 @@
+<title>pdf2email</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Layout: single narrow column — drop zone, results table, export bar */
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --fg: #1b1f27; --muted: #5d6675;
+    --line: #d9dee6; --accent: #2f5bd3; --accent-fg: #ffffff; --tag: #eef2fb;
+    --font-body: system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #12151b; --surface: #1a1e26; --fg: #e6e9ef; --muted: #98a1b0;
+    --line: #2c323d; --accent: #7d9cf0; --accent-fg: #0f1320; --tag: #222a3a; color-scheme: dark } }
+  :root[data-theme="dark"] {
+    --bg: #12151b; --surface: #1a1e26; --fg: #e6e9ef; --muted: #98a1b0;
+    --line: #2c323d; --accent: #7d9cf0; --accent-fg: #0f1320; --tag: #222a3a; color-scheme: dark }
+  body { background: var(--bg); color: var(--fg); font-family: var(--font-body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px; }
+  main { max-width: 980px; margin: 0 auto; display: grid; gap: 16px; }
+  h1 { font-size: 1.4rem; margin: 0; text-wrap: balance; }
+  p { margin: 0; color: var(--muted); line-height: 1.5; }
+  #drop { border: 2px dashed var(--line); border-radius: 8px; background: var(--surface);
+    padding: 28px 16px; text-align: center; cursor: pointer; }
+  #drop.over { border-color: var(--accent); }
+  #drop:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  button { font: inherit; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--fg); cursor: pointer; }
+  button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  button:disabled { opacity: .5; cursor: default; }
+  #status { color: var(--muted); font-size: .9rem; }
+  .wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  td.mono { font-family: var(--font-mono); font-size: .82rem; word-break: break-all; }
+  .tag { display: inline-block; background: var(--tag); border-radius: 4px; padding: 1px 6px; margin: 1px 2px 1px 0; }
+  .example { font-size: .75rem; color: var(--muted); }
+</style>
+
+<main>
+  <h1>pdf2email</h1>
+  <p>Drop PDFs below. Names and email addresses are pulled from each file's text layer (scanned image-only PDFs yield nothing). Names are heuristic: "Name:" labels, words next to an email, or the email's local part. Everything runs in your browser.</p>
+
+  <div id="drop" tabindex="0" role="button" aria-label="Choose PDF files">
+    <strong>Drop PDFs here</strong> or click to choose
+    <input id="file" type="file" accept="application/pdf,.pdf" multiple hidden>
+  </div>
+
+  <div class="bar">
+    <button id="export" class="primary" disabled>Download .xlsx</button>
+    <button id="clear" disabled>Clear</button>
+    <span id="status"></span>
+  </div>
+
+  <div class="wrap">
+    <table>
+      <thead><tr><th>File</th><th>Names</th><th>Emails</th></tr></thead>
+      <tbody id="rows">
+        <tr><td>example-invoice.pdf <span class="example">(example)</span></td>
+          <td><span class="tag">Jane Doe</span></td><td class="mono">jane.doe@example.com</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+// pdf.worker is loaded as a plain script above, so pdf.js runs it on the main thread (no cross-origin Worker needed).
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const results = [];
+const $ = id => document.getElementById(id);
+const EMAIL_RE = /[A-Za-z0-9._%+'-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
+const NAME_WORD = "[A-Z][a-zA-Z'\\-]+";
+const LABEL_RE = new RegExp("\\b(?:Name|Full Name|Contact|Attn|Attention|From|To|Prepared by|Signed)\\s*[:\\-]\\s*((?:" + NAME_WORD + "\\s+){0,2}" + NAME_WORD + ")", "g");
+const BEFORE_RE = new RegExp("((?:" + NAME_WORD + "\\s+){1,2}" + NAME_WORD + ")\\s*[<(\\[,:\\-–]?\\s*$");
+const STOP = new Set(["Email","E-mail","Mail","Phone","Tel","Contact","Name","Address","Dear","From","To","The","And","Page","Date","Invoice","Mobile","Fax","Website","Company","Ltd","Inc"]);
+
+function cleanName(n) {
+  const words = n.trim().split(/\s+/).filter(w => !STOP.has(w));
+  return words.length >= 2 ? words.join(" ") : null;
+}
+function nameFromEmail(e) {
+  const local = e.split("@")[0];
+  const parts = local.split(/[._-]+/).filter(p => /^[a-z]{2,}$/i.test(p));
+  if (parts.length < 2 || /^(info|admin|support|sales|hello|contact|noreply|no|office|accounts|enquiries)$/i.test(parts[0])) return null;
+  return parts.slice(0, 3).map(p => p[0].toUpperCase() + p.slice(1).toLowerCase()).join(" ");
+}
+
+async function pdfLines(buf) {
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  const lines = [];
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const tc = await (await pdf.getPage(i)).getTextContent();
+    let line = "";
+    for (const it of tc.items) { line += it.str + (it.hasEOL ? "\n" : " "); }
+    lines.push(...line.split("\n"));
+  }
+  return { lines, pages: pdf.numPages };
+}
+
+function extract(lines) {
+  const emails = new Set(), names = new Set();
+  for (const raw of lines) {
+    const line = raw.replace(/\s+/g, " ");
+    for (const m of line.matchAll(LABEL_RE)) { const n = cleanName(m[1]); if (n) names.add(n); }
+    for (const m of line.matchAll(EMAIL_RE)) {
+      const e = m[0].replace(/^mailto:/i, "").replace(/\.$/, "").toLowerCase();
+      emails.add(e);
+      const b = line.slice(0, m.index).match(BEFORE_RE);
+      const n = (b && cleanName(b[1])) || nameFromEmail(e);
+      if (n) names.add(n);
+    }
+  }
+  return { emails: [...emails], names: [...names] };
+}
+
+function render() {
+  const tb = $("rows");
+  tb.replaceChildren();
+  for (const r of results) {
+    const tr = document.createElement("tr");
+    const f = document.createElement("td"); f.textContent = r.file + (r.error ? " — " + r.error : "");
+    const n = document.createElement("td");
+    for (const x of r.names) { const s = document.createElement("span"); s.className = "tag"; s.textContent = x; n.append(s); }
+    const e = document.createElement("td"); e.className = "mono"; e.textContent = r.emails.join("; ");
+    tr.append(f, n, e); tb.append(tr);
+  }
+  $("export").disabled = $("clear").disabled = !results.length;
+}
+
+async function handle(files) {
+  const pdfs = [...files].filter(f => /\.pdf$/i.test(f.name) || f.type === "application/pdf");
+  let done = 0;
+  for (const f of pdfs) {
+    $("status").textContent = `Reading ${++done} of ${pdfs.length}: ${f.name}`;
+    try {
+      const { lines, pages } = await pdfLines(await f.arrayBuffer());
+      results.push({ file: f.name, pages, ...extract(lines) });
+    } catch (err) {
+      results.push({ file: f.name, pages: "", names: [], emails: [], error: "could not read (" + (err.message || err) + ")" });
+    }
+    render();
+  }
+  $("status").textContent = `${results.length} file(s) processed.`;
+}
+
+async function exportXlsx() {
+  const maxE = Math.max(1, ...results.map(r => r.emails.length));
+  const rows = results.map(r => {
+    const row = { File: r.file, Pages: r.pages, Names: r.names.join("; "), Emails: r.emails.join("; ") };
+    for (let i = 0; i < maxE; i++) row["Email " + (i + 1)] = r.emails[i] || "";
+    if (r.error) row.Error = r.error;
+    return row;
+  });
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws["!cols"] = [{ wch: 32 }, { wch: 6 }, { wch: 40 }, { wch: 50 }];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Contacts");
+  const filename = "pdf2email.xlsx";
+  const downloads = window.claude ? await window.claude.use("downloads") : null;
+  if (downloads) {
+    const data = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    try { await downloads.save({ filename, data }); $("status").textContent = "Saved " + filename; }
+    catch (e) { $("status").textContent = e.code === "declined" ? "Download cancelled." : "Download unavailable here (" + (e.code || e) + ")."; }
+  } else {
+    XLSX.writeFile(wb, filename);
+  }
+}
+
+const drop = $("drop"), input = $("file");
+drop.onclick = () => input.click();
+drop.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); } };
+input.onchange = () => { handle(input.files); input.value = ""; };
+drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
+drop.ondragleave = () => drop.classList.remove("over");
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); handle(e.dataTransfer.files); };
+$("export").onclick = exportXlsx;
+$("clear").onclick = () => { results.length = 0; render(); $("status").textContent = ""; };
+</script>
