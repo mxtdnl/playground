@@ -1,4 +1,4 @@
-<title>PDF Contact Extractor</title>
+<title>pdf2email</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
   /* Layout: single narrow column — drop zone, results table, export bar */
@@ -39,7 +39,7 @@
 </style>
 
 <main>
-  <h1>PDF Contact Extractor</h1>
+  <h1>pdf2email</h1>
   <p>Drop PDFs below. Names and email addresses are pulled from each file's text layer (scanned image-only PDFs yield nothing). Names are heuristic: "Name:" labels, words next to an email, or the email's local part. Everything runs in your browser.</p>
 
   <div id="drop" tabindex="0" role="button" aria-label="Choose PDF files">
@@ -160,7 +160,7 @@ async function exportXlsx() {
   ws["!cols"] = [{ wch: 32 }, { wch: 6 }, { wch: 40 }, { wch: 50 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Contacts");
-  const filename = "pdf-contacts.xlsx";
+  const filename = "pdf2email.xlsx";
   const downloads = window.claude ? await window.claude.use("downloads") : null;
   if (downloads) {
     const data = XLSX.write(wb, { bookType: "xlsx", type: "array" });
