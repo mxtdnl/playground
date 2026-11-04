@@ -1,6 +1,6 @@
-# Four Levers — specification
+# Turn the Page — specification
 
-Working title. An interactive, illustrated, choose-your-own-adventure coaching simulation for high school guidance, career and university counsellors who are being introduced to a developmental coaching approach.
+*Turn the Page* is an interactive, illustrated, choose-your-own-adventure coaching simulation for high school guidance, career and university counsellors who are being introduced to a developmental coaching approach.
 
 Version 1 covers one student (Maya, 16) across two sessions: Round 1 and a follow-up, Round 2. The engine reads all student and case data from content files, so new profiles and cases (including university students) are data, not code.
 
@@ -339,7 +339,7 @@ Layout: desktop puts the scene on the left and the story and choices on the righ
 ## 14. Technical architecture
 
 ```
-coaching-sim/
+turn-the-page/
   CLAUDE.md               Folder rules for Claude Code sessions (created in session 1)
   docs/SPEC.md            This file
   docs/BUILD-PLAN.md      Sessions and prompts
@@ -350,7 +350,7 @@ coaching-sim/
   src/art.js              SVG scene and figure generators
   src/content/maya.js     Profile plus Round 1 and Round 2 nodes (data only)
   src/ui.js               Screens, input, persistence
-  build.mjs               Inlines everything into coaching-sim/index.html (mirrors sales-sim)
+  build.mjs               Inlines everything into turn-the-page/index.html (mirrors sales-sim)
   index.html              Generated single file (committed, served by GitHub Pages)
   tests/engine.test.mjs   node:test unit tests
   tests/calibrate.mjs     Path enumeration and calibration report (section 7.8)
@@ -420,12 +420,12 @@ const CASE = {
 ### 14.4 State and persistence
 
 - State: `{ caseId, round, nodeId, meters, history: [{ nodeId, optionId, lever, quality, deltas, guess }], ending, seed }`.
-- Autosave to `localStorage` under `coaching-sim:maya:v1`, wrapped in `try/catch`. If storage is unavailable the simulation still runs, with a notice that progress will not be saved.
+- Autosave to `localStorage` under `turn-the-page:maya:v1`, wrapped in `try/catch`. If storage is unavailable the simulation still runs, with a notice that progress will not be saved.
 - No names or free text are stored. Nothing is sent anywhere.
 
 ### 14.5 Hosting
 
-GitHub Pages serving `coaching-sim/index.html` from the repository's Pages branch (expected URL `https://mxtdnl.github.io/playground/coaching-sim/`, assuming Pages is enabled for this repository; not yet verified).
+GitHub Pages serving `turn-the-page/index.html` from the repository's Pages branch (expected URL `https://mxtdnl.github.io/playground/turn-the-page/`, assuming Pages is enabled for this repository; not yet verified).
 
 ## 15. Accessibility
 
@@ -444,5 +444,5 @@ Additional profiles and a profile picker; university-student cases; a facilitato
 
 1. SME validation of the trait multipliers (section 7.5) and the endings thresholds (section 7.7).
 2. SME review of the full script (`docs/CONTENT-REVIEW.md`, produced in session 2).
-3. Final title.
+3. Title confirmed: Turn the Page (subtitle optional, e.g. "a coaching adventure").
 4. Whether GitHub Pages is enabled for this repository, and from which branch.
