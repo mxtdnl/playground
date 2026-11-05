@@ -174,10 +174,10 @@ The calibrator covers every path through each round (Round 1 has 12 options per 
 - Every ending is reachable in both rounds, from every Round 2 starting state.
 - Breakthrough is reachable by at least three paths whose first three levers differ.
 - No single-lever strategy reaches Breakthrough (for example, all Support, or all skilful Question).
-- Uniformly random play reaches Breakthrough on 5–20% of paths, and Early exit on 5–25%.
+- Uniformly random play reaches Breakthrough on 5–20% of paths (2–20% in Round 1 since session 6; see the Calibration log), and Early exit on 5–25%.
 - Early exit within three decisions requires at least two Challenges or clumsy wordings (a plausible wording does not count as risky).
 - Round 1: no strategy of only plausible wordings reaches Breakthrough (any levers, plausible at every decision). Added in session 6: plausible counselling may earn agreement, not ownership.
-- Round 1: wording quality matters on average. Random play restricted to one quality (random lever, then always skilful, always plausible or always clumsy) reaches Breakthrough at a strictly falling rate from skilful to plausible to clumsy, and Early exit at a strictly rising rate. Added in session 6.
+- Round 1: wording quality matters on average. Random play restricted to one quality (random lever, then always skilful, always plausible or always clumsy) reaches Breakthrough or Partial at a strictly falling rate from skilful to plausible to clumsy, and Early exit at a strictly rising rate. Added in session 6. (The approved draft said Breakthrough alone; that cannot hold together with the plausible-only criterion above, which makes plausible and clumsy both 0%.)
 
 **Method (session 6).** Seven decisions at 12 options are 12⁷, about 36 million paths, too many to walk one by one. The calibrator memoises instead. What happens after a decision depends only on the *future key*: the node, the three meters, and the last lever with the length of its run capped at `RULES.repetition.streakLength − 1` (the only part of history the formula reads; traits are fixed within a round). The engine exports this key (`futureKey(state)`) beside `computeDeltas`, so a rule that starts reading more of the history must extend it. For each key the calibrator stores, once: the probability of each ending under uniform random play, the number of paths to each ending, whether each ending is reachable, and the set of distinct final states (for the Round 2 carry-overs).
 
@@ -264,7 +264,7 @@ The point is that a counsellor cannot sort the three wordings without thinking a
 
 1. **Ending card:** the ending's name and one line of what happened.
 2. **Meter traces:** three small line charts across the decisions, with markers in each choice's lever colour.
-3. **Your levers:** count of each lever used, split into skilful / plausible / clumsy wording (`2 skilful · 1 plausible · 0 clumsy`), and a total line (`Wording: 3 skilful, 2 plausible, 2 clumsy of 7`). The count blocks use three styles with an ink edge: filled (skilful), lower half filled (plausible), hollow (clumsy); a key under the counts shows the three styles with their names, so quality never relies on colour or fill alone.
+3. **Your levers:** count of each lever used, split into skilful / plausible / clumsy wording (`2 skilful · 1 plausible · 0 clumsy`), and a total line (`Wording over 7 decisions: 3 skilful, 2 plausible, 2 clumsy`). The count blocks use three styles with an ink edge: filled (skilful), lower half filled (plausible), hollow (clumsy); a key under the counts shows the three styles with their names, so quality never relies on colour or fill alone.
 4. **Path replay:** each decision with the chosen line, its wording quality as a text tag ("Skilful wording", "Plausible wording", "Clumsy wording"), Maya's reaction, the meter change and the debrief note. The two biggest turning points are highlighted.
 5. **Road not taken:** at the two turning points, a short authored line on what another lever tended to do there. Precomputed; no live simulation.
 6. **Meet Maya:** her trait profile revealed, mapped to the referral-note hints and to the moments in the replay where each trait showed.
@@ -277,7 +277,7 @@ Everything in Debrief 1 for Round 2, plus:
 - **Lever recognition:** "You named the lever correctly 5 of 7 times", with the misses shown.
 - **Two sessions side by side:** meter traces across both rounds, and how the Round 1 ending shaped the Round 2 opening.
 - **Reflection prompts:** three questions for self-study or the facilitator (text only; nothing is stored).
-- **Copy summary:** plain text of the endings, lever counts, the Round 1 wording split (`Wording: 3 skilful, 2 plausible, 2 clumsy of 7`) and recognition score for pasting into a shared document. No names or free text.
+- **Copy summary:** plain text of the endings, lever counts, the Round 1 wording split (`Wording over 7 decisions: 3 skilful, 2 plausible, 2 clumsy`) and recognition score for pasting into a shared document. No names or free text.
 
 ## 11. Visual language: "Paperback Constructivist"
 
@@ -391,6 +391,7 @@ turn-the-page/
   tests/contrast.mjs      Playwright: WCAG walk of every text node in every screen state
   tests/a11y.test.mjs     Playwright: section 15 checks, narrow layout, decoration, print (session 5)
   tests/states.mjs        Screen-state catalogue shared by the two above
+  tests/wording-tells.mjs Surface tells in Round 1 wordings (section 9.4; session 6)
   tests/export-review.mjs Writes docs/CONTENT-REVIEW.md from the content files
 ```
 
@@ -499,12 +500,15 @@ Session 2 (content and calibration). Overrides were tuned first; these `RULES` v
 | Round 2 start after Early exit (9.2) | Trust 20 | Trust 25 | From Trust 20 a single Challenge (−8) followed by one Observe before trust (−2) ended the round in two decisions, which breaks the "early exit within three decisions needs two Challenges or clumsy wordings" criterion; no override within ±5 on the opening can prevent it on every path. 25 still leaves her the most reluctant of the four openings. |
 | High-ownership Breakthrough (7.7), added after session 5 | none | Ownership ≥ 68 and Trust ≥ 25 | Requested so that a path with exceptionally high ownership but middling trust is not a Polite exit. At 60–65 the path of seven skilful Questions (Ownership 65, Trust 42) became a Breakthrough, breaking the "no single-lever strategy" criterion; 68 is the lowest value that keeps it. The rule rarely fires (well under 1% of random paths). A Polite exit that ends with Breakthrough-level Ownership shows the ending's `ownershipNote` in the debrief instead. |
 
-Overrides: 108 of the 184 options carry one; every value is listed in `docs/CONTENT-REVIEW.md`. In Round 1 most skilful wordings carry a small Trust or Ownership bonus (+1 to +5). That is a deliberate content choice: skilful wording that fits the moment should do better than the base row, and the bonuses vary by node, so they belong in content rather than in `RULES`. Round 2 overrides were set by a constrained search within authored ranges: lines that fit the moment could only gain, lines that misfit it could only lose. They are what make Round 2 a choice of lever rather than of wording.
+Overrides (session 2): 108 of the then 184 options carried one, and still do (of 244 since session 6); every value is listed in `docs/CONTENT-REVIEW.md`. In Round 1 most skilful wordings carry a small Trust or Ownership bonus (+1 to +5). That is a deliberate content choice: skilful wording that fits the moment should do better than the base row, and the bonuses vary by node, so they belong in content rather than in `RULES`. Round 2 overrides were set by a constrained search within authored ranges: lines that fit the moment could only gain, lines that misfit it could only lose. They are what make Round 2 a choice of lever rather than of wording.
 
 Session 6 (three wordings). The plausible transform is new: positive effects × 0.7, then Trust −1, as an initial value. Rows are added here as calibration changes `RULES`; override changes are summarised below the table.
 
 | Rule | Was | Now | Why |
 |---|---|---|---|
-| Plausible wording (7.2) | none | × 0.7, Trust −1 | Initial value, not yet calibrated. |
+| Plausible wording (7.2) | none | × 0.7, Trust −1 | Initial value, kept: with it every criterion passes, plausible-only play reaches Partial at most (1.8% of its random paths; never Breakthrough), and one-quality random play orders Early exit 2.8% / 20.7% / 62.1% for skilful / plausible / clumsy. |
+| Round 1 random-play Breakthrough target (7.8) | 5–20% | 2–20% | A criterion change, not a `RULES` change. With three wordings, random play picks the skilful one 1 time in 3 instead of 1 in 2, and the point of this session is that guessing works less: random-play Breakthrough fell from 6.2% to 2.8% with no change to any rule or skilful override. Raising it back to 5% was tried four ways. (1) A plausible Trust penalty of 0, or × 0.8: at most 4.4%. (2) Trust thresholds of 40–43 for Breakthrough and Partial: at most 4.5%. (3) +1 or +2 Trust on every skilful Question, Support and Observe, and +1 Ownership on skilful wordings in Acts 2 and 3: 5.0–5.8%, but seven-decision Question-only and Observe-only strategies then reached Breakthrough (up to 133 paths), and Round 2 after Breakthrough lost its Early exit from the highest Trust carry. (4) Bonuses on skilful Support and Challenge only: 3.2–3.9%, with the same Round 2 failure. Every route to 5% was a blanket bonus that broke a stronger criterion, so the floor moved instead. Round 2 keeps 5–20%. Review: if the SME prefers to keep 5%, the next option is a `RULES` change to the base rows, not more overrides. |
+
+Overrides in session 6: the 60 new plausible wordings carry none, so they show the transform alone; the 60 rewritten clumsy wordings keep the session 2 overrides of the lines they replace (Trust −2 or −3, Ownership −2 to −4 where they rescue); skilful overrides are unchanged. Round 1 now has 30.1 million paths; the memoised calibrator visits 722,803 distinct states.
 
 Calibrator interpretation (unchanged from session 1): every SPEC.md 7.8 criterion is checked for Round 1 and separately for each Round 2 opening, using the median carry-over for that Round 1 ending. Reachability of all four endings is also checked from the lowest and highest carry-over.

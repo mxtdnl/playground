@@ -31,7 +31,7 @@ Contents: [Maya](#maya) · [Round 1](#round-1-just-lazy) · [Round 2](#round-2-t
 
 ## Round 1: Just lazy
 
-Format B: the counsellor picks a lever, then one of two wordings (skilful or clumsy, unlabelled, shuffled). 15 pages.
+Format B: the counsellor picks a lever, then one of three wordings (skilful, plausible or clumsy, unlabelled, shuffled). 15 pages.
 
 | Act | Title | Cliffhanger (act banner) |
 |---|---|---|
@@ -107,13 +107,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | Thanks for coming. Before we get to grades, how has this term been for you? | She shrugs. "Fine. Busy. I don't know." But she sits back a little.<br>*[extraversion:high]* "Honestly? Weird." She starts to say more, then stops herself.<br>*(pose: chair back)* | T +1, O +2 | T +4, C +1, O +6 | T +4, C +1, O +6 | An open start that put her experience before the grades. It gave her room, though at this point she had little to fill it with. |
-| Question (clumsy) | Why do you think you've been lazy? | "I just am. I don't know." She looks at the floor.<br>*(pose: gaze floor)* | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Leading: it took her word "lazy" as the starting point. You got an answer quickly, and it kept her inside her own label. |
+| Question (plausible) | Thanks for coming. What do you think has made the grades slip this term? | "I don't know. I just stopped keeping up." She keeps hold of the strap.<br>*(pose: arms bag)* | — | T +1, C +1, O +4 | T +1, C +1, O +4 | A reasonable question about causes, asked before she had settled. She answered it, inside the frame of the grades she came in braced for. |
+| Question (clumsy) | Thanks for coming. Is it mainly the homework, or are lessons harder too? | "Both, I guess." She looks at the floor.<br>*(pose: gaze floor)* | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | An either-or question that set the options for her. It was easy to answer, and it narrowed the talk to schoolwork before she had said what was going on. |
 | Support (skilful) | Thanks for coming in. You're not in trouble. I'd just like to hear how things are from your side. | "OK." Her shoulders come down a little. She looks at you properly for the first time.<br>*[defensiveness:high]* "That's what everyone says." But she stays in the chair.<br>*(pose: shoulders relaxed, gaze counsellor)* | T +4 | T +11, C +8, O ±0 | T +11, C +8, O ±0 | Lowered the stakes before anything else. Trust rose quickly; she had not yet done any of the thinking. |
-| Support (clumsy) | Oh, I'm sure you're not lazy at all! | "You don't know that." A half-smile, as if you have missed the point.<br>*(pose: mouth slightSmile)* | — | T +1, C +3, O ±0 | T +1, C +3, O ±0 | Warm, but premature: it contradicted her before you had heard her. The reassurance arrived before any understanding. |
+| Support (plausible) | Thanks for coming in. Lots of students have a term like this, and it usually settles down. | "Maybe." She nods, but her hand stays on the strap.<br>*(pose: arms bag)* | — | T +4, C +5, O ±0 | T +4, C +5, O ±0 | Normalising, and kindly meant. It reassured her before she had said anything, so it reassured a version of the problem you had guessed. |
+| Support (clumsy) | Thanks for coming in. I don't think you're lazy at all, from what Mr Okafor has told me. | "He doesn't know either." A half-smile, as if you have missed the point.<br>*(pose: mouth slightSmile)* | — | T +1, C +3, O ±0 | T +1, C +3, O ±0 | Warm, and it contradicted her account before you had heard it. It also told her she had been discussed, which made the reassurance harder to trust. |
 | Observe (skilful) | You said that very quickly, before I'd asked anything. It sounds like you've had that conversation a few times already. | She blinks. "I mean... yeah. Everyone keeps saying it." She lets go of the bag strap.<br>*[defensiveness:high]* "So?" She grips the strap tighter, but she is listening.<br>*(pose: arms lap)* | T +5, O +3 | T +3, C +2, O +6 | T +7, C +2, O +6 | Named something real in what she said, without judging it. At low trust an observation can feel exposing; this one was gentle enough to open a door. |
-| Observe (clumsy) | You look like you really don't want to be here. | "Well, I didn't ask to come." She pulls the bag closer.<br>*(pose: arms bag)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | An honest observation, delivered as a judgement about her. It was accurate, and it put her on the defensive. |
+| Observe (plausible) | You're sitting near the door with your bag still in your hand. It looks as if you're not sure how long this will take. | "I've got class after." She sits back a little anyway.<br>*(pose: chair back)* | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Accurate: you described what you could see. At this level of trust a comment on her body can feel like being watched, and she explained it away. |
+| Observe (clumsy) | You said "lazy" very quickly, before I'd asked anything. It sounds like you've already decided that's the answer. | "Well, it is the answer." She grips the strap.<br>*(pose: arms bag)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Started from what she said and ended on a judgement about her. "Already decided" sounded like criticism, and she held her position. |
 | Challenge (skilful) | "Lazy" is one explanation. I'm not sure it's the whole one. | She frowns. "What else would it be?" Her arms fold.<br>*[confidence:high]* She tilts her head. "Go on, then. What else?"<br>*(pose: arms crossed, mouth tight)* | O +2 | T −8, C −5, O +4 | T −6, C +2, O +6 | A thoughtful reframe, offered before there was trust to hold it. It planted a seed and cost some rapport. |
-| Challenge (clumsy) | Are you, though? | She folds her arms. "Yes." The room goes quiet.<br>*(pose: arms crossed, mouth tight)* | T −2 | T −13, C −5, O +1 | T −11, C +1, O +4 | Direct and quick. It questioned her before she felt safe, and she closed the topic down. |
+| Challenge (plausible) | "Lazy" is one explanation. Usually there's something else behind it. | "Like what?" She sounds tired rather than curious. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | A fair point, made as a general rule. It suggested you knew her story before she had told it. |
+| Challenge (clumsy) | "Lazy" is one explanation. It doesn't sound like the real one to me. | She folds her arms. "Well, it is." The room goes quiet.<br>*(pose: arms crossed, mouth tight)* | T −2 | T −13, C −5, O +1 | T −11, C +1, O +4 | Set your view against hers before there was trust to hold it. Her explanation became something to defend. |
 
 #### r1-02 · p. 12 · Act 1
 
@@ -126,13 +130,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What would you want to get out of talking today, if anything? | "I don't know. Not being nagged, I guess." She thinks. "Maybe working out why I can't just... do stuff." | T +1, O +5 | T +4, C +1, O +6 | T +4, C +1, O +6 | Asked her to set the purpose of the conversation. It handed her some ownership early, though she had to think on the spot. |
-| Question (clumsy) | Shall we make a plan to get your grades back up? | "I guess." She says it as if she has said it many times before. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A closed question with your agenda inside it. She agreed; the purpose was yours, not hers. |
+| Question (plausible) | What do you think Mr Okafor is hoping we'll get out of today? | "For me to stop being lazy, probably." She shrugs. | — | T +1, C +1, O +4 | T +1, C +1, O +4 | Invited her view, but of someone else's purpose. She answered for Mr Okafor, and the conversation stayed his. |
+| Question (clumsy) | Shall we use today to make a plan for getting the grades back up? | "I guess." She says it as if she has said it many times before. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A closed question with your agenda inside it. She agreed; the purpose was yours, not hers. |
 | Support (skilful) | It's not a warning. It's just a chance to talk about how things are going, at whatever pace suits you. | "OK." She puts the bag down on the floor.<br>*(pose: arms lap)* | T +5 | T +12, C +8, O ±0 | T +12, C +8, O ±0 | Removed the threat and let her set the pace. Trust rose; the purpose of the conversation stayed vague. |
-| Support (clumsy) | Don't worry, we'll have you back on track in no time. | "Right." She does not look convinced.<br>*(pose: mouth flat)* | O −2 | T +1, C +3, O −2 | T +1, C +3, O −2 | Rescuing: it promised an outcome and took the problem onto your shoulders. Kind, and it left her nothing to do. |
+| Support (plausible) | It's not a warning. Lots of students come in here, and it usually turns out to be nothing serious. | "OK." Her hands stay on the bag.<br>*(pose: arms bag)* | — | T +4, C +5, O ±0 | T +4, C +5, O ±0 | Lowered the stakes by making it ordinary. It reassured her, and it also told her the answer before she had said anything. |
+| Support (clumsy) | It's not a warning. We'll work out what's going wrong and get you back on track in no time. | "Right." She does not look convinced.<br>*(pose: mouth flat)* | O −2 | T +1, C +3, O −2 | T +1, C +3, O −2 | Rescuing: it promised an outcome and took the problem onto your shoulders. Kind, and it assumed there was a problem to fix before she had said what it was. |
 | Observe (skilful) | You asked if it's a warning. It sounds like you're expecting to be in trouble. | "Aren't I?" A pause. "Everyone's been on at me."<br>*[extraversion:low]* She nods, once, and says nothing. | T +3, O +3 | T +1, C +2, O +6 | T +5, C +2, O +6 | Reflected her own words back. It showed you were listening and let her name what she was afraid of. |
-| Observe (clumsy) | You seem very defensive. | "I'm not defensive." Her hands tighten on the bag.<br>*(pose: arms bag, mouth tight)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Labelled her rather than describing what you saw or heard. A label is easy to argue with, and she did. |
+| Observe (plausible) | You're holding on to your bag with both hands. It looks like you're ready to leave. | "I'm fine." She loosens her grip a little.<br>*(pose: arms bag)* | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | An accurate description of what you could see. It pointed at her wish to leave rather than at what she had asked, so she brushed it off. |
+| Observe (clumsy) | You asked if it's a warning. It sounds like you think you deserve one. | "I didn't say that." Her hands tighten on the bag.<br>*(pose: arms bag, mouth tight)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Began by reflecting her words, then added a meaning she had not given them. It was easy to argue with, and she did. |
 | Challenge (skilful) | I don't think Mr Okafor sees this as a warning. He told me he doesn't think "lazy" is the full story. | She looks up. "He said that?" She does not seem to know what to do with it.<br>*(pose: head up, gaze counsellor)* | T +1, O +2 | T −7, C −5, O +4 | T −5, C +2, O +6 | Offered a different view of why she was here. It questioned her story about being in trouble; how it landed depended on the trust built so far. |
-| Challenge (clumsy) | Well, two missed deadlines is a pretty serious warning sign. | "So it is a warning." She looks at the door.<br>*(pose: gaze door)* | T −2 | T −13, C −5, O +1 | T −11, C +1, O +4 | Judgemental: it confirmed her fear before exploring it. The facts were accurate; the framing turned them into a verdict. |
+| Challenge (plausible) | I don't think Mr Okafor sees this as a warning. He's worried about you and wants to help you catch up. | "Catch up. Right." She looks down at the bag.<br>*(pose: gaze floor)* | — | T −9, C −5, O +1 | T −8, C +1, O +6 | Offered a kinder view of why she was here, then brought it back to catching up. It eased the fear and kept the grades at the centre. |
+| Challenge (clumsy) | I don't think Mr Okafor sees this as a warning yet. But two missed deadlines is a pattern he can't ignore. | "So it is a warning." She looks at the door.<br>*(pose: gaze door)* | T −2 | T −13, C −5, O +1 | T −11, C +1, O +4 | Started as reassurance and ended as a verdict. The facts were accurate; "yet" confirmed the fear she came in with. |
 
 #### r1-03a · p. 19 · Act 2
 
@@ -145,13 +153,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What's happening in those late evenings? | "Nothing. Phone. Videos. Just... not thinking." She stops. "That sounds bad."<br>*[extraversion:high]* "Oh, everything. Videos, messages, then it's one o'clock." She laughs, then doesn't. | T +2, O +4 | T +5, C +1, O +10 | T +5, C +1, O +10 | Followed her own words into the detail. She explored, and noticed something about herself. |
-| Question (clumsy) | Have you tried going to bed earlier? | "Yeah. Obviously." She stops picking at the strap.<br>*(pose: arms lap)* | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Closed and premature: it jumped to a solution she had already thought of. It ended the exploring. |
+| Question (plausible) | What time do you usually get to sleep? | "One? Two, sometimes." She shrugs. "It's not that late." | — | T +1, C +1, O +4 | T +1, C +1, O +4 | A practical question that went straight to the sleep, which is where an adult would look first. She gave you the number and not much else. |
+| Question (clumsy) | Have you tried going to bed a bit earlier? | "Yeah. It doesn't work." She stops picking at the strap. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Advice in the shape of a question. It assumed the answer was the bedtime, and she had already tried that. |
 | Support (skilful) | That sounds exhausting. Tired, and then annoyed with yourself for being tired. | "Yeah. Exactly that." She sighs.<br>*(pose: shoulders relaxed)* | T +3 | T +10, C +5, O ±0 | T +10, C +5, O ±0 | Named the feeling accurately. She felt understood; the conversation stayed with the feeling rather than moving on. |
-| Support (clumsy) | Oh, everyone your age stays up too late. It's completely normal. | "OK." She seems to have nothing to add. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Normalising, but it made her experience ordinary before she had finished describing it. |
-| Observe (skilful) | You said "so I don't". Not "I can't". | She thinks about it. "I suppose. It's easier not to start than to start and be rubbish at it." | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Fed back a detail of her own words. It let her notice a choice inside the habit, and she did the thinking. |
-| Observe (clumsy) | You obviously aren't sleeping enough. You look very tired. | "Thanks." She pulls her sleeves down over her hands.<br>*(pose: arms lap, shoulders raised)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Based on what you could see, but it came out as a comment on her appearance. It stung more than it helped. |
+| Support (plausible) | That sounds exhausting. No wonder starting anything in the evening feels so hard. | "Yeah." She nods. "So it's the sleep, I suppose." | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Validating, and it accepted her explanation whole. She felt understood and settled on tiredness as the full story. |
+| Support (clumsy) | That sounds exhausting. Try not to worry about it too much, it'll sort itself out. | "OK." She seems to have nothing to add. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Comforting, and it closed the subject. If it will sort itself out, there is nothing left for her to think about. |
+| Observe (skilful) | You said "so I don't". You didn't say "I can't". | She thinks about it. "I suppose. It's easier not to start than to start and be rubbish at it." | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Fed back a detail of her own words. It let her notice a choice inside the habit, and she did the thinking. |
+| Observe (plausible) | You started with the late nights, not the work. | "Because that's what it is." She shrugs. | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Noticed the order she told it in, which was accurate. It pointed at the sleep story she had already chosen, so it confirmed it. |
+| Observe (clumsy) | You said "so I don't". It sounds like you choose not to. | "I don't choose it." She pulls her sleeves down over her hands.<br>*(pose: arms lap, head down)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Took her exact words and turned them into a verdict about her will. She defended herself instead of thinking about it. |
 | Challenge (skilful) | Being that tired is real. I wonder if "lazy" is the right word for someone who's this tired. | "What else would you call it?" But she is thinking about it. | O +3 | T −8, C −5, O +5 | T −6, C +2, O +12 | Questioned her label with care. It offered a new frame; whether she could take it depended on the trust built so far. |
-| Challenge (clumsy) | Well, that's a choice you're making every night. | "I know." Flat. She looks away.<br>*(pose: gaze window, mouth flat)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | True, and delivered as a verdict. It handed her the responsibility before she was ready to hold it. |
+| Challenge (plausible) | Being that tired is real. It sounds more like a sleep problem than a laziness problem. | "Maybe." She considers it, without much interest. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | Replaced her label with a kinder one of yours. It eased the self-criticism, and the new explanation was still not hers. |
+| Challenge (clumsy) | Being that tired is real, but staying up is a choice you are making every night. | "I know." Flat. She looks away.<br>*(pose: gaze window)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Accurate, and it put the whole problem down to her choices. She agreed, and the agreement closed the subject. |
 
 #### r1-03b · p. 23 · Act 2
 
@@ -164,13 +176,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What happens in the moment you sit down? | "I look at it and it's like... too much. So I do something else." | T +2, O +4 | T +5, C +1, O +10 | T +5, C +1, O +10 | Slowed down on the exact moment things stall for her. She described it in her own words, which is where ownership starts. |
-| Question (clumsy) | Is it because the work is too hard? | "No. I mean, some of it. I don't know." | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Closed and leading: it offered her an explanation to agree with. She half-agreed, and the real answer stayed hidden. |
+| Question (plausible) | What is it you're meant to be working on? | "Chemistry, mostly. English." She lists it flatly. | — | T +1, C +1, O +4 | T +1, C +1, O +4 | A useful practical question. It moved to the content of the work and away from what happens to her when she sits down. |
+| Question (clumsy) | Is it that the work feels too hard? | "No. I mean, some of it. I don't know." | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Offered her a ready-made reason. It was easy to half-agree with, and it guessed rather than asked. |
 | Support (skilful) | That's a horrible feeling, wanting to start and not being able to. | "Yeah." Quietly. "It is."<br>*(pose: head down)* | T +3 | T +10, C +5, O ±0 | T +10, C +5, O ±0 | Acknowledged the feeling without hurrying her. Trust grew; nothing new came out yet. |
-| Support (clumsy) | Don't be so hard on yourself. You'll get there. | "Maybe." She does not sound convinced. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Encouraging, and it skipped past what she had just told you. Reassurance without understanding can feel like being hurried along. |
+| Support (plausible) | That happens to a lot of people. Starting is often the hardest part. | "I guess." She looks back at the desk.<br>*(pose: gaze floor)* | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Normalising, and true. It told her she was not alone, and it made her experience general just as she was describing her own. |
+| Support (clumsy) | Don't be so hard on yourself. You'll get there when you're ready. | "Maybe." She does not sound convinced. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Kind, and it skipped past the feeling to a promise. She had just said she could not start; being told she would did not help her see why. |
 | Observe (skilful) | You said "it's not like I don't try". It sounds like trying matters to you. | "Well, yeah. I'm not just sitting there doing nothing." She sits up a little.<br>*(pose: head up)* | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Reflected back what she valued in her own words. It gave her a better story about herself, and she took it. |
-| Observe (clumsy) | You look like you've given up on it. | "I haven't given up." Sharper than she meant.<br>*(pose: mouth tight)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | An observation of her mood turned into a conclusion about her. She defended herself instead of exploring. |
+| Observe (plausible) | You said you sit down to do it. So you are getting as far as the desk. | "I suppose." A small shrug. | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Picked out something she was doing, which is encouraging. It sounded a little like a consolation prize, and she did not take it further. |
+| Observe (clumsy) | You said "it's not like I don't try". It sounds like you want me to believe that. | "Because it's true." Sharper than she meant.<br>*(pose: mouth tight)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Reflected her words with a hint of doubt attached. She heard the doubt and defended herself. |
 | Challenge (skilful) | You keep sitting down to do it. That doesn't sound like someone who's lazy. | She looks at you. "I suppose not." She does not sound sure.<br>*(pose: gaze counsellor)* | O +4 | T −8, C −5, O +6 | T −6, C +2, O +13 | Pushed back on her label using her own evidence. A strong reframe; it asked her to see herself differently, which takes trust. |
-| Challenge (clumsy) | But sitting there isn't enough, is it? You have to actually do it. | "I know that." She folds her arms.<br>*(pose: arms crossed)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | A push that told her what she already knew. It put the pressure back on just as she had started to open up. |
+| Challenge (plausible) | You keep sitting down to do it. Maybe the trick is a smaller first step. | "Maybe." She does not seem to know what that would be. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | Moved straight to a solution. The idea is sensible; it arrived before she understood the problem, so it was your idea to try. |
+| Challenge (clumsy) | You keep sitting down to do it, but sitting there isn't the same as doing it. | "I know that." She folds her arms.<br>*(pose: arms crossed)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | A fair point, made as a reprimand. It told her something she already knew and left her defending herself. |
 
 #### r1-03c · p. 26 · Act 2
 
@@ -183,13 +199,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What would you want people to understand, instead of asking? | "That I don't know what's wrong. That's the whole thing." | T +1, O +4 | T +4, C +1, O +10 | T +4, C +1, O +10 | Turned her complaint into something she could say for herself. She answered honestly, and the not-knowing became the subject. |
-| Question (clumsy) | So is something wrong? | "No. That's what I mean." She sighs. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | The very question she had just said she was tired of. Closed, and it confirmed her point. |
+| Question (plausible) | What do you usually say when people ask you what's wrong? | "That I'm fine. That I'm tired." She shrugs. "Same as now." | — | T +1, C +1, O +4 | T +1, C +1, O +4 | Asked about the pattern she was tired of, which is a reasonable thread. It also had her rehearse the answer she gives everyone. |
+| Question (clumsy) | So when they ask, is there something you'd rather not say? | "No. That's what I mean." She sighs. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Asked the very question she had just said she was tired of, in a gentler form. She gave the same answer she gives everyone. |
 | Support (skilful) | That sounds tiring. I'll try not to be one more person asking the same thing. | A small laugh. "Thanks."<br>*(pose: mouth slightSmile)* | T +3 | T +10, C +5, O ±0 | T +10, C +5, O ±0 | Took her side on the thing she found hard, with a light touch. Trust rose; the exploring waited. |
-| Support (clumsy) | Nothing's wrong with you. You're doing fine. | "My grades say I'm not." | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Meant kindly, and easy for her to disprove. Reassurance that does not match the facts tends to cost credibility. |
+| Support (plausible) | That sounds tiring. People only ask because they care about you, you know. | "I know." She says it to the floor.<br>*(pose: gaze floor)* | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Defended the people asking, which is fair to them. It asked her to see their side before you had seen hers. |
+| Support (clumsy) | That sounds tiring. Nothing is wrong with you, so you don't need to explain. | "My grades say there is." | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Reassurance that contradicted the reason she was here. It was kind, and she argued with it. |
 | Observe (skilful) | You said "everyone". It sounds like it's coming from a lot of directions at once. | "Teachers. Home. Everyone." She stops there. | T +1, O +4 | T −1, C +2, O +8 | T +3, C +2, O +8 | Picked out one word and reflected its weight. She told you more than she meant to, without being asked directly. |
-| Observe (clumsy) | You're very guarded, aren't you? | "Not really." Her arms tighten.<br>*(pose: arms crossed)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | A label, not an observation. It gave her something to deny rather than something to look at. |
+| Observe (plausible) | You put your bag down a minute ago. You seem a bit more settled than when you came in. | "I suppose." She glances at the bag, then back at you. | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Accurate and warm. It moved attention to how she was sitting just as she had said something about other people. |
+| Observe (clumsy) | You said "everyone". It sounds like you feel everyone is against you at the moment. | "I didn't say against me." Her arms tighten.<br>*(pose: arms crossed)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Went one step beyond her word and made it bigger. She pushed back on the exaggeration and did not add anything. |
 | Challenge (skilful) | I don't think Mr Okafor asked what was wrong to nag you. He noticed you'd gone quiet, and that's not like you. | "He noticed?" Surprised, then wary.<br>*(pose: gaze counsellor)* | O +3 | T −8, C −5, O +5 | T −6, C +2, O +12 | Offered a different reading of the attention she resented. It could reframe the nagging as care, if she trusted you enough to hear it. |
-| Challenge (clumsy) | People ask because your grades have dropped. That's fair, isn't it? | "I didn't say it wasn't fair." She looks away.<br>*(pose: gaze window)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Defended the people asking rather than exploring her experience of it. She felt contradicted and pulled back. |
+| Challenge (plausible) | I don't think people ask to nag you. Most of them can see you're having a hard time this term. | "Maybe." She does not sound convinced. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | Offered a kinder reading of the people asking. It was general, so it was easy for her to set aside. |
+| Challenge (clumsy) | I don't think people ask to nag you. Your grades have dropped, so it's a fair thing for them to ask. | "I didn't say it wasn't fair." She looks away.<br>*(pose: gaze window)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | A reasonable point, and it took the others' side. She felt told off rather than heard. |
 
 #### r1-03d · p. 31 · Act 2
 
@@ -202,13 +222,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What's made it feel pointless? | A long pause. "I don't know. It just does." | T +2, O +2 | T +5, C +1, O +8 | T +5, C +1, O +8 | Stayed curious after a push had landed badly. It kept the door open, although she was not ready to walk through it. |
-| Question (clumsy) | Don't you care about your grades? | "Obviously I care." Too fast. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A closed question with an accusation inside it. She gave the expected answer and nothing else. |
+| Question (plausible) | What would make it feel worth it? | "Dunno. Nothing, probably." Her arms stay folded.<br>*(pose: arms crossed)* | — | T +1, C +1, O +4 | T +1, C +1, O +4 | A forward-looking question, asked before she had said why it felt pointless. It was too far ahead of her to answer. |
+| Question (clumsy) | Don't you care about your grades? | "Of course I care." Too fast. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A closed question with a judgement folded into it. She gave the answer it invited, quickly. |
 | Support (skilful) | I pushed a bit fast just then. Sorry. We can slow down. | She glances at you, surprised. Her arms loosen slightly.<br>*(pose: gaze counsellor, arms lap)* | T +5 | T +12, C +5, O ±0 | T +12, C +5, O ±0 | Repaired the moment by owning your part in it. Trust recovered; the conversation itself had not moved on yet. |
-| Support (clumsy) | Hey, it's not pointless! You've got so much potential. | "Everyone says that." She sounds tired. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Upbeat, and it argued with her feeling instead of acknowledging it. She had heard it before. |
+| Support (plausible) | That's OK. Lots of people feel like that at some point in school. | "Yeah, well." She keeps looking at the clock. | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Normalising, which lowers the stakes. It also accepted "pointless" as the end of the matter. |
+| Support (clumsy) | It's not pointless. You've got a lot of potential, you know. | "Everyone says that." She sounds tired. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Encouragement that argued with her. She has heard it before, and it told her you had not heard her. |
 | Observe (skilful) | You said "any more". So there was a time when you were bothered. | "...Yeah. Last year I actually liked school." She looks surprised that she said it.<br>*(pose: gaze counsellor, head up)* | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Caught a small word that carried a lot. It let her remember a different version of herself without being told to. |
-| Observe (clumsy) | You've folded your arms. I can tell you're shutting me out. | "I'm just sitting here." She does not move. | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Started with what you saw and finished with a conclusion about her. The conclusion was what she heard. |
+| Observe (plausible) | You keep looking at the clock. It seems like you want this to be over. | "Kind of." She looks at you, then back at the clock. | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Accurate, and honest about what you saw. It named her wish to leave, which she could only agree with. |
+| Observe (clumsy) | You've folded your arms. It looks like you've decided not to talk to me. | "I'm sitting here, aren't I?" She does not move. | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Read her posture as a decision about you. It made the moment about the relationship, and she held her ground. |
 | Challenge (skilful) | Pointless is a strong word. You still came in today, when you could have not. | "I had to come." But she does not get up. | O +3 | T −8, C −5, O +5 | T −6, C +2, O +12 | Offered evidence against her own word. It was a fair push; with trust this low it was always going to cost something. |
-| Challenge (clumsy) | That's a bit of an excuse, isn't it? | "Can you just... not." She looks at the door.<br>*(pose: gaze door)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Called her feeling an excuse. It pushed hard at the moment she was least able to take it. |
+| Challenge (plausible) | Pointless is a strong word. It can't be completely pointless if you're still here. | "I had to come." She shrugs. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | A gentle argument with her word. Logic is easy to answer with a fact, and she had one ready. |
+| Challenge (clumsy) | Pointless is a strong word. It sounds more like a reason not to bother trying. | "Can you not." She looks at the door.<br>*(pose: gaze door)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Challenged her word by questioning her motive. It landed as an accusation before there was trust to hold it. |
 
 #### r1-04a · p. 36 · Act 2
 
@@ -221,13 +245,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What goes through your head when you open it? | "That it's going to be rubbish anyway. So why bother." | T +1, O +4 | T +4, C +1, O +10 | T +4, C +1, O +10 | Went underneath the habit to the thought driving it. She named it herself, which is harder to forget than being told. |
-| Question (clumsy) | So the phone is the problem, really? | "I guess." She puts it away, as if caught.<br>*(pose: props none, gaze floor)* | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Leading: it handed her a tidy explanation. She accepted it, and the phone became the culprit instead of the clue. |
+| Question (plausible) | What were you doing on your phone for those two hours? | "Scrolling. Nothing, really." She turns the phone over.<br>*(pose: gaze phone)* | — | T +1, C +1, O +4 | T +1, C +1, O +4 | Followed the most visible detail. It kept the conversation on the phone rather than on what she was avoiding. |
+| Question (clumsy) | So is the phone the main problem, do you think? | "I guess." She puts it away, as if caught.<br>*(pose: props none)* | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A leading question with the answer in it. She agreed, and put the phone out of sight, which hid the cue. |
 | Support (skilful) | Two hours of avoiding something you're dreading. That's a hard way to spend an evening. | "It's awful, actually. I feel worse after." | T +3 | T +10, C +5, O ±0 | T +10, C +5, O ±0 | Recognised how unpleasant the avoiding is. She admitted it out loud; the cue in her hands went unremarked. |
-| Support (clumsy) | Everyone puts things off. Don't worry about it. | "Yeah, but not every night." | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Normalised it so quickly that she had to put you right. The kindness made the problem smaller than it was. |
-| Observe (skilful) | I noticed you picked up your phone just as you mentioned next year. | She looks at it in her hand, then puts it face down on her knee. "I didn't even notice."<br>*[extraversion:low]* She stops turning the phone. A long silence. Then a very small nod.<br>*(pose: props none, head down)* | T +4, O +5 | T +2, C +2, O +9 | T +6, C +2, O +9 | Used a real, specific cue and did not turn it into a criticism. It showed her a pattern she had not seen for herself. |
-| Observe (clumsy) | You're on your phone again. Is this boring you? | "No. Sorry." She pushes it into her pocket. Her face closes a little.<br>*(pose: props none, mouth tight)* | T −2 | T −6, C +1, O +2 | T −3, C +1, O +2 | Noticed the phone, and read it as rudeness rather than as a signal. The cue was there; the interpretation cost trust. |
+| Support (plausible) | Two hours goes quickly on a phone. It happens to everyone, adults included. | "I suppose." She turns the phone over again. | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Normalised it, which took away some shame. It also made it sound like a phone habit rather than avoidance. |
+| Support (clumsy) | Two hours is a lot, but everyone puts things off. Try not to worry about it. | "Yeah, but not every night." | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Reassured her by making it small. She put you right: for her it was every night. |
+| Observe (skilful) | I noticed you picked up your phone as soon as you mentioned next year. | She looks at it in her hand, then puts it face down on her knee. "I didn't even notice."<br>*[extraversion:low]* She stops turning the phone. A long silence. Then a very small nod.<br>*(pose: props none, head down)* | T +4, O +5 | T +2, C +2, O +9 | T +6, C +2, O +9 | Used a real, specific cue and did not turn it into a criticism. It showed her a pattern she had not seen for herself. |
+| Observe (plausible) | I noticed you said it's the same every night. That sounds like a routine now. | "Pretty much." She keeps turning the phone. | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | An accurate reflection of the pattern. It stayed with the evenings and missed the moment the phone came out. |
+| Observe (clumsy) | I noticed you picked up your phone while we were talking. Is this boring you? | "No. Sorry." She pushes it into her pocket. Her face closes a little.<br>*(pose: props none)* | T −2 | T −6, C +1, O +2 | T −3, C +1, O +2 | Saw the right thing and read it as rudeness. She apologised and put the phone away, and with it the thing worth noticing. |
 | Challenge (skilful) | You're calling that lazy. It sounds more like you're avoiding something. | She goes still. "Avoiding what?" She does not wait for an answer.<br>*(pose: shoulders raised)* | O +4 | T −8, C −5, O +6 | T −6, C +2, O +13 | Offered a different explanation for the same behaviour. It went close to the real issue; how close she let it come depended on trust. |
-| Challenge (clumsy) | Two hours on your phone? Well, that's where your grades went, then. | "Wow. OK." She puts the phone away and looks at the door.<br>*(pose: props none, gaze door)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Turned what she had just shared into evidence against her. She had been open; she will be less so now. |
+| Challenge (plausible) | You're calling that lazy. It sounds more like the phone is the problem. | "Maybe." She looks at the phone as if it might agree.<br>*(pose: gaze phone)* | — | T −9, C −5, O +1 | T −8, C +1, O +6 | Swapped her label for a more obvious one. It was easier to accept than "lazy", and it pointed away from what the phone was helping her avoid. |
+| Challenge (clumsy) | You're calling that lazy. Two hours a night is where the grades have gone. | "Wow. OK." She puts the phone away and looks at the door.<br>*(pose: gaze door, props none)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Connected the facts accurately and turned them into a verdict. She heard blame rather than a different view. |
 
 #### r1-04b · p. 40 · Act 2
 
@@ -240,13 +268,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What's it like when you try to think about next year? | She shrugs, eyes on the screen. "I don't really."<br>*(pose: gaze phone)* | T +1, O +4 | T +4, C +1, O +10 | T +4, C +1, O +10 | An open question aimed at the right place. With trust this low she could only give a small answer, but it was hers. |
-| Question (clumsy) | Are you worried about the exams? | "Not really." She scrolls.<br>*(pose: gaze phone)* | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Closed: it could be answered with one word, and was. |
+| Question (plausible) | What subjects are you thinking of taking next year? | "Haven't decided." She keeps her eyes on the screen.<br>*(pose: gaze phone)* | — | T +1, C +1, O +4 | T +1, C +1, O +4 | A practical question about next year. It asked for decisions while the cue was that next year itself was hard to look at. |
+| Question (clumsy) | Are you worried about the exams next year, is that it? | "Not really." She scrolls.<br>*(pose: gaze phone)* | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Named a feeling for her and asked her to confirm it. A closed question is easy to deflect, and she did. |
 | Support (skilful) | It's OK if this is hard to talk about. We don't have to rush. | She looks up from the phone. "OK."<br>*(pose: gaze counsellor)* | T +5 | T +12, C +5, O ±0 | T +12, C +5, O ±0 | Took the pressure off when she was shutting down. Trust recovered; the topic was put on hold. |
-| Support (clumsy) | Don't worry, the exams are ages away. | "Right." She keeps scrolling.<br>*(pose: gaze phone)* | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Reassurance that was not quite true. It closed the subject she most needed to open. |
-| Observe (skilful) | Every time next year comes up, you look at your phone. I'm not telling you off. I just noticed it. | She stops scrolling. A pause. "It's easier than thinking about it."<br>*[extraversion:low]* She stops scrolling. She does not look up, but she puts the phone away.<br>*(pose: arms lap)* | T +4, O +5 | T +2, C +2, O +9 | T +6, C +2, O +9 | Named the pattern and removed the threat in the same breath. When she was saying least, what she was doing said most. |
-| Observe (clumsy) | You're more interested in your phone than in this conversation. | "I'm listening." She does not look up.<br>*(pose: gaze phone)* | T −3 | T −7, C +1, O +2 | T −4, C +1, O +2 | Saw the cue and read it as rudeness. It turned a clue into a complaint. |
+| Support (plausible) | It's OK. Most people your age can't be bothered with exams yet. | "Yeah." She keeps scrolling.<br>*(pose: gaze phone)* | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Met her where she was, and agreed with "can't be bothered". It kept her comfortable and the subject closed. |
+| Support (clumsy) | It's OK. The exams are ages away, so there's nothing to worry about. | "Right." She keeps scrolling.<br>*(pose: gaze phone)* | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Tried to remove the worry by moving it further away. It did not match what her phone was telling you. |
+| Observe (skilful) | Every time next year comes up, you look at your phone. I'm not telling you off. I noticed it, that's all. | She stops scrolling. A pause. "It's easier than thinking about it."<br>*[extraversion:low]* She stops scrolling. She does not look up, but she puts the phone away.<br>*(pose: arms lap)* | T +4, O +5 | T +2, C +2, O +9 | T +6, C +2, O +9 | Named the pattern and removed the threat in the same breath. When she was saying least, what she was doing said most. |
+| Observe (plausible) | You've had your phone out most of the time. I'm not telling you off. I wondered if you'd noticed. | "Sorry." She puts it face down, but her eyes stay on it.<br>*(pose: gaze phone)* | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Named the phone without blame. It noticed the habit and missed the pattern of when she reached for it. |
+| Observe (clumsy) | Every time next year comes up, you look at your phone. It's hard to talk to you while you're on it. | "I'm listening." She does not look up.<br>*(pose: gaze phone)* | T −3 | T −7, C +1, O +2 | T −4, C +1, O +2 | Saw the pattern and used it as a complaint. It made the phone a matter of manners rather than something to understand. |
 | Challenge (skilful) | I don't think you can't be bothered. I think something about next year is getting to you. | She looks up, then away. "Maybe."<br>*(pose: gaze window)* | O +3 | T −8, C −5, O +5 | T −6, C +2, O +12 | Offered a different explanation for "can't be bothered". It was close to the truth, and pushing at low trust carries a cost. |
-| Challenge (clumsy) | If you can't be bothered, there's not much I can do for you. | "Fine." She half stands up, then sits back down.<br>*(pose: chair edge)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Called her bluff. It left her with nowhere to go except the door. |
+| Challenge (plausible) | I don't think you can't be bothered. I think you're more tired than you're letting on. | "Maybe." She shrugs, still scrolling. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | Pushed back on "can't be bothered", which was a fair push. The alternative you offered was a guess, and not the one the cue pointed to. |
+| Challenge (clumsy) | I don't think you can't be bothered. I think you're scared of failing the exams. | "I'm not scared." She half stands up, then sits back down.<br>*(pose: chair edge)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Named a fear for her, confidently. Even if it was close, being told what she feels made her defend herself. |
 
 #### r1-05 · p. 45 · Act 2
 
@@ -259,13 +291,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What's it like, having that already decided? | "It's fine. It's just... how it is." Her voice is smaller.<br>*(pose: head down)* | T +1, O +5 | T +4, C +1, O +11 | T +4, C +1, O +11 | Asked about her experience of the decision rather than the decision itself. She did not explain, but she stayed with it. |
-| Question (clumsy) | Who's decided? Your parents? | "I didn't say that." She closes the subject. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Leading: it guessed the answer and named her family before she had. She shut the topic rather than choosing to explain. |
+| Question (plausible) | What has everyone decided you'll be doing? | "It's... a plan. It's fine." She keeps looking at the window.<br>*(pose: gaze window)* | — | T +1, C +1, O +4 | T +1, C +1, O +4 | The natural next question. It asked for something she had not offered, and kept the attention on what others had decided rather than on her. |
+| Question (clumsy) | Who's decided that? Is it your family? | "I didn't say that." She closes the subject. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Put an answer inside the question and named her family before she had. She shut the topic rather than choose to explain. |
 | Support (skilful) | That sounds like a lot to carry on your own. | She nods, only just. | T +3 | T +10, C +5, O ±0 | T +10, C +5, O ±0 | Acknowledged the weight without prying. It kept her safe; what she meant stayed unsaid. |
-| Support (clumsy) | Don't worry about after school yet. That's years away. | "It isn't, though." She looks at the floor.<br>*(pose: gaze floor)* | O −2 | T +1, C +2, O −2 | T +1, C +2, O −2 | Tried to lift the weight by shrinking the future. For someone two years from finishing school, it did not ring true. |
+| Support (plausible) | That's a lot. Plenty of people your age feel that. | "I suppose." She keeps looking at the window.<br>*(pose: gaze window)* | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Kind, and it filed her experience under something common before you knew what it was. |
+| Support (clumsy) | There's still plenty of time to work that out. | "Is there?" She looks at the floor.<br>*(pose: gaze floor)* | O −2 | T +1, C +2, O −2 | T +1, C +2, O −2 | Tried to lift the weight by giving her more time. Two years from finishing school, it did not match how close it felt to her. |
 | Observe (skilful) | You said "everyone's decided". I noticed you didn't say what you'd decided. | She is quiet for a long moment. "No. I didn't." | T +1, O +5 | T −1, C +2, O +9 | T +3, C +2, O +9 | Reflected exactly what she had and had not said. It showed her where she was missing from her own sentence. |
-| Observe (clumsy) | You've gone quiet. That clearly upsets you. | "It doesn't upset me." It clearly does.<br>*(pose: mouth tight)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Accurate, and announced as a fact about her feelings. She denied it, as most people would. |
+| Observe (plausible) | You said that to the window. It seems hard to say it while looking at me. | "It's easier." She glances at you, then back at the window.<br>*(pose: gaze window)* | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Noticed something real about how she said it. Commenting on her discomfort drew attention to her rather than to what she had said. |
+| Observe (clumsy) | You said "everyone's decided". It sounds like you don't agree with them. | "I didn't say that." Her mouth tightens.<br>*(pose: mouth tight)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Went one step beyond her words and gave her a position she had not taken. She disowned it rather than explore it. |
 | Challenge (skilful) | Maybe. But you'd be the one living it, so I'd be interested in what you think too. | "What I think doesn't really change anything." But she is looking at you now.<br>*(pose: gaze counsellor)* | O +4 | T −8, C −5, O +6 | T −6, C +2, O +13 | Put her own view back on the table without criticising anyone else's. A real push; it needed enough trust to be heard as interest, not as taking sides. |
-| Challenge (clumsy) | Well, nobody can decide your future for you. | "You don't know that." She looks away.<br>*(pose: gaze window)* | T −2 | T −13, C −5, O +1 | T −11, C +1, O +4 | A slogan, and one that quietly took sides against whoever had "decided". She dismissed it easily. |
+| Challenge (plausible) | Maybe. But you'd be the one living it. Is it what you'd choose yourself? | "I don't know. Maybe." She shrugs, still facing the window.<br>*(pose: gaze window)* | — | T −9, C −5, O +1 | T −8, C +1, O +6 | A real push, asked as a yes-or-no question before she had said what the decision was. She could only answer it vaguely. |
+| Challenge (clumsy) | Maybe. But you're the one living it, so they need to hear what you think. | "You don't know them." She looks away.<br>*(pose: gaze window)* | T −2 | T −13, C −5, O +1 | T −11, C +1, O +4 | Pushed her towards a conversation at home and cast her family as the obstacle. It took a side she had not taken. |
 
 #### r1-06a · p. 51 · Act 3
 
@@ -278,13 +314,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | If things were a bit better two weeks from now, what would be different? | She thinks. "I'd have started something. Even one thing. Without it being a whole drama." | T +2, O +5 | T +5, C +1, O +11 | T +5, C +1, O +11 | Asked her to picture a small, near future. She described a change in her own words, which made it hers. |
-| Question (clumsy) | Do you want to feel better about school? | "Obviously." | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A question with only one possible answer. She gave it. |
-| Support (skilful) | That makes sense. Feeling stuck every evening sounds really draining. | "It is." She breathes out.<br>*(pose: shoulders relaxed)* | T +3 | T +10, C +5, O ±0 | T +10, C +5, O ±0 | Stayed with the feeling she had just named. She felt heard; the future stayed unexplored. |
-| Support (clumsy) | It will stop. These things always pass. | "Will it?" She does not sound sure. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | A promise you could not keep. Comforting for a moment, and it asked nothing of her. |
-| Observe (skilful) | When you said that, you sat up a little. It sounds like you really want things to change. | "I do. I just don't know how." | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Linked what you saw to what she said. It let her hear her own wish for change. |
-| Observe (clumsy) | You obviously know what you need to do. | "Do I?" | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Presented as confidence in her, received as pressure. The observation was about you, not her. |
+| Question (plausible) | What do you think is the main thing making it feel like this? | "I don't know. Everything?" She looks away again.<br>*(pose: gaze window)* | — | T +1, C +1, O +4 | T +1, C +1, O +4 | A fair question about causes. She had just turned towards wanting a change, and it turned her back to the problem. |
+| Question (clumsy) | Do you want to feel better about school by the time we next meet? | "Well, yes." | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A closed question with only one possible answer. It got a yes and no picture of what better would be. |
+| Support (skilful) | That makes sense. Feeling stuck every evening sounds draining. | "It is." She breathes out.<br>*(pose: shoulders relaxed)* | T +3 | T +10, C +5, O ±0 | T +10, C +5, O ±0 | Stayed with the feeling she had just named. She felt heard; the future stayed unexplored. |
+| Support (plausible) | That makes sense. It will stop, though. Things like this usually pass. | "I hope so." She does not sound sure. | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Hopeful, and it arrived before she had said what "this" was. It promised an end without anything for her to do. |
+| Support (clumsy) | That makes sense. Let's work out together how to make it stop, then. | "OK." She waits for you to start. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Generous and practical, and it took the lead from her. "Together" quickly became you doing the working out. |
+| Observe (skilful) | When you said that, you sat up a little. It sounds like you want things to change. | "I do. I just don't know how." | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Linked what you saw to what she said. It let her hear her own wish for change. |
+| Observe (plausible) | When you said that, you looked at me. It's the first time you've done that today. | "Is it?" She looks away again.<br>*(pose: gaze window)* | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Accurate, and it made her aware of being watched. She stepped back from the moment you had noticed. |
+| Observe (clumsy) | When you said that, you sat up a little. It sounds like you know what to do about it. | "Do I?" She slumps back in the chair.<br>*(pose: chair back)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Read her wish for change as knowing the answer. It put pressure on her to have one. |
 | Challenge (skilful) | I think you have more say over how this feels than it seems right now. | "Like what?" Doubtful, but curious. | O +3 | T −8, C −5, O +5 | T −6, C +2, O +12 | Challenged her sense of helplessness. A hopeful push; it needed trust to sound like belief rather than blame. |
-| Challenge (clumsy) | Well, it won't stop by itself. | "I know that." Flat. | — | T −11, C −5, O +1 | T −9, C +1, O +4 | True and blunt. It told her what she knew and left her feeling told off. |
+| Challenge (plausible) | I think it'll start to feel better once the homework is under control. | "Maybe." She does not sound convinced. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | A sensible view from the outside. It made the homework the answer before she had said what would help. |
+| Challenge (clumsy) | I think it won't stop by itself, though. Something will have to change. | "I know that." Flat. | — | T −11, C −5, O +1 | T −9, C +1, O +4 | True, and said as a warning. It told her what she already knew and gave her nothing to work with. |
 
 #### r1-06b · p. 54 · Act 3
 
@@ -297,13 +337,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | If the next two weeks went a bit better, what would you notice first? | "That I'd done some homework without it being a whole thing." A small shrug. | T +2, O +5 | T +5, C +1, O +11 | T +5, C +1, O +11 | Moved from comfort to the future at the moment she felt safest. She did the picturing herself. |
-| Question (clumsy) | Would it help to talk about it more? | "Maybe." | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A closed question when she had just started talking. It invited a yes or no, and got neither. |
+| Question (plausible) | Who would you feel able to talk to about it, outside school? | "I don't know. No one, really." She shrugs. | — | T +1, C +1, O +4 | T +1, C +1, O +4 | A caring question that looked for support beyond this room. It moved away from the conversation she had just started having with you. |
+| Question (clumsy) | Would it help to talk about it more often, maybe here with me? | "Maybe." | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A kind offer as a closed question. She said maybe; it did not ask what she wanted. |
 | Support (skilful) | I'm glad you're talking about it now. | "Me too. I think." | T +2, O −1 | T +9, C +5, O −1 | T +9, C +5, O −1 | Warm and true. More comfort at this point kept her safe, and it kept the next step with you. |
-| Support (clumsy) | You can always come to me with anything. I'll sort it out. | "OK." She looks relieved, and a little let off.<br>*(pose: shoulders relaxed)* | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | A generous offer that moved the problem to your desk. Relief came at the cost of her ownership. |
+| Support (plausible) | I'm glad. Talking always helps. | "I guess." She smiles a little. | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Warm, and a general rule. It praised the talking and moved past what she had said. |
+| Support (clumsy) | You can come to me. I'll sort it out. | "OK." She looks relieved, and a little let off. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Generous, and it took the problem off her. Relief is not the same as a step of her own. |
 | Observe (skilful) | You said you don't really talk about it. You're talking about it now. | "Yeah. Weird." A small smile.<br>*(pose: mouth slightSmile)* | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Showed her something she was already doing differently. Small, and it was hers. |
-| Observe (clumsy) | You look really down about it all. | "I'm fine." She sits up straighter, as if to prove it.<br>*(pose: head up)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Described her mood for her. She disagreed in order to keep some control. |
+| Observe (plausible) | You said you don't really talk about it. That must make it feel heavier. | "I suppose." She shrugs. | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | An empathic guess about how it felt. It was probably close, and it told her the feeling rather than letting her name it. |
+| Observe (clumsy) | You said it's a lot. You look as if it's all getting on top of you. | "I'm fine." She sits up straighter, as if to prove it.<br>*(pose: chair back)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Described her state rather than what you saw or heard. She had just admitted something, and the label made her take it back. |
 | Challenge (skilful) | Not talking about it is one way to cope. I'm not sure it's working for you. | "...No. It isn't." | O +3 | T −8, C −5, O +5 | T −6, C +2, O +12 | Questioned her way of coping, gently. A push that relied on the warmth already there. |
-| Challenge (clumsy) | Then you need to start talking about it, don't you? | "I guess." | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Turned her admission into an instruction. She agreed, without owning it. |
+| Challenge (plausible) | Not talking about it is one way to cope. It might help to tell someone at home. | "Maybe." She does not look keen. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | A reasonable suggestion, made early. It pointed her towards home before you knew what home meant in this. |
+| Challenge (clumsy) | Not talking about it is one way to cope, but you'll need to start talking at some point. | "I guess." | — | T −11, C −5, O +1 | T −9, C +1, O +4 | A fair point as an instruction. She agreed, and the instruction was yours. |
 
 #### r1-06c · p. 58 · Act 3
 
@@ -316,13 +360,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What would you want the next two weeks to look like? | "Less of this. Less being annoyed at myself at eleven at night." She pauses. "Actually starting things." | T +2, O +5 | T +5, C +1, O +11 | T +5, C +1, O +11 | Gave her the question she had just asked herself. She answered it, which made the future hers. |
-| Question (clumsy) | Do you know what you want? | "No." Quickly. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Closed, and asked at the moment she was least sure. It invited the easiest answer. |
+| Question (plausible) | What do you think you might want to do after school? | "I don't know." She looks at the window. "Something."<br>*(pose: gaze window)* | — | T +1, C +1, O +4 | T +1, C +1, O +4 | The big question, asked at the first opening. It was too large a step from "I didn't say what I want". |
+| Question (clumsy) | Do you know what you want, deep down, or not yet? | "No." Quickly. | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A closed question that made her choose between knowing and not knowing. "No" was the quick way out. |
 | Support (skilful) | That's OK. It's not easy to know what you want at sixteen. | "Everyone else seems to know." | T +3 | T +10, C +5, O ±0 | T +10, C +5, O ±0 | Normalised not knowing, kindly. It eased the pressure, and it eased the question away too. |
-| Support (clumsy) | You don't need to know yet. Don't worry about it. | "OK." She lets it go. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Rescued her from an uncomfortable thought she had arrived at herself. Comfortable; the thought was lost. |
+| Support (plausible) | That's OK. You don't need to know yet. There's plenty of time. | "OK." She lets it go. | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Took the pressure off, which she may have needed. It also closed the door she had just opened. |
+| Support (clumsy) | That's OK. We can work out what you want together, step by step. | "OK." She lets you take it. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | A generous offer of help. "Together" put you in charge of finding out what she wanted. |
 | Observe (skilful) | You laughed, but it didn't sound like you found it funny. | "No. It isn't." She looks at you properly.<br>*(pose: gaze counsellor)* | O +3 | T −2, C +2, O +7 | T +2, C +2, O +7 | Noticed the gap between her laugh and her face. It let her drop the act without being told to. |
-| Observe (clumsy) | You clearly have no idea what you want. | "Thanks." | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Took her own observation and handed it back as a criticism. It sounded like a verdict. |
+| Observe (plausible) | You said that quietly, as if you'd noticed it for the first time. | "Kind of." She looks at her hands.<br>*(pose: gaze floor)* | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | A gentle, accurate observation. It stayed with how she said it rather than with what she had realised. |
+| Observe (clumsy) | You laughed, but it sounds like you don't know what you want. | "Thanks." The laugh is gone. | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Started with what you saw and ended with a conclusion about her. The conclusion stung. |
 | Challenge (skilful) | I think you might have more of an idea than you're letting yourself say. | She looks at you for a long moment. "Maybe."<br>*(pose: gaze counsellor)* | O +4 | T −8, C −5, O +6 | T −6, C +2, O +13 | Pushed on her not-knowing. With trust in place it can feel like belief in her; without it, like pressure. |
-| Challenge (clumsy) | Well, you need to work that out, then. | "Yeah. Obviously." | — | T −11, C −5, O +1 | T −9, C +1, O +4 | An instruction where an invitation was possible. She agreed and closed off. |
+| Challenge (plausible) | I think you might want something different from what everyone has decided. | "Maybe." She does not say what. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | A perceptive guess, said for her. It may have been close; she could agree without owning it. |
+| Challenge (clumsy) | I think you need to work out what you want, then, before someone else does. | "Yeah. I know." | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Pushed for urgency and hinted at others deciding for her. It took a side and added pressure. |
 
 #### r1-06d · p. 62 · Act 3
 
@@ -335,13 +383,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | If it were two weeks from now and things were slightly better, what would you see? | "Me doing chemistry before my phone. Maybe." She seems surprised by her own answer. | T +2, O +5 | T +5, C +1, O +11 | T +5, C +1, O +11 | Followed a push with an open question. The push opened the door; the question let her walk through it. |
-| Question (clumsy) | Would getting your homework in on time be a good change? | "I guess." | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A suggestion dressed as a question. She accepted your idea instead of finding hers. |
+| Question (plausible) | What do you think would make the biggest difference to your grades right now? | "Doing the homework, I guess." It sounds like the expected answer. | — | T +1, C +1, O +4 | T +1, C +1, O +4 | Asked for her view, on the grades and on the biggest change. She gave the answer she knew was expected. |
+| Question (clumsy) | Would getting your homework in on time be a good change to start with? | "I guess." | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Your change, phrased as a question. A yes was easy and did not commit her to anything. |
 | Support (skilful) | Not knowing yet is fine. You've thought about a lot today. | "Yeah. My head hurts a bit." A smile.<br>*(pose: mouth smile)* | T +2 | T +9, C +5, O ±0 | T +9, C +5, O ±0 | Recognised the effort she had made. Trust rose; the change she might make stayed undefined. |
-| Support (clumsy) | Don't worry, I'll help you work out what to change. | "OK." She waits for you to tell her.<br>*(pose: gaze counsellor)* | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Offered help at the moment she was about to think for herself. She waited for your answer instead. |
-| Observe (skilful) | You've stopped looking at the door. You're really thinking about this. | "I am, actually." | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Showed her the change in her own behaviour. It affirmed her engagement without telling her what to think. |
-| Observe (clumsy) | You clearly need to change something. | "I know." | — | T −4, C +1, O +2 | T −1, C +1, O +2 | An observation that was really a judgement. It gave her nothing new. |
-| Challenge (skilful) | I think you already have one idea. You just don't trust it yet. | "...Maybe the phone thing." She pulls a face.<br>*(pose: mouth tight)* | O +5 | T −8, C −5, O +7 | T −6, C +2, O +14 | A second push, made with trust already in place. It worked because it pointed at her idea, not yours. |
-| Challenge (clumsy) | You have to change something, or nothing will change. | "Yeah, I get it." | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Logical and flat. It added pressure without adding direction. |
+| Support (plausible) | Not knowing yet is fine. We can always come back to it next time. | "OK." She seems a little relieved. | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Gave her room, which was kind. It let her off just as she had started thinking. |
+| Support (clumsy) | Not knowing yet is fine. I'll help you work out what to change. | "OK." She waits for you to tell her. | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Offered help, and in doing so took over the thinking. She waited for your answer. |
+| Observe (skilful) | You've stopped looking at the door. You seem to be thinking about this. | "I am, actually." | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Showed her the change in her own behaviour. It affirmed her engagement without telling her what to think. |
+| Observe (plausible) | You've sat back in the chair. You seem more relaxed than when you came in. | "I suppose." She glances at the door, then back.<br>*(pose: gaze door)* | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Accurate and warm. It noticed the comfort and missed the thinking, and drew her eye back to the door. |
+| Observe (clumsy) | You've stopped looking at the door. You seem to know what needs to change. | "I don't, though." | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Read her thinking as knowing. It put her on the spot to have an answer. |
+| Challenge (skilful) | I think you already have one idea. You don't trust it yet, that's all. | "...Maybe the phone thing." She pulls a face.<br>*(pose: mouth tight)* | O +5 | T −8, C −5, O +7 | T −6, C +2, O +14 | A second push, made with trust already in place. It worked because it pointed at her idea, not yours. |
+| Challenge (plausible) | I think the phone might be the place to start. It came up a few times. | "Maybe." She pulls a face. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | A sensible starting point, offered by you. She could accept it without it being hers. |
+| Challenge (clumsy) | I think you have to change something, or nothing will change, will it? | "Yeah, I get it." | — | T −11, C −5, O +1 | T −9, C +1, O +4 | True, and said as pressure. It asked her to agree rather than to think. |
 
 #### r1-06e · p. 64 · Act 3
 
@@ -354,13 +406,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | You're right, I might not. What am I missing? | A pause. "It's not about being lazy. It's just... a lot." | T +3, O +4 | T +6, C +1, O +10 | T +6, C +1, O +10 | Accepted her criticism and turned it into curiosity. It recovered some ground and let her put you right. |
-| Question (clumsy) | Is it that you don't want to talk about after school? | "I don't want to talk about any of it." | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | A guess, offered as a yes-or-no question. She took the chance to close everything. |
+| Question (plausible) | You're right, I might not. Is it after school? | "Partly." She keeps the bag on her lap.<br>*(pose: arms bag)* | — | T +1, C +1, O +4 | T +1, C +1, O +4 | Owned the gap and then filled it with a guess. She confirmed part of it and kept the rest. |
+| Question (clumsy) | You're right. Can you help me get it, then? | "Not really." Her hands stay on the bag.<br>*(pose: arms bag)* | — | T −1, C ±0, O +2 | T −1, C ±0, O +2 | Agreed, then put the work of explaining back on her. At that moment, the "then" sounded like a test. |
 | Support (skilful) | That's fair. I pushed. I'd still like to understand, if you'll let me. | She hesitates, then puts the bag down.<br>*(pose: arms lap)* | T +5 | T +12, C +5, O ±0 | T +12, C +5, O ±0 | Repaired the rupture openly. Trust came back; there was less time left to use it. |
-| Support (clumsy) | I do get it, honestly. I was sixteen once. | "Not like this." | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Claimed understanding she had just told you was missing. It made the gap between you wider. |
-| Observe (skilful) | You've picked up your bag. I think I pushed too hard just now. | "A bit." The bag stays on her lap, but she does not stand.<br>*(pose: arms bag, chair edge)* | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Read the bag accurately and said so without blame. Naming the rupture helped repair it. |
-| Observe (clumsy) | You're getting really worked up about this. | "I'm not worked up." Her voice is louder.<br>*(pose: mouth tight, shoulders raised)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Described her reaction as a problem. She had to defend herself instead of being understood. |
+| Support (plausible) | That's fair. Sorry. I was only trying to help you, that's all. | "I know." She keeps the bag on her lap.<br>*(pose: arms bag)* | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Apologised, which helped, and then explained yourself. It made the repair about your intentions. |
+| Support (clumsy) | That's fair. But I do get it more than you think. I was sixteen once. | "Not like this." | — | T +1, C +2, O ±0 | T +1, C +2, O ±0 | Tried to close the gap by sharing your own past. She heard that you knew better. |
+| Observe (skilful) | You've picked up your bag. I think I pushed too hard a moment ago. | "A bit." The bag stays on her lap, but she does not stand.<br>*(pose: arms bag, chair edge)* | T +1, O +2 | T −1, C +2, O +6 | T +3, C +2, O +6 | Read the bag accurately and said so without blame. Naming the rupture helped repair it. |
+| Observe (plausible) | You've picked up your bag. Do you want to stop for today? | "No. I don't know." She does not stand.<br>*(pose: arms bag)* | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | Respected her signal and offered her the door. It was considerate, and it left the repair to her. |
+| Observe (clumsy) | You've picked up your bag. You seem quite worked up about this. | "I'm not worked up." Her voice is louder.<br>*(pose: arms bag)* | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Saw the bag and labelled her feeling. A label is easy to deny, and she did. |
 | Challenge (skilful) | Maybe I don't. But I don't think you've given up, either. | "How would you know?" But she stays. | O +3 | T −8, C −5, O +5 | T −6, C +2, O +12 | Held your ground and expressed belief in her. A second push while she was upset; a risk, and she stayed. |
-| Challenge (clumsy) | I think you just don't want to hear it. | She stands up. Then, slowly, she sits down again.<br>*(pose: chair edge)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Pushed again when she had just pushed back. It escalated rather than explored. |
+| Challenge (plausible) | Maybe I don't. But it would help if you told me, then. | "Maybe." She does not start. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | A logical push. It was reasonable, and it asked her to do the repair. |
+| Challenge (clumsy) | Maybe I don't. But I think you don't want to hear it, either. | She stands up. Then, slowly, she sits down again.<br>*(pose: chair edge)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | Matched her push with one of your own. It turned the moment into a stand-off. |
 
 #### r1-07 · p. 70 · Act 3
 
@@ -373,13 +429,17 @@ flowchart TD
 | Lever | Counsellor says | Maya's reaction | Override | Δ at start (T 35) | Δ at T 55 | Debrief note |
 |---|---|---|---|---|---|---|
 | Question (skilful) | What's one small thing you'd want to try before we meet again? | She thinks for a while. "Maybe... do the chemistry first. Before my phone. Just to see."<br>*(pose: gaze window)* | T +1, O +5 | T +4, C +1, O +11 | T +4, C +1, O +11 | Asked her for the next step and waited. Whatever she chose, it was hers to try. |
-| Question (clumsy) | Will you promise to hand in your next piece of homework on time? | "I guess." | O −2 | T −1, C ±0, O ±0 | T −1, C ±0, O ±0 | Got a yes quickly. It was your plan and her agreement, which is not the same as her commitment. |
+| Question (plausible) | What do you think would help most with the homework deadlines? | "Start earlier, I guess." It sounds like something she has been told. | — | T +1, C +1, O +4 | T +1, C +1, O +4 | Invited her answer, on the deadlines that brought her here. She gave the answer she knew was expected. |
+| Question (clumsy) | Could you try handing in the next piece of homework on time? | "I can try." She says it to the clock. | O −2 | T −1, C ±0, O ±0 | T −1, C ±0, O ±0 | Your step, phrased as a question. A yes was easy to give and easy to forget. |
 | Support (skilful) | You don't have to fix everything this week. We can meet again in two weeks and see how things are. | "OK. Yeah." She seems lighter.<br>*(pose: shoulders relaxed)* | T +2, O −1 | T +9, C +5, O −1 | T +9, C +5, O −1 | Took the pressure off and kept the relationship going. She left lighter, without a step of her own. |
-| Support (clumsy) | Don't worry, I'll talk to your teachers and sort out some extensions for you. | "Really? OK. Thanks." She relaxes. The problem is yours now.<br>*(pose: chair back, shoulders relaxed)* | O −4 | T +1, C +2, O −4 | T +1, C +2, O −4 | Generous, and it took the problem off her completely. It also promised something that was not yours alone to give. |
+| Support (plausible) | You don't have to fix everything this week. Even one finished piece of homework would be a good start. | "OK. I'll try." She nods, a bit too quickly. | — | T +4, C +4, O ±0 | T +4, C +4, O ±0 | Encouraging, and it chose the step for her. She agreed to a reasonable target that was yours. |
+| Support (clumsy) | You don't have to fix everything this week. I'll have a word with your teachers about the deadlines. | "Oh. OK. Thanks." She relaxes. The problem is yours now.<br>*(pose: chair back, shoulders relaxed)* | O −4 | T +1, C +2, O −4 | T +1, C +2, O −4 | Generous, and it took the problem off her. It also promised something that depended on other staff. |
 | Observe (skilful) | You've talked about the moment you sit down and then stop. That moment seems to matter. | "Yeah. If I could just get past the first bit..." She trails off, thinking.<br>*(pose: gaze window)* | O +3 | T −2, C +2, O +7 | T +2, C +2, O +7 | Gave her back a thread from her own words and left the conclusion to her. She started to build on it. |
-| Observe (clumsy) | You obviously know what you need to do. | "Not really. That's why I'm here." | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Assumed an answer she did not have. It left her with the pressure and none of the help. |
+| Observe (plausible) | You've talked about your phone a few times. That seems to be where the evening goes. | "Yeah. I could leave it downstairs, I guess." She does not sound sure. | — | T −3, C +1, O +3 | T ±0, C +1, O +3 | An accurate thread from her own words, picked because it pointed at an obvious fix. She took the fix you had pointed to. |
+| Observe (clumsy) | You've talked about the work in a lot of detail. It sounds like you already know what to do. | "Not really. That's why I'm here." | — | T −4, C +1, O +2 | T −1, C +1, O +2 | Assumed she had an answer she did not have. It left her with the pressure and none of the help. |
 | Challenge (skilful) | I could give you a plan, but it would be my plan. I'd rather hear yours, even if it's small. | She looks surprised. Then: "OK. Let me think."<br>*(pose: head up)* | O +5 | T −8, C −5, O +7 | T −6, C +2, O +14 | Refused to take the problem off her, kindly. It is a push; with enough trust it hands her the pen. |
-| Challenge (clumsy) | Saying "I don't know" isn't going to get your grades back up. | "I didn't say I don't know." She picks up her bag.<br>*(pose: arms bag, chair edge, gaze door)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | A reprimand at the last moment. It ended the session on her failure rather than her next step. |
+| Challenge (plausible) | I could give you a plan, but plans from me don't usually stick. Shall we make one together? | "OK. If you want." She waits for you to start. | — | T −9, C −5, O +1 | T −8, C +1, O +6 | Offered partnership, which sounds generous. As a yes-or-no question it left you holding the pen. |
+| Challenge (clumsy) | I could give you a plan, but you'd need to stick to it this time. Are you up for that? | "This time?" She picks up her bag.<br>*(pose: arms bag, chair edge, gaze door)* | — | T −11, C −5, O +1 | T −9, C +1, O +4 | "This time" carried a judgement about last time. The push landed on her past rather than her next step. |
 
 ### Endings
 
@@ -776,16 +836,16 @@ Hand-tuned adjustments (SPEC.md 7.6), added after the formula, in the range -5 t
 | r1 / r1-01 / s-s | Support (skilful) | Thanks for coming in. You're not in trouble. I'd just like to hear how things are from your side. | T +4 |
 | r1 / r1-01 / o-s | Observe (skilful) | You said that very quickly, before I'd asked anything. It sounds like you've had that conversation a few times already. | T +5, O +3 |
 | r1 / r1-01 / c-s | Challenge (skilful) | "Lazy" is one explanation. I'm not sure it's the whole one. | O +2 |
-| r1 / r1-01 / c-c | Challenge (clumsy) | Are you, though? | T −2 |
+| r1 / r1-01 / c-c | Challenge (clumsy) | "Lazy" is one explanation. It doesn't sound like the real one to me. | T −2 |
 | r1 / r1-02 / q-s | Question (skilful) | What would you want to get out of talking today, if anything? | T +1, O +5 |
 | r1 / r1-02 / s-s | Support (skilful) | It's not a warning. It's just a chance to talk about how things are going, at whatever pace suits you. | T +5 |
-| r1 / r1-02 / s-c | Support (clumsy) | Don't worry, we'll have you back on track in no time. | O −2 |
+| r1 / r1-02 / s-c | Support (clumsy) | It's not a warning. We'll work out what's going wrong and get you back on track in no time. | O −2 |
 | r1 / r1-02 / o-s | Observe (skilful) | You asked if it's a warning. It sounds like you're expecting to be in trouble. | T +3, O +3 |
 | r1 / r1-02 / c-s | Challenge (skilful) | I don't think Mr Okafor sees this as a warning. He told me he doesn't think "lazy" is the full story. | T +1, O +2 |
-| r1 / r1-02 / c-c | Challenge (clumsy) | Well, two missed deadlines is a pretty serious warning sign. | T −2 |
+| r1 / r1-02 / c-c | Challenge (clumsy) | I don't think Mr Okafor sees this as a warning yet. But two missed deadlines is a pattern he can't ignore. | T −2 |
 | r1 / r1-03a / q-s | Question (skilful) | What's happening in those late evenings? | T +2, O +4 |
 | r1 / r1-03a / s-s | Support (skilful) | That sounds exhausting. Tired, and then annoyed with yourself for being tired. | T +3 |
-| r1 / r1-03a / o-s | Observe (skilful) | You said "so I don't". Not "I can't". | T +1, O +2 |
+| r1 / r1-03a / o-s | Observe (skilful) | You said "so I don't". You didn't say "I can't". | T +1, O +2 |
 | r1 / r1-03a / c-s | Challenge (skilful) | Being that tired is real. I wonder if "lazy" is the right word for someone who's this tired. | O +3 |
 | r1 / r1-03b / q-s | Question (skilful) | What happens in the moment you sit down? | T +2, O +4 |
 | r1 / r1-03b / s-s | Support (skilful) | That's a horrible feeling, wanting to start and not being able to. | T +3 |
@@ -801,23 +861,23 @@ Hand-tuned adjustments (SPEC.md 7.6), added after the formula, in the range -5 t
 | r1 / r1-03d / c-s | Challenge (skilful) | Pointless is a strong word. You still came in today, when you could have not. | O +3 |
 | r1 / r1-04a / q-s | Question (skilful) | What goes through your head when you open it? | T +1, O +4 |
 | r1 / r1-04a / s-s | Support (skilful) | Two hours of avoiding something you're dreading. That's a hard way to spend an evening. | T +3 |
-| r1 / r1-04a / o-s | Observe (skilful) | I noticed you picked up your phone just as you mentioned next year. | T +4, O +5 |
-| r1 / r1-04a / o-c | Observe (clumsy) | You're on your phone again. Is this boring you? | T −2 |
+| r1 / r1-04a / o-s | Observe (skilful) | I noticed you picked up your phone as soon as you mentioned next year. | T +4, O +5 |
+| r1 / r1-04a / o-c | Observe (clumsy) | I noticed you picked up your phone while we were talking. Is this boring you? | T −2 |
 | r1 / r1-04a / c-s | Challenge (skilful) | You're calling that lazy. It sounds more like you're avoiding something. | O +4 |
 | r1 / r1-04b / q-s | Question (skilful) | What's it like when you try to think about next year? | T +1, O +4 |
 | r1 / r1-04b / s-s | Support (skilful) | It's OK if this is hard to talk about. We don't have to rush. | T +5 |
-| r1 / r1-04b / o-s | Observe (skilful) | Every time next year comes up, you look at your phone. I'm not telling you off. I just noticed it. | T +4, O +5 |
-| r1 / r1-04b / o-c | Observe (clumsy) | You're more interested in your phone than in this conversation. | T −3 |
+| r1 / r1-04b / o-s | Observe (skilful) | Every time next year comes up, you look at your phone. I'm not telling you off. I noticed it, that's all. | T +4, O +5 |
+| r1 / r1-04b / o-c | Observe (clumsy) | Every time next year comes up, you look at your phone. It's hard to talk to you while you're on it. | T −3 |
 | r1 / r1-04b / c-s | Challenge (skilful) | I don't think you can't be bothered. I think something about next year is getting to you. | O +3 |
 | r1 / r1-05 / q-s | Question (skilful) | What's it like, having that already decided? | T +1, O +5 |
 | r1 / r1-05 / s-s | Support (skilful) | That sounds like a lot to carry on your own. | T +3 |
-| r1 / r1-05 / s-c | Support (clumsy) | Don't worry about after school yet. That's years away. | O −2 |
+| r1 / r1-05 / s-c | Support (clumsy) | There's still plenty of time to work that out. | O −2 |
 | r1 / r1-05 / o-s | Observe (skilful) | You said "everyone's decided". I noticed you didn't say what you'd decided. | T +1, O +5 |
 | r1 / r1-05 / c-s | Challenge (skilful) | Maybe. But you'd be the one living it, so I'd be interested in what you think too. | O +4 |
-| r1 / r1-05 / c-c | Challenge (clumsy) | Well, nobody can decide your future for you. | T −2 |
+| r1 / r1-05 / c-c | Challenge (clumsy) | Maybe. But you're the one living it, so they need to hear what you think. | T −2 |
 | r1 / r1-06a / q-s | Question (skilful) | If things were a bit better two weeks from now, what would be different? | T +2, O +5 |
-| r1 / r1-06a / s-s | Support (skilful) | That makes sense. Feeling stuck every evening sounds really draining. | T +3 |
-| r1 / r1-06a / o-s | Observe (skilful) | When you said that, you sat up a little. It sounds like you really want things to change. | T +1, O +2 |
+| r1 / r1-06a / s-s | Support (skilful) | That makes sense. Feeling stuck every evening sounds draining. | T +3 |
+| r1 / r1-06a / o-s | Observe (skilful) | When you said that, you sat up a little. It sounds like you want things to change. | T +1, O +2 |
 | r1 / r1-06a / c-s | Challenge (skilful) | I think you have more say over how this feels than it seems right now. | O +3 |
 | r1 / r1-06b / q-s | Question (skilful) | If the next two weeks went a bit better, what would you notice first? | T +2, O +5 |
 | r1 / r1-06b / s-s | Support (skilful) | I'm glad you're talking about it now. | T +2, O −1 |
@@ -829,16 +889,16 @@ Hand-tuned adjustments (SPEC.md 7.6), added after the formula, in the range -5 t
 | r1 / r1-06c / c-s | Challenge (skilful) | I think you might have more of an idea than you're letting yourself say. | O +4 |
 | r1 / r1-06d / q-s | Question (skilful) | If it were two weeks from now and things were slightly better, what would you see? | T +2, O +5 |
 | r1 / r1-06d / s-s | Support (skilful) | Not knowing yet is fine. You've thought about a lot today. | T +2 |
-| r1 / r1-06d / o-s | Observe (skilful) | You've stopped looking at the door. You're really thinking about this. | T +1, O +2 |
-| r1 / r1-06d / c-s | Challenge (skilful) | I think you already have one idea. You just don't trust it yet. | O +5 |
+| r1 / r1-06d / o-s | Observe (skilful) | You've stopped looking at the door. You seem to be thinking about this. | T +1, O +2 |
+| r1 / r1-06d / c-s | Challenge (skilful) | I think you already have one idea. You don't trust it yet, that's all. | O +5 |
 | r1 / r1-06e / q-s | Question (skilful) | You're right, I might not. What am I missing? | T +3, O +4 |
 | r1 / r1-06e / s-s | Support (skilful) | That's fair. I pushed. I'd still like to understand, if you'll let me. | T +5 |
-| r1 / r1-06e / o-s | Observe (skilful) | You've picked up your bag. I think I pushed too hard just now. | T +1, O +2 |
+| r1 / r1-06e / o-s | Observe (skilful) | You've picked up your bag. I think I pushed too hard a moment ago. | T +1, O +2 |
 | r1 / r1-06e / c-s | Challenge (skilful) | Maybe I don't. But I don't think you've given up, either. | O +3 |
 | r1 / r1-07 / q-s | Question (skilful) | What's one small thing you'd want to try before we meet again? | T +1, O +5 |
-| r1 / r1-07 / q-c | Question (clumsy) | Will you promise to hand in your next piece of homework on time? | O −2 |
+| r1 / r1-07 / q-c | Question (clumsy) | Could you try handing in the next piece of homework on time? | O −2 |
 | r1 / r1-07 / s-s | Support (skilful) | You don't have to fix everything this week. We can meet again in two weeks and see how things are. | T +2, O −1 |
-| r1 / r1-07 / s-c | Support (clumsy) | Don't worry, I'll talk to your teachers and sort out some extensions for you. | O −4 |
+| r1 / r1-07 / s-c | Support (clumsy) | You don't have to fix everything this week. I'll have a word with your teachers about the deadlines. | O −4 |
 | r1 / r1-07 / o-s | Observe (skilful) | You've talked about the moment you sit down and then stop. That moment seems to matter. | O +3 |
 | r1 / r1-07 / c-s | Challenge (skilful) | I could give you a plan, but it would be my plan. I'd rather hear yours, even if it's small. | O +5 |
 | r2 / r2-01a / s | Support | Well done for trying it. I'm really proud of you. | T −3, O −3 |
@@ -896,6 +956,7 @@ From `RULES` in `src/engine.js`. Changes made during calibration, and why, are i
 
 | Rule | Value |
 |---|---|
+| Plausible wording (Round 1) | positive effects × 0.7, then Trust −1 |
 | Clumsy wording (Round 1) | positive effects × 0.4, then Trust −2 |
 | Challenge before trust | Trust < 50: row replaced by T −5, C −5, O +2 |
 | Observe before trust | Trust < 40: Trust effect −2 |
@@ -923,34 +984,34 @@ From `RULES` in `src/engine.js`. Changes made during calibration, and why, are i
 
 ## Calibration report
 
-From `node tests/calibrate.mjs` (SPEC.md 7.8). Round 1 has 8 options per decision and Round 2 has 4; "random play" picks each option with equal probability. Round 2 criteria use the median carry-over for each Round 1 ending; reachability is also checked from the lowest and highest.
+From `node tests/calibrate.mjs` (SPEC.md 7.8). Round 1 has 12 options per decision and Round 2 has 4; "random play" picks each option with equal probability. Every path is covered by a memoised walk over distinct states, so the percentages are exact. Round 2 criteria use the median carry-over for each Round 1 ending; reachability is also checked from the lowest and highest.
 
 ```text
 Turn the Page — calibration report (SPEC.md 7.8)
 Case: maya
 
-  Round 1: 1753102 paths, longest 7 decisions
-    breakthrough    129812 paths     6.2% of random play
-    partial         211375 paths    10.1% of random play
-    polite         1301511 paths    62.1% of random play
-    early           110404 paths    21.7% of random play
+  Round 1: 30115603 paths (722803 distinct states), longest 7 decisions
+    breakthrough   1002662 paths     2.8% of random play
+    partial        3046674 paths     8.5% of random play
+    polite        24116028 paths    67.3% of random play
+    early          1950239 paths    21.4% of random play
 
-  Round 2 after breakthrough (median carry {"trust":39,"confidence":60,"ownership":20}, 764 distinct): 15460 paths, longest 7 decisions
+  Round 2 after breakthrough (median carry {"trust":39,"confidence":54,"ownership":20}, 814 distinct): 15460 paths (17560 distinct states), longest 7 decisions
     breakthrough      2614 paths    16.0% of random play
     partial           4249 paths    25.9% of random play
     polite            8425 paths    51.4% of random play
     early              172 paths     6.7% of random play
-  Round 2 after partial (median carry {"trust":37,"confidence":61,"ownership":15}, 587 distinct): 15454 paths, longest 7 decisions
+  Round 2 after partial (median carry {"trust":37,"confidence":61,"ownership":15}, 629 distinct): 15454 paths (16800 distinct states), longest 7 decisions
     breakthrough      1511 paths     9.2% of random play
     partial           4668 paths    28.5% of random play
     polite            9092 paths    55.5% of random play
     early              183 paths     6.8% of random play
-  Round 2 after polite (median carry {"trust":30,"confidence":30,"ownership":15}, 1 distinct): 14668 paths, longest 7 decisions
+  Round 2 after polite (median carry {"trust":30,"confidence":30,"ownership":15}, 1 distinct): 14668 paths (15924 distinct states), longest 7 decisions
     breakthrough      1146 paths     7.0% of random play
     partial           3375 paths    20.6% of random play
     polite            9873 paths    60.3% of random play
     early              274 paths    12.1% of random play
-  Round 2 after early (median carry {"trust":25,"confidence":30,"ownership":15}, 1 distinct): 13390 paths, longest 7 decisions
+  Round 2 after early (median carry {"trust":25,"confidence":30,"ownership":15}, 1 distinct): 13390 paths (15445 distinct states), longest 7 decisions
     breakthrough      1146 paths     7.0% of random play
     partial           2218 paths    13.5% of random play
     polite            9722 paths    59.3% of random play
@@ -960,9 +1021,12 @@ Criteria:
   PASS  Round 1: every ending reachable — all four reached
   PASS  Round 1: Breakthrough by >= 3 paths with different first three levers — 63 distinct opening triple(s): question>question>question; question>question>support; question>question>observe; question>question>challenge; question>support>question; ...
   PASS  Round 1: no single-lever strategy reaches Breakthrough — none
-  PASS  Round 1: random play: Breakthrough 5-20% — 6.2%
-  PASS  Round 1: random play: Early exit 5-25% — 21.7%
+  PASS  Round 1: random play: Breakthrough 2-20% — 2.8%
+  PASS  Round 1: random play: Early exit 5-25% — 21.4%
   PASS  Round 1: Early exit within 3 decisions needs >= 2 Challenges or clumsy wordings — none
+  PASS  Round 1: no strategy of only plausible wordings reaches Breakthrough — none (best ending reached: partial, polite, early)
+  PASS  Round 1: one-quality random play: Breakthrough or Partial falls skilful > plausible > clumsy — skilful 67.3%, plausible 1.8%, clumsy 0.0%
+  PASS  Round 1: one-quality random play: Early exit rises skilful < plausible < clumsy — skilful 2.8%, plausible 20.7%, clumsy 62.1%
   PASS  Round 2 after breakthrough: every ending reachable — all four reached
   PASS  Round 2 after breakthrough: Breakthrough by >= 3 paths with different first three levers — 50 distinct opening triple(s): question>question>question; question>question>support; question>question>observe; question>question>challenge; question>support>question; ...
   PASS  Round 2 after breakthrough: no single-lever strategy reaches Breakthrough — none
@@ -988,7 +1052,297 @@ Criteria:
   PASS  Round 2 after early: random play: Early exit 5-25% — 20.1%
   PASS  Round 2 after early: Early exit within 3 decisions needs >= 2 Challenges or clumsy wordings — none
 
-PASSED all 30 checks.
+PASSED all 33 checks.
+```
+
+## Wording tells (Round 1)
+
+From `node tests/wording-tells.mjs` (SPEC.md 9.4, 14.3): length, end punctuation and opening word of each wording, and anything that would let a reader sort the three qualities by surface features.
+
+```text
+Turn the Page — wording tells (SPEC.md 9.4, 14.3)
+
+p. 7 (r1-01)
+  question  ratio 1.04
+    skilful    75  end "?"   opens Thanks    
+    plausible  72  end "?"   opens Thanks    
+    clumsy     72  end "?"   opens Thanks    
+  support   ratio 1.10
+    skilful    97  end "."   opens Thanks     tells: just
+    plausible  90  end "."   opens Thanks    
+    clumsy     88  end "."   opens Thanks    
+  observe   ratio 1.05
+    skilful   119  end "."   opens You       
+    plausible 118  end "."   opens You're    
+    clumsy    113  end "."   opens You       
+  challenge ratio 1.15
+    skilful    59  end "."   opens Lazy      
+    plausible  68  end "."   opens Lazy      
+    clumsy     68  end "."   opens Lazy      
+
+p. 12 (r1-02)
+  question  ratio 1.07
+    skilful    61  end "?"   opens What      
+    plausible  61  end "?"   opens What      
+    clumsy     65  end "?"   opens Shall     
+  support   ratio 1.12
+    skilful   102  end "."   opens It's       tells: just
+    plausible  98  end "."   opens It's      
+    clumsy     91  end "."   opens It's      
+  observe   ratio 1.19
+    skilful    78  end "."   opens You       
+    plausible  83  end "."   opens You're    
+    clumsy     70  end "."   opens You       
+  challenge ratio 1.05
+    skilful   101  end "."   opens I         
+    plausible 102  end "."   opens I         
+    clumsy    106  end "."   opens I         
+
+p. 19 (r1-03a)
+  question  ratio 1.11
+    skilful    40  end "?"   opens What's    
+    plausible  38  end "?"   opens What      
+    clumsy     42  end "?"   opens Have      
+  support   ratio 1.05
+    skilful    78  end "."   opens That      
+    plausible  81  end "."   opens That      
+    clumsy     82  end "."   opens That      
+  observe   ratio 1.19
+    skilful    48  end "."   opens You       
+    plausible  47  end "."   opens You       
+    clumsy     56  end "."   opens You       
+  challenge ratio 1.15
+    skilful    92  end "."   opens Being     
+    plausible  86  end "."   opens Being     
+    clumsy     80  end "."   opens Being     
+
+p. 23 (r1-03b)
+  question  ratio 1.17
+    skilful    40  end "?"   opens What      
+    plausible  41  end "?"   opens What      
+    clumsy     35  end "?"   opens Is        
+  support   ratio 1.05
+    skilful    66  end "."   opens That's    
+    plausible  68  end "."   opens That      
+    clumsy     65  end "."   opens Don't     
+  observe   ratio 1.16
+    skilful    75  end "."   opens You       
+    plausible  70  end "."   opens You       
+    clumsy     81  end "."   opens You       
+  challenge ratio 1.07
+    skilful    75  end "."   opens You       
+    plausible  72  end "."   opens You       
+    clumsy     77  end "."   opens You       
+
+p. 26 (r1-03c)
+  question  ratio 1.05
+    skilful    60  end "?"   opens What      
+    plausible  57  end "?"   opens What      
+    clumsy     58  end "?"   opens So        
+  support   ratio 1.04
+    skilful    77  end "."   opens That      
+    plausible  74  end "."   opens That      
+    clumsy     76  end "."   opens That      
+  observe   ratio 1.06
+    skilful    81  end "."   opens You       
+    plausible  86  end "."   opens You       
+    clumsy     83  end "."   opens You       
+  challenge ratio 1.17
+    skilful   110  end "."   opens I         
+    plausible  94  end "."   opens I         
+    clumsy    100  end "."   opens I         
+
+p. 31 (r1-03d)
+  question  ratio 1.10
+    skilful    30  end "?"   opens What's    
+    plausible  33  end "?"   opens What      
+    clumsy     33  end "?"   opens Don't     
+  support   ratio 1.18
+    skilful    55  end "."   opens I          tells: just
+    plausible  65  end "."   opens That's    
+    clumsy     60  end "."   opens It's      
+  observe   ratio 1.13
+    skilful    64  end "."   opens You       
+    plausible  70  end "."   opens You       
+    clumsy     72  end "."   opens You've    
+  challenge ratio 1.06
+    skilful    77  end "."   opens Pointless 
+    plausible  82  end "."   opens Pointless 
+    clumsy     78  end "."   opens Pointless 
+
+p. 36 (r1-04a)
+  question  ratio 1.20
+    skilful    45  end "?"   opens What      
+    plausible  54  end "?"   opens What      
+    clumsy     47  end "?"   opens So        
+  support   ratio 1.16
+    skilful    87  end "."   opens Two       
+    plausible  75  end "."   opens Two       
+    clumsy     76  end "."   opens Two       
+  observe   ratio 1.10
+    skilful    70  end "."   opens I         
+    plausible  77  end "."   opens I         
+    clumsy     77  end "?"   opens I         
+  challenge ratio 1.04
+    skilful    72  end "."   opens You're    
+    plausible  71  end "."   opens You're    
+    clumsy     74  end "."   opens You're    
+
+p. 40 (r1-04b)
+  question  ratio 1.06
+    skilful    53  end "?"   opens What's    
+    plausible  51  end "?"   opens What      
+    clumsy     54  end "?"   opens Are       
+  support   ratio 1.11
+    skilful    61  end "."   opens It's      
+    plausible  63  end "."   opens It's      
+    clumsy     68  end "."   opens It's      
+  observe   ratio 1.08
+    skilful   105  end "."   opens Every     
+    plausible  97  end "."   opens You've    
+    clumsy     99  end "."   opens Every     
+  challenge ratio 1.11
+    skilful    89  end "."   opens I         
+    plausible  86  end "."   opens I         
+    clumsy     80  end "."   opens I         
+
+p. 45 (r1-05)
+  question  ratio 1.16
+    skilful    44  end "?"   opens What's    
+    plausible  42  end "?"   opens What      
+    clumsy     38  end "?"   opens Who's     
+  support   ratio 1.14
+    skilful    44  end "."   opens That      
+    plausible  50  end "."   opens That's    
+    clumsy     46  end "."   opens There's   
+  observe   ratio 1.04
+    skilful    75  end "."   opens You       
+    plausible  73  end "."   opens You       
+    clumsy     72  end "."   opens You       
+  challenge ratio 1.14
+    skilful    82  end "."   opens Maybe     
+    plausible  72  end "?"   opens Maybe     
+    clumsy     73  end "."   opens Maybe     
+
+p. 51 (r1-06a)
+  question  ratio 1.18
+    skilful    72  end "?"   opens If        
+    plausible  61  end "?"   opens What      
+    clumsy     65  end "?"   opens Do        
+  support   ratio 1.13
+    skilful    62  end "."   opens That      
+    plausible  70  end "."   opens That      
+    clumsy     68  end "."   opens That      
+  observe   ratio 1.05
+    skilful    82  end "."   opens When      
+    plausible  81  end "."   opens When      
+    clumsy     85  end "."   opens When      
+  challenge ratio 1.01
+    skilful    70  end "."   opens I         
+    plausible  70  end "."   opens I         
+    clumsy     71  end "."   opens I         
+
+p. 54 (r1-06b)
+  question  ratio 1.15
+    skilful    69  end "?"   opens If        
+    plausible  60  end "?"   opens Who       
+    clumsy     62  end "?"   opens Would     
+  support   ratio 1.19
+    skilful    37  end "."   opens I'm       
+    plausible  31  end "."   opens I'm       
+    clumsy     37  end "."   opens You       
+  observe   ratio 1.07
+    skilful    69  end "."   opens You        tells: really
+    plausible  72  end "."   opens You        tells: really
+    clumsy     67  end "."   opens You       
+  challenge ratio 1.17
+    skilful    75  end "."   opens Not       
+    plausible  79  end "."   opens Not       
+    clumsy     88  end "."   opens Not       
+
+p. 58 (r1-06c)
+  question  ratio 1.06
+    skilful    52  end "?"   opens What      
+    plausible  52  end "?"   opens What      
+    clumsy     49  end "?"   opens Do        
+  support   ratio 1.10
+    skilful    58  end "."   opens That's    
+    plausible  62  end "."   opens That's    
+    clumsy     64  end "."   opens That's    
+  observe   ratio 1.14
+    skilful    57  end "."   opens You       
+    plausible  65  end "."   opens You       
+    clumsy     61  end "."   opens You       
+  challenge ratio 1.04
+    skilful    72  end "."   opens I         
+    plausible  74  end "."   opens I         
+    clumsy     75  end "."   opens I         
+
+p. 62 (r1-06d)
+  question  ratio 1.17
+    skilful    82  end "?"   opens If        
+    plausible  77  end "?"   opens What      
+    clumsy     70  end "?"   opens Would     
+  support   ratio 1.12
+    skilful    58  end "."   opens Not       
+    plausible  65  end "."   opens Not       
+    clumsy     63  end "."   opens Not       
+  observe   ratio 1.04
+    skilful    71  end "."   opens You've    
+    plausible  74  end "."   opens You've    
+    clumsy     74  end "."   opens You've    
+  challenge ratio 1.00
+    skilful    70  end "."   opens I         
+    plausible  70  end "."   opens I         
+    clumsy     70  end "?"   opens I         
+
+p. 64 (r1-06e)
+  question  ratio 1.07
+    skilful    45  end "?"   opens You're    
+    plausible  46  end "?"   opens You're    
+    clumsy     43  end "?"   opens You're    
+  support   ratio 1.13
+    skilful    70  end "."   opens That's    
+    plausible  62  end "."   opens That's    
+    clumsy     69  end "."   opens That's    
+  observe   ratio 1.16
+    skilful    66  end "."   opens You've    
+    plausible  57  end "?"   opens You've    
+    clumsy     63  end "."   opens You've    
+  challenge ratio 1.13
+    skilful    57  end "."   opens Maybe     
+    plausible  54  end "."   opens Maybe     
+    clumsy     61  end "."   opens Maybe     
+
+p. 70 (r1-07)
+  question  ratio 1.03
+    skilful    62  end "?"   opens What's    
+    plausible  62  end "?"   opens What      
+    clumsy     60  end "?"   opens Could     
+  support   ratio 1.04
+    skilful    98  end "."   opens You       
+    plausible 102  end "."   opens You       
+    clumsy    100  end "."   opens You       
+  observe   ratio 1.10
+    skilful    87  end "."   opens You've    
+    plausible  84  end "."   opens You've    
+    clumsy     92  end "."   opens You've    
+  challenge ratio 1.07
+    skilful    92  end "."   opens I         
+    plausible  91  end "?"   opens I         
+    clumsy     86  end "?"   opens I         
+
+Per lever, pages on which each quality is the longest / the only question / the only statement / carries a tell word:
+  question skilful 6/0/0/0   plausible 3/0/0/0   clumsy 3/0/0/0   (of 15 pages)
+  support  skilful 5/0/0/3   plausible 6/0/0/0   clumsy 3/0/0/0   (of 15 pages)
+  observe  skilful 4/0/0/1   plausible 4/1/0/1   clumsy 5/1/0/0   (of 15 pages)
+  challengeskilful 5/0/1/0   plausible 1/1/0/0   clumsy 7/1/0/0   (of 15 pages)
+
+Warnings (0):
+
+Flags (0):
+
+PASSED: no flags.
 ```
 
 ## PLACEHOLDER strings

@@ -81,9 +81,13 @@ for (const c of CASES) {
         const ids = node.options.map((o) => o.id);
         assert.equal(new Set(ids).size, ids.length, id + ' has duplicate option ids');
         if (round.format === 'B') {
+          // SPEC.md 8.1 and 14.3: exactly 4 levers x {skilful, plausible, clumsy} = 12 options.
+          assert.equal(node.options.length, RULES.levers.length * RULES.qualities.length, id + ' needs 12 options');
           const pairs = node.options.map((o) => o.lever + '/' + o.quality).sort();
-          const want = RULES.levers.flatMap((l) => [l + '/clumsy', l + '/skilful']).sort();
-          assert.deepEqual(pairs, want, id + ' needs four levers x {skilful, clumsy}');
+          const want = RULES.levers.flatMap((l) => RULES.qualities.map((q) => l + '/' + q)).sort();
+          assert.deepEqual(pairs, want, id + ' needs four levers x {skilful, plausible, clumsy}');
+          // Ids follow the lever and quality, so saves and the debrief stay readable.
+          for (const o of node.options) assert.equal(o.id, o.lever[0] + '-' + o.quality[0], id + '/' + o.id + ' id matches lever and quality');
         } else if (round.format === 'C') {
           assert.deepEqual(node.options.map((o) => o.lever).sort(), RULES.levers.slice().sort(), id + ' needs one option per lever');
           for (const o of node.options) assert.equal(o.quality, undefined, id + '/' + o.id + ': format C has no quality');

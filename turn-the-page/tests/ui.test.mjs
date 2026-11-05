@@ -35,15 +35,22 @@ const skip = chromium ? false : 'playwright is not available';
 // ---------------------------------------------------------------------------
 // Fixed paths from the engine.
 
-function orderFor(options, target) {
-  if (target !== 'early') return options;
-  const score = (o) => (o.lever === 'challenge' ? 0 : 2) + (o.quality === 'clumsy' ? 0 : 1);
-  return options.slice().sort((a, b) => score(a) - score(b));
+// Early exit: Challenges and clumsy wordings first. Other endings: a fixed
+// pattern of preferred wording quality per decision (Round 1), so the paths and
+// their debriefs show skilful, plausible and clumsy wordings (SPEC.md 10.1).
+const QUALITY_PATTERN = ['skilful', 'plausible', 'skilful', 'clumsy', 'skilful', 'skilful', 'plausible'];
+function orderFor(options, target, depth) {
+  if (target === 'early') {
+    const score = (o) => (o.lever === 'challenge' ? 0 : 2) + (o.quality === 'clumsy' ? 0 : 1);
+    return options.slice().sort((a, b) => score(a) - score(b));
+  }
+  const want = QUALITY_PATTERN[(depth || 0) % QUALITY_PATTERN.length];
+  return options.filter((o) => o.quality === want).concat(options.filter((o) => o.quality !== want));
 }
 
 function findPath(state, target) {
   if (state.ending) return state.ending === target ? [] : null;
-  for (const o of orderFor(getNode(state).options, target)) {
+  for (const o of orderFor(getNode(state).options, target, state.history.length)) {
     const rest = findPath(applyChoice(state, o.id), target);
     if (rest) return [o.id].concat(rest);
   }
@@ -127,7 +134,7 @@ async function playRound(page, state, ids) {
     } else {
       assert.equal(await page.locator('[data-lever]').count(), 4);
       await page.click('[data-lever="' + option.lever + '"]');
-      assert.equal(await page.locator('.line-option').count(), 2);
+      assert.equal(await page.locator('.line-option').count(), RULES.qualities.length);
       await page.click('[data-option="' + option.id + '"]');
     }
     assert.equal(await screenOf(page), 'consequence');
@@ -400,8 +407,14 @@ async function checkDebrief(page, state, which) {
     assert.equal(await page.locator('[data-lever-count="' + lever + ':' + used + '"]').count(), 1, 'count for ' + lever);
   }
   if (which === '1') {
-    const skilful = state.history.filter((e) => e.quality === 'skilful').length;
-    assert.equal(await page.getAttribute('[data-skilful]', 'data-skilful'), skilful + '/' + n);
+    const counts = RULES.qualities.map((q) => state.history.filter((e) => e.quality === q).length);
+    assert.equal(await page.getAttribute('[data-wording]', 'data-wording'), counts.join('/') + '/' + n);
+    // Key with three block styles, each named (never colour alone).
+    assert.deepEqual(await page.$$eval('.cb-key li', (els) => els.map((e) => e.textContent)), ['Skilful wording', 'Plausible wording', 'Clumsy wording']);
+    for (const q of RULES.qualities) assert.equal(await page.locator('.cb-key .cb-' + q).count(), 1);
+    // Path replay tags each decision with its wording quality.
+    const tags = await page.$$eval('.path .quality', (els) => els.map((e) => e.textContent));
+    assert.deepEqual(tags, state.history.map((e) => ({ skilful: 'Skilful wording', plausible: 'Plausible wording', clumsy: 'Clumsy wording' })[e.quality]));
   }
   assert.equal(await page.locator('.road').count(), 2);
   assert.equal(await page.locator('.trait').count(), 4);

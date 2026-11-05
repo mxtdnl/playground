@@ -377,7 +377,7 @@ test('every option shows its own reply page; the consequence page carries it', {
   await open(page, byName('r1-levers'));
   const cards = await page.$$eval('[data-lever] .dest', (els) => els.map((e) => e.textContent));
   assert.equal(new Set(cards).size, 4, 'four different lever-card labels: ' + cards.join(', '));
-  for (const c of cards) assert.match(c, /^→ p\. \d+ or \d+$/);
+  for (const c of cards) assert.match(c, /^→ p\. \d+, \d+ or \d+$/);
   await open(page, byName('r2-lines'));
   const lines = await page.$$eval('.line-option .dest', (els) => els.map((e) => e.textContent));
   assert.equal(new Set(lines).size, 4, 'four different line labels: ' + lines.join(', '));

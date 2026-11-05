@@ -487,9 +487,13 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 .counts { list-style: none; padding: 0; margin: 8px 0 12px; display: grid; gap: 8px; }
 .count-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) auto; align-items: center; gap: 4px 14px; background: var(--paper-card); border: 2px solid var(--rule); padding: 8px 12px; }
 .count-blocks { display: flex; gap: 4px; flex-wrap: wrap; }
-/* Ink edge: the block reads at 3:1 in every lever colour; hollow = clumsy. */
+/* Ink edge: the block reads at 3:1 in every lever colour. Filled = skilful, lower half = plausible, hollow = clumsy (SPEC.md 10.1). */
 .cb { display: inline-block; width: 18px; height: 18px; background: var(--lc); border: 2px solid var(--ink); }
+.cb.cb-plausible { background: var(--paper-card); box-shadow: inset 0 -7px 0 var(--lc); } /* lower half filled; no gradient */
 .cb.cb-clumsy { background: transparent; }
+.cb.lv-key { --lc: var(--ink); }
+.cb-key { list-style: none; margin: 0.5rem 0 0.9rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; font-size: 0.85rem; color: var(--ink-muted); }
+.cb-key li { display: inline-flex; align-items: center; gap: 0.45rem; }
 .count-n { font: 700 0.85rem/1.3 var(--ui); }
 .count-q { grid-column: 2 / -1; font-size: 0.85rem; color: var(--ink-muted); }
 .count-total { max-width: 46rem; }

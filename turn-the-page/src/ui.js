@@ -40,6 +40,8 @@ const CHANGE_WORDS = { little: 4, lot: 10 }; // |change| <= little: "a little"; 
 const LEVEL_WORDS = ['very low', 'very low', 'very low', 'low', 'low', 'middling', 'middling', 'high', 'high', 'very high', 'very high'];
 
 const ROUND_LABELS = { r1: 'Round 1', r2: 'Round 2' };
+// Wording quality as shown in the debrief (Round 1 only; SPEC.md 10.1).
+const QUALITY_LABELS = { skilful: 'Skilful wording', plausible: 'Plausible wording', clumsy: 'Clumsy wording' };
 const SCREEN_NAMES = ['cover', 'how', 'referral', 'scene', 'consequence', 'act', 'ending', 'debrief', 'interlude'];
 
 // ---------------------------------------------------------------------------
@@ -288,11 +290,12 @@ function roundLabel(st) {
 
 // Destination pages for a set of options (SPEC.md 11.3): each option turns
 // to its own reply page (the option's `page`), so every fork shows a
-// different number. A lever card lists both of its wordings' pages in
-// ascending order, so the numbers never give away which one is skilful.
+// different number. A lever card lists its three wordings' pages in
+// ascending order ('→ p. 13, 46 or 112'), so the numbers never give away
+// which one is skilful.
 function destLabel(options) {
   const pages = options.map(function (o) { return o.page; }).sort(function (a, b) { return a - b; });
-  return '→ p. ' + pages.join(' or ');
+  return '→ p. ' + (pages.length > 1 ? pages.slice(0, -1).join(', ') + ' or ' + pages[pages.length - 1] : pages[0]);
 }
 
 // ---------------------------------------------------------------------------
@@ -848,7 +851,7 @@ function section(id, title, kids, intro) {
 
 function leverStats(st) {
   const out = {};
-  RULES.levers.forEach(function (l) { out[l] = { n: 0, skilful: 0, clumsy: 0 }; });
+  RULES.levers.forEach(function (l) { out[l] = { n: 0 }; RULES.qualities.forEach(function (q) { out[l][q] = 0; }); });
   st.history.forEach(function (e) {
     out[e.lever].n += 1;
     if (e.quality) out[e.lever][e.quality] += 1;
@@ -856,27 +859,46 @@ function leverStats(st) {
   return out;
 }
 
+// Wording quality counts for a format B round, e.g. { skilful: 3, plausible: 2, clumsy: 2 }.
+function wordingCounts(st) {
+  const out = {};
+  RULES.qualities.forEach(function (q) { out[q] = st.history.filter(function (e) { return e.quality === q; }).length; });
+  return out;
+}
+
+// 'Wording over 7 decisions: 3 skilful, 2 plausible, 2 clumsy' (debrief and Copy summary).
+function wordingLine(st) {
+  const c = wordingCounts(st);
+  return 'Wording over ' + st.history.length + ' decision' + (st.history.length === 1 ? '' : 's') + ': ' + RULES.qualities.map(function (q) { return c[q] + ' ' + q; }).join(', ');
+}
+
 function leverCountsView(st) {
   const stats = leverStats(st);
   const isB = MAYA.rounds[st.round].format === 'B';
-  const skilful = st.history.filter(function (e) { return e.quality === 'skilful'; }).length;
+  const wc = wordingCounts(st);
+  // Count blocks (SPEC.md 10.1): filled = skilful, lower half = plausible,
+  // hollow = clumsy, each with an ink edge; the key names all three.
+  const block = function (lever, quality) { return h('span', { class: 'cb lv-' + lever + (quality ? ' cb-' + quality : '') }); };
   const rows = RULES.levers.map(function (l) {
     const s = stats[l];
     const blocks = h('span', { class: 'count-blocks', 'aria-hidden': 'true' }, st.history.filter(function (e) { return e.lever === l; }).map(function (e) {
-      return h('span', { class: 'cb lv-' + l + (e.quality === 'clumsy' ? ' cb-clumsy' : '') });
+      return block(l, e.quality);
     }));
     return h('li', { class: 'count-row', 'data-lever-count': l + ':' + s.n }, [
       leverTag(l),
       blocks,
       h('span', { class: 'count-n', text: s.n === 1 ? 'once' : s.n === 0 ? 'not used' : s.n + ' times' }),
-      isB && s.n ? h('span', { class: 'count-q', text: s.skilful + ' skilful · ' + s.clumsy + ' clumsy' }) : null
+      isB && s.n ? h('span', { class: 'count-q', text: RULES.qualities.map(function (q) { return s[q] + ' ' + q; }).join(' · ') }) : null
     ]);
   });
   return [
     h('ul', { class: 'counts' }, rows),
-    isB ? h('p', { class: 'count-total', 'data-skilful': skilful + '/' + st.history.length }, [
-      h('strong', { text: 'Skilful wording ' + skilful + ' of ' + st.history.length + '. ' }),
-      'Clumsy wordings (hollow blocks above) were leading, closed, judgemental, premature or rescuing. They kept less of the lever\'s gain and cost some trust.'
+    isB ? h('ul', { class: 'cb-key', 'aria-label': 'Key to the blocks' }, RULES.qualities.map(function (q) {
+      return h('li', {}, [block('key', q), h('span', { text: QUALITY_LABELS[q] })]);
+    })) : null,
+    isB ? h('p', { class: 'count-total', 'data-wording': RULES.qualities.map(function (q) { return wc[q]; }).join('/') + '/' + st.history.length }, [
+      h('strong', { text: wordingLine(st) + '. ' }),
+      'Plausible wordings sounded reasonable but missed the moment: a little early, slightly leading, or reassuring before she had said anything. Clumsy wordings were leading, closed, judgemental, premature or rescuing. Both kept less of the lever\'s gain; clumsy ones cost more trust.'
     ]) : null
   ];
 }
@@ -900,7 +922,7 @@ function pathReplay(st, turning) {
       h('div', { class: 'path-head' }, [
         h('span', { class: 'pageno', text: 'p. ' + node.page }),
         leverTag(e.lever),
-        e.quality ? h('span', { class: 'quality q-' + e.quality, text: e.quality === 'skilful' ? 'Skilful wording' : 'Clumsy wording' }) : null,
+        e.quality ? h('span', { class: 'quality q-' + e.quality, text: QUALITY_LABELS[e.quality] }) : null,
         isC ? h('span', { class: 'muted' }, e.guessCorrect ? ['✓ You named it'] : ['✗ You named ', leverTag(e.guess)]) : null
       ]),
       h('p', { class: 'said', text: quoted(option.text) }),
@@ -1022,7 +1044,7 @@ function summaryText(r1, r2) {
     lines.push(ROUND_LABELS[st.round] + ' (' + round.title + '): ' + round.endings[st.ending].title);
     lines.push('  Levers: ' + RULES.levers.map(function (l) { return LEVER_INFO[l].name + ' ' + stats[l].n; }).join(', '));
     lines.push('  Order: ' + st.history.map(function (e) { return LEVER_INFO[e.lever].name; }).join(' → '));
-    if (round.format === 'B') lines.push('  Skilful wording: ' + st.history.filter(function (e) { return e.quality === 'skilful'; }).length + ' of ' + st.history.length);
+    if (round.format === 'B') lines.push('  ' + wordingLine(st));
     if (round.format === 'C') lines.push('  Lever recognition: ' + st.history.filter(function (e) { return e.guessCorrect; }).length + ' of ' + st.history.length);
   });
   return lines.join('\n');

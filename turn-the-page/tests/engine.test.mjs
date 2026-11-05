@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   RULES, computeDeltas, createRound, optionsFor, applyChoice, checkEnding,
-  carryOver, shuffle, roundHalfAway, resolveRoute, reactionFor, registerCase
+  carryOver, shuffle, roundHalfAway, resolveRoute, reactionFor, registerCase, futureKey
 } from '../src/engine.js';
 
 const MID = { confidence: 'mid', extraversion: 'mid', defensiveness: 'mid', readiness: 'mid' };
@@ -21,7 +21,7 @@ function d(lever, opts) {
 
 const h = (lever) => ({ lever: lever });
 
-// A test case: `n` nodes in a chain, each with all eight Round 1 options
+// A test case: `n` nodes in a chain, each with all twelve Round 1 options
 // (ids like 'question-skilful'), or a format C round.
 function makeCase(opts) {
   const o = Object.assign({ id: 'test', n: 3, acts: [1, 2, 3], traits: {}, start: { trust: 60, confidence: 40, ownership: 40 } }, opts);
@@ -29,7 +29,7 @@ function makeCase(opts) {
   for (let i = 0; i < o.n; i++) {
     const options = [];
     for (const lever of RULES.levers) {
-      for (const quality of ['skilful', 'clumsy']) {
+      for (const quality of RULES.qualities) {
         options.push({ id: lever + '-' + quality, lever, quality, text: lever, reaction: { default: 'r', 'confidence:low': 'low-r' }, debrief: 'd' });
       }
     }
@@ -68,8 +68,39 @@ test('7.2 base effects of skilful levers (neutral state)', () => {
   assert.deepEqual(d('challenge'), { trust: -4, confidence: 2, ownership: 9 });
 });
 
+test('7.2 plausible wording: positives x 0.7, then Trust -1 (session 6 initial value)', () => {
+  const w = RULES.wording.plausible;
+  for (const lever of RULES.levers) {
+    const b = RULES.base[lever];
+    const want = {};
+    for (const m of RULES.meters) want[m] = roundHalfAway((b[m] > 0 ? b[m] * w.positiveFactor : b[m]) + (m === 'trust' ? w.trustPenalty : 0));
+    assert.deepEqual(d(lever, { quality: 'plausible' }), want, lever);
+  }
+});
+
+test('7.2 wording quality orders skilful >= plausible >= clumsy on every meter (neutral state)', () => {
+  for (const lever of RULES.levers) {
+    const [s, p, c] = RULES.qualities.map((q) => d(lever, { quality: q }));
+    for (const m of RULES.meters) assert.ok(s[m] >= p[m] && p[m] >= c[m], lever + ' ' + m);
+  }
+});
+
+test('7.8 futureKey: same node, meters and capped run give the same key', () => {
+  const c = makeCase({ id: 'fk', n: 6 });
+  let a = createRound(c, 'r1', null, 1);
+  let b = createRound(c, 'r1', null, 2);
+  a = applyChoice(applyChoice(a, 'question-skilful'), 'support-clumsy');
+  b = applyChoice(applyChoice(b, 'question-clumsy'), 'support-skilful');
+  // Different quality history, different meters: keys differ only through meters.
+  assert.notEqual(futureKey(a), futureKey(b));
+  const x = Object.assign({}, a, { history: a.history.concat([{ lever: 'support' }, { lever: 'support' }]) });
+  const y = Object.assign({}, a, { history: a.history.concat([{ lever: 'support' }, { lever: 'support' }, { lever: 'support' }]) });
+  assert.equal(futureKey(x), futureKey(y), 'run length is capped at streakLength - 1');
+  assert.ok(futureKey(x).endsWith('|support:' + (RULES.repetition.streakLength - 1) + '|'));
+});
+
 test('7.2 clumsy wording: positives x 0.4, then Trust -2 (calibrated from -3, SPEC.md calibration log)', () => {
-  assert.equal(RULES.clumsy.trustPenalty, -2);
+  assert.equal(RULES.wording.clumsy.trustPenalty, -2);
   // Question: 3*0.4-2 = -0.8, 1*0.4 = 0.4, 6*0.4 = 2.4
   assert.deepEqual(d('question', { quality: 'clumsy' }), { trust: -1, confidence: 0, ownership: 2 });
   // Support: 7*0.4-2 = 0.8, 5*0.4 = 2, 0
@@ -339,4 +370,26 @@ test('createRound for Round 2 uses the opening for the carry and needs one', () 
   assert.equal(s.nodeId, 'c0');
   assert.equal(s.from, 'partial');
   assert.deepEqual(s.meters, { trust: 40, confidence: 30, ownership: 15 });
+});
+
+// --- 7.8 calibrator method: memoised walk equals brute force -----------------
+
+test('7.8 memoised calibrator walk matches brute-force enumeration', async () => {
+  const { solver, bruteForce } = await import('./calibrate.mjs');
+  const { MAYA } = await import('../src/content/maya.js');
+  const same = (label, start, filter) => {
+    const m = solver(filter)(start);
+    const b = bruteForce(start, filter);
+    for (const e of Object.keys(b.count)) {
+      assert.equal(m.count[e], b.count[e], label + ' ' + e + ' count');
+      assert.ok(Math.abs(m.prob[e] - b.prob[e]) < 1e-12, label + ' ' + e + ' probability');
+    }
+  };
+  // Round 2, every opening (4 options per decision).
+  for (const from of ['breakthrough', 'partial', 'polite', 'early']) {
+    const carry = { from, meters: { trust: 40, confidence: 35, ownership: 20 }, traits: Object.assign({}, MAYA.profile.traits) };
+    same('r2 ' + from, createRound(MAYA, 'r2', carry, 1));
+  }
+  // Round 1 restricted to two wordings per lever, where full enumeration is feasible.
+  same('r1 skilful+clumsy', createRound(MAYA, 'r1', null, 1), (o) => o.quality !== 'plausible');
 });
