@@ -186,7 +186,7 @@ for (const [rid, round] of Object.entries(C.rounds)) {
   w();
   w('| Ending | Title | Text | Debrief summary |');
   w('|---|---|---|---|');
-  for (const [e, x] of Object.entries(round.endings)) w('| ' + e + ' | ' + x.title + ' | ' + esc(x.text) + ' | ' + esc(x.summary) + ' |');
+  for (const [e, x] of Object.entries(round.endings)) w('| ' + e + ' | ' + x.title + ' | ' + esc(x.text) + ' | ' + esc(x.summary) + (x.ownershipNote ? ' *If ownership ended high:* ' + esc(x.ownershipNote) : '') + ' |');
   w();
 }
 
@@ -243,7 +243,7 @@ for (const t of RULES.traitMultipliers) w('| Trait: ' + t.trait + ' `' + t.band 
 for (const t of RULES.traitCaps) w('| Trait cap: ' + t.trait + ' `' + t.band + '` | ' + t.meter + ' gain at most +' + t.max + ' per decision' + (t.act ? ' in Act ' + t.act : '') + ' |');
 const E = RULES.endings;
 w('| Early exit | Trust ≤ ' + E.early.trustAtMost + ' at any point |');
-w('| Breakthrough | at the end, Ownership ≥ ' + E.breakthrough.ownershipAtLeast + ' and Trust ≥ ' + E.breakthrough.trustAtLeast + ' |');
+w('| Breakthrough | at the end, Ownership ≥ ' + E.breakthrough.ownershipAtLeast + ' and Trust ≥ ' + E.breakthrough.trustAtLeast + '; or Ownership ≥ ' + E.highOwnership.ownershipAtLeast + ' and Trust ≥ ' + E.highOwnership.trustAtLeast + ' |');
 w('| Partial | at the end, Trust ≥ ' + E.partial.trustAtLeast + ' and Ownership ≥ ' + E.partial.ownershipAtLeast + '; otherwise Polite exit |');
 for (const [e, c] of Object.entries(RULES.carry)) {
   const parts = [];

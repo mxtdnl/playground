@@ -368,3 +368,33 @@ test('print stylesheet: debriefs print cleanly, other screens print a note', { s
   await context.close();
 });
 
+// ---------------------------------------------------------------------------
+// Reply pages (every option turns to its own page) and the high-ownership note.
+
+test('every option shows its own reply page; the consequence page carries it', { skip, timeout: 60000 }, async () => {
+  const context = await newContext(browser, {});
+  const page = await newPage(context);
+  await open(page, byName('r1-levers'));
+  const cards = await page.$$eval('[data-lever] .dest', (els) => els.map((e) => e.textContent));
+  assert.equal(new Set(cards).size, 4, 'four different lever-card labels: ' + cards.join(', '));
+  for (const c of cards) assert.match(c, /^→ p\. \d+ or \d+$/);
+  await open(page, byName('r2-lines'));
+  const lines = await page.$$eval('.line-option .dest', (els) => els.map((e) => e.textContent));
+  assert.equal(new Set(lines).size, 4, 'four different line labels: ' + lines.join(', '));
+  const first = lines[0];
+  await page.click('.line-option[data-key="1"]');
+  await page.click('[data-guess="question"]');
+  assert.equal('→ p. ' + (await page.getAttribute('.runhead [data-page]', 'data-page')), first);
+  assert.deepEqual(page.errors, []);
+  await context.close();
+});
+
+test('a Polite exit with high ownership explains why it was not a Breakthrough', { skip, timeout: 60000 }, async () => {
+  const context = await newContext(browser, {});
+  const page = await newPage(context);
+  await open(page, byName('debrief1-polite')); // ends with Ownership 65, Trust 42
+  assert.equal(await page.locator('[data-ownership-note]').count(), 1);
+  await open(page, byName('debrief1-early'));
+  assert.equal(await page.locator('[data-ownership-note]').count(), 0);
+  await context.close();
+});

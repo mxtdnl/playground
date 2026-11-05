@@ -286,23 +286,13 @@ function roundLabel(st) {
   return ROUND_LABELS[st.round] + ' · ' + MAYA.rounds[st.round].title;
 }
 
-// Destination pages for a set of options (SPEC.md 11.3). A route that depends
-// on the meters lists every page it can lead to, so the number never gives
-// away which wording is the skilful one.
-function destLabel(round, node, options) {
-  const pages = [];
-  let end = false;
-  options.forEach(function (o) {
-    const r = routeFor(node, o);
-    (Array.isArray(r) ? r.map(function (x) { return x.to; }) : [r]).forEach(function (t) {
-      if (t === null) end = true;
-      else if (pages.indexOf(round.nodes[t].page) < 0) pages.push(round.nodes[t].page);
-    });
-  });
-  pages.sort(function (a, b) { return a - b; });
-  const parts = pages.map(String);
-  if (!parts.length) return '→ the end';
-  return '→ p. ' + parts.join(' or ') + (end ? ' or the end' : '');
+// Destination pages for a set of options (SPEC.md 11.3): each option turns
+// to its own reply page (the option's `page`), so every fork shows a
+// different number. A lever card lists both of its wordings' pages in
+// ascending order, so the numbers never give away which one is skilful.
+function destLabel(options) {
+  const pages = options.map(function (o) { return o.page; }).sort(function (a, b) { return a - b; });
+  return '→ p. ' + pages.join(' or ');
 }
 
 // ---------------------------------------------------------------------------
@@ -550,7 +540,7 @@ function lineButtons(options, round, node, onPick, coloured) {
     }, [
       h('span', { class: 'num', 'aria-hidden': 'true', text: String(i + 1) }),
       h('span', { class: 'quote', text: quoted(o.text) }),
-      h('span', { class: 'dest', text: destLabel(round, node, [o]) })
+      h('span', { class: 'dest', text: destLabel([o]) })
     ]);
   }));
 }
@@ -566,7 +556,7 @@ function choicePanel(st, node) {
           view.lever = lever;
           render({ focus: '.line-option' });
         }, {
-          dest: function (lever) { return destLabel(round, node, node.options.filter(function (o) { return o.lever === lever; })); }
+          dest: function (lever) { return destLabel(node.options.filter(function (o) { return o.lever === lever; })); }
         })
       ]);
     }
@@ -649,8 +639,8 @@ function screenConsequence(opts) {
   }
   const next = st.ending ? '→ the end' : '→ p. ' + round.nodes[st.nodeId].page;
   return pageEl('consequence', null, [
-    runhead(roundLabel(st) + ' · Act ' + node.act + ': ' + round.acts[node.act].title, node.page),
-    h('h1', { class: 'sr-only', text: ROUND_LABELS[st.round] + ', page ' + node.page + ': what happened' }),
+    runhead(roundLabel(st) + ' · Act ' + node.act + ': ' + round.acts[node.act].title, option.page),
+    h('h1', { class: 'sr-only', text: ROUND_LABELS[st.round] + ', page ' + option.page + ': what happened' }),
     h('div', { class: 'spread', 'data-node': entry.nodeId }, [
       metersView(st.meters, { before: before, lever: entry.lever, animate: !!opts.animate && !reducedMotion() }),
       sceneView(st, node, option),
@@ -738,7 +728,7 @@ const BAND_WORDS = { low: 'Low', mid: 'Mid', high: 'High' };
 function traceLines(meter) {
   const E = RULES.endings;
   if (meter === 'trust') return [{ y: E.breakthrough.trustAtLeast, label: 'Breakthrough or agreement' }, { y: E.early.trustAtMost, label: 'Early exit' }];
-  if (meter === 'ownership') return [{ y: E.breakthrough.ownershipAtLeast, label: 'Breakthrough' }, { y: E.partial.ownershipAtLeast, label: 'Agreement' }];
+  if (meter === 'ownership') return [{ y: E.highOwnership.ownershipAtLeast, label: 'Breakthrough at lower trust' }, { y: E.breakthrough.ownershipAtLeast, label: 'Breakthrough' }, { y: E.partial.ownershipAtLeast, label: 'Agreement' }];
   return [];
 }
 
@@ -1074,7 +1064,10 @@ function screenDebrief() {
     h('div', { class: 'ending-card', 'data-ending-card': st.ending }, [
       h('p', { class: 'eyebrow', text: 'Ending' }),
       h('h2', { text: ending.title }),
-      h('p', { text: ending.summary })
+      h('p', { text: ending.summary }),
+      // A Polite exit with Breakthrough-level ownership: say why it was not one.
+      st.ending === 'polite' && ending.ownershipNote && st.meters.ownership >= RULES.endings.breakthrough.ownershipAtLeast
+        ? h('p', { class: 'ending-note', 'data-ownership-note': true, text: ending.ownershipNote }) : null
     ]),
     section('traces', 'Meter traces', [traceKey(), tracesView(series)], 'How each meter moved, decision by decision. Each marker is the lever you used; shaded columns are the turning points.'),
     section('levers', 'Your levers', leverCountsView(st))
@@ -1096,7 +1089,7 @@ function screenDebrief() {
         ]),
         traceKey(),
         tracesView([r1Series, series[0]]),
-        h('p', { class: 'muted trace-lines-note', text: 'Dashed lines: on Trust, the level for a Breakthrough or agreement (upper) and for an early exit (lower); on Ownership, the level for a Breakthrough (upper) and for agreement (lower). The dotted line marks the two weeks between sessions.' })
+        h('p', { class: 'muted trace-lines-note', text: 'Dashed lines: on Trust, the level for a Breakthrough or agreement (upper) and for an early exit (lower); on Ownership, the level for a Breakthrough even at lower trust (top), for a Breakthrough (middle) and for agreement (bottom). The dotted line marks the two weeks between sessions.' })
       ]),
       section('reflect', 'Reflection prompts', [h('ol', { class: 'reflection' }, MAYA.reflection.map(function (q) { return h('li', { text: q }); }))], 'For self-study or with your facilitator. Nothing you think or write here is stored.'),
       section('copy', 'Copy summary', copySummaryView(summaryText(r1, st)), 'Plain text of the endings, lever counts and recognition score, for pasting into a shared document. No names or free text.')

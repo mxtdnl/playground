@@ -26,7 +26,7 @@ Contents: [Maya](#maya) · [Round 1](#round-1-just-lazy) · [Round 2](#round-2-t
 |---|---|---|
 | She used to participate actively but has gone quiet in class | extraversion | Extraversion: mid, currently suppressed. She is not a naturally quiet student; something has made her withdraw. Open questions yield more once trust is in place. |
 | she said she's "just being lazy." | confidence | Self-confidence: low. She reaches for a harsh label for herself, so Support tends to be needed before a Challenge can land. |
-| When I asked, she said | defensiveness | PLACEHOLDER: Defensiveness: mid. She answered a teacher's question with a ready-made explanation that closes the subject: protective, but not hostile. This is the weakest of the four hints; confirm with the SME or strengthen the note. |
+| When I asked, she said | defensiveness | Defensiveness: mid. She answered a teacher's question with a ready-made explanation that closes the subject: protective, but not hostile. |
 | has missed two homework deadlines | readiness | Readiness for change: low. The pattern is established and she has not yet tried to change it, so Ownership builds slowly in the first act. |
 
 ## Round 1: Just lazy
@@ -387,7 +387,7 @@ flowchart TD
 |---|---|---|---|
 | breakthrough | Breakthrough | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | Maya proposed a next step of her own, and asked to come back. |
 | partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. | Maya agreed to the step you suggested. The plan stayed yours. |
-| polite | Polite exit | "Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed. | Maya stayed polite from start to finish and left unmoved. |
+| polite | Polite exit | "Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed. | Maya stayed polite from start to finish and left unmoved. *If ownership ended high:* She did a lot of her own thinking: ownership ended high. Trust stayed below the level where she would commit to a step out loud, so the ideas left the room with her. |
 | early | Early exit | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | Trust ran out, and Maya left before the conversation really began. |
 
 ## Round 2: Two weeks later
@@ -725,7 +725,7 @@ flowchart TD
 |---|---|---|---|
 | breakthrough | Breakthrough | Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." | Maya chose her own next step, and how she wants to raise it at home. |
 | partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll look at the website." She takes the brochure with her. You are not sure she will open it. | Maya agreed to look at the course you suggested. The step stayed yours. |
-| polite | Polite exit | "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved. | A pleasant conversation. The brochure stayed on the desk. |
+| polite | Polite exit | "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved. | A pleasant conversation. The brochure stayed on the desk. *If ownership ended high:* Ownership ended high: the thinking was hers. Trust stayed below the level where she would say a next step out loud, so it went home unspoken. |
 | early | Early exit | "Can I go now?" She is out of the door before you can answer. | Trust ran out, and Maya left before the real issue came up. |
 
 ## Turning points and road not taken
@@ -914,7 +914,7 @@ From `RULES` in `src/engine.js`. Changes made during calibration, and why, are i
 | Trait: defensiveness `high` | Observe trust cost × 1.5 |
 | Trait cap: readiness `low` | ownership gain at most +6 per decision in Act 1 |
 | Early exit | Trust ≤ 10 at any point |
-| Breakthrough | at the end, Ownership ≥ 45 and Trust ≥ 45 |
+| Breakthrough | at the end, Ownership ≥ 45 and Trust ≥ 45; or Ownership ≥ 68 and Trust ≥ 25 |
 | Partial | at the end, Trust ≥ 45 and Ownership ≥ 30; otherwise Polite exit |
 | Round 2 start after breakthrough | Trust 70% of final, Confidence final +10, Ownership 20; readiness +1 band |
 | Round 2 start after partial | Trust 60% of final, Confidence carries, Ownership 15; readiness +1 band |
@@ -930,16 +930,16 @@ Turn the Page — calibration report (SPEC.md 7.8)
 Case: maya
 
   Round 1: 1753102 paths, longest 7 decisions
-    breakthrough    129044 paths     6.2% of random play
+    breakthrough    129812 paths     6.2% of random play
     partial         211375 paths    10.1% of random play
-    polite         1302279 paths    62.1% of random play
+    polite         1301511 paths    62.1% of random play
     early           110404 paths    21.7% of random play
 
-  Round 2 after breakthrough (median carry {"trust":41,"confidence":72,"ownership":20}, 637 distinct): 15634 paths, longest 7 decisions
-    breakthrough      2785 paths    17.0% of random play
-    partial           5316 paths    32.4% of random play
-    polite            7401 paths    45.2% of random play
-    early              132 paths     5.4% of random play
+  Round 2 after breakthrough (median carry {"trust":39,"confidence":60,"ownership":20}, 764 distinct): 15460 paths, longest 7 decisions
+    breakthrough      2614 paths    16.0% of random play
+    partial           4249 paths    25.9% of random play
+    polite            8425 paths    51.4% of random play
+    early              172 paths     6.7% of random play
   Round 2 after partial (median carry {"trust":37,"confidence":61,"ownership":15}, 587 distinct): 15454 paths, longest 7 decisions
     breakthrough      1511 paths     9.2% of random play
     partial           4668 paths    28.5% of random play
@@ -964,10 +964,10 @@ Criteria:
   PASS  Round 1: random play: Early exit 5-25% — 21.7%
   PASS  Round 1: Early exit within 3 decisions needs >= 2 Challenges or clumsy wordings — none
   PASS  Round 2 after breakthrough: every ending reachable — all four reached
-  PASS  Round 2 after breakthrough: Breakthrough by >= 3 paths with different first three levers — 51 distinct opening triple(s): question>question>question; question>question>support; question>question>observe; question>question>challenge; question>support>question; ...
+  PASS  Round 2 after breakthrough: Breakthrough by >= 3 paths with different first three levers — 50 distinct opening triple(s): question>question>question; question>question>support; question>question>observe; question>question>challenge; question>support>question; ...
   PASS  Round 2 after breakthrough: no single-lever strategy reaches Breakthrough — none
-  PASS  Round 2 after breakthrough: random play: Breakthrough 5-20% — 17.0%
-  PASS  Round 2 after breakthrough: random play: Early exit 5-25% — 5.4%
+  PASS  Round 2 after breakthrough: random play: Breakthrough 5-20% — 16.0%
+  PASS  Round 2 after breakthrough: random play: Early exit 5-25% — 6.7%
   PASS  Round 2 after breakthrough: Early exit within 3 decisions needs >= 2 Challenges or clumsy wordings — none
   PASS  Round 2 after partial: every ending reachable — all four reached
   PASS  Round 2 after partial: Breakthrough by >= 3 paths with different first three levers — 45 distinct opening triple(s): question>question>question; question>question>support; question>question>observe; question>question>challenge; question>support>question; ...
@@ -993,4 +993,4 @@ PASSED all 30 checks.
 
 ## PLACEHOLDER strings
 
-- PLACEHOLDER: Defensiveness: mid. She answered a teacher's question with a ready-made explanation that closes the subject: protective, but not hostile. This is the weakest of the four hints; confirm with the SME or strengthen the note.
+None.

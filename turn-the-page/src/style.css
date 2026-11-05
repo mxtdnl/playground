@@ -454,6 +454,7 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 .ending-card p.eyebrow { font: 700 0.75rem/1.3 var(--ui); color: var(--paper); margin-bottom: 4px; }
 .ending-card h2 { margin-bottom: 6px; font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem); }
 .ending-card p { margin: 0; font: 400 1.08rem/1.5 var(--story); }
+.ending-card p.ending-note { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--ink-muted); font-size: 1rem; }
 
 /* Meter traces: small line charts, ink line, lever-glyph markers. */
 .traces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }

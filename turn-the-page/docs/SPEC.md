@@ -155,7 +155,7 @@ An option may carry a small authored adjustment (±1 to ±5) when its specific w
 Checked in this order:
 
 1. **Early exit:** Trust ≤ 10 at any point. Maya asks, "Can I go now?" The round ends at once.
-2. **Breakthrough:** at the end, Ownership ≥ 60 and Trust ≥ 50 (calibrated to Ownership ≥ 45 and Trust ≥ 45; see the Calibration log). Maya proposes her own next step.
+2. **Breakthrough:** at the end, Ownership ≥ 60 and Trust ≥ 50 (calibrated to Ownership ≥ 45 and Trust ≥ 45; see the Calibration log). Also a Breakthrough: exceptionally high Ownership (≥ 68) as long as Trust is 25 or more. Maya proposes her own next step.
 3. **Partial (agreement without ownership):** at the end, Trust ≥ 45 and Ownership ≥ 30. Maya agrees to the counsellor's suggestion.
 4. **Polite exit:** anything else. Maya thanks the counsellor and leaves, unmoved.
 
@@ -297,7 +297,7 @@ Measured contrast (WCAG):
 
 ### 11.3 Pulp devices
 
-- **Page numbers:** every node has a non-sequential page number (`p. 47`). Choice buttons show their destination in small type (`→ p. 63`).
+- **Page numbers:** every node has a non-sequential page number (`p. 47`). Every option turns to its own reply page, with a page number unique across the case: the option shows it in small type (`→ p. 63`), a Round 1 lever card shows the pages of both its wordings in ascending order (`→ p. 23 or 141`), and the consequence page carries it as its page number. Continue then shows the next node's page. The numbers are decorative and do not reveal routes or wording quality.
 - **Page turn:** a horizontal slide with a paper edge and shadow, about 0.35s. Instant under reduced motion.
 - **Act banners:** full-width `--ink` blocks with a cliffhanger line in large serif and a slab of the act's colour carrying the act number.
 - **Print:** the debriefs only, on white paper without decoration or buttons, so a counsellor can print their path.
@@ -466,6 +466,7 @@ Session 2 (content and calibration). Overrides were tuned first; these `RULES` v
 | Round 2 start after Breakthrough (9.2) | Trust 80%, Ownership 25 | Trust 70%, Ownership 20 | With the lower threshold, a Breakthrough carry-over put Round 2 within a few decisions of another Breakthrough (random play 46–64%) and made Early exit almost unreachable (under 1%). 70% and 20 keep the head start (higher Trust, Confidence +10, readiness `mid`) while leaving Round 2 open in both directions. |
 | Round 2 start after Partial (9.2) | Trust 70% | Trust 60% | Same reason: random play from a Partial start reached Early exit on only 2–3% of paths. |
 | Round 2 start after Early exit (9.2) | Trust 20 | Trust 25 | From Trust 20 a single Challenge (−8) followed by one Observe before trust (−2) ended the round in two decisions, which breaks the "early exit within three decisions needs two Challenges or clumsy wordings" criterion; no override within ±5 on the opening can prevent it on every path. 25 still leaves her the most reluctant of the four openings. |
+| High-ownership Breakthrough (7.7), added after session 5 | none | Ownership ≥ 68 and Trust ≥ 25 | Requested so that a path with exceptionally high ownership but middling trust is not a Polite exit. At 60–65 the path of seven skilful Questions (Ownership 65, Trust 42) became a Breakthrough, breaking the "no single-lever strategy" criterion; 68 is the lowest value that keeps it. The rule rarely fires (well under 1% of random paths). A Polite exit that ends with Breakthrough-level Ownership shows the ending's `ownershipNote` in the debrief instead. |
 
 Overrides: 108 of the 184 options carry one; every value is listed in `docs/CONTENT-REVIEW.md`. In Round 1 most skilful wordings carry a small Trust or Ownership bonus (+1 to +5). That is a deliberate content choice: skilful wording that fits the moment should do better than the base row, and the bonuses vary by node, so they belong in content rather than in `RULES`. Round 2 overrides were set by a constrained search within authored ranges: lines that fit the moment could only gain, lines that misfit it could only lose. They are what make Round 2 a choice of lever rather than of wording.
 

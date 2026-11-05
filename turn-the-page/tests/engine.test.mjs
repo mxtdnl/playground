@@ -220,6 +220,16 @@ test('7.7 end-of-round endings and their thresholds (Breakthrough at 45/45, cali
   assert.equal(st(11, 0), 'polite');
 });
 
+test('7.7 exceptionally high ownership is a Breakthrough while Trust is 25 or more', () => {
+  const st = (trust, ownership) => checkEnding({ meters: { trust, confidence: 50, ownership }, nodeId: null });
+  assert.equal(st(25, 68), 'breakthrough');
+  assert.equal(st(44, 68), 'breakthrough');
+  assert.equal(st(24, 68), 'polite');
+  assert.equal(st(25, 67), 'polite');
+  assert.equal(st(44, 67), 'polite');
+  assert.equal(st(10, 90), 'early'); // early exit still comes first
+});
+
 test('a full playthrough ends when the last node is passed', () => {
   const c = makeCase({ id: 'full', start: { trust: 60, confidence: 40, ownership: 40 } });
   let s = createRound(c, 'r1');

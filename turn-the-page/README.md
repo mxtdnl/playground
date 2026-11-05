@@ -59,10 +59,10 @@ Maya's case contains no risk indicators (no self-harm, abuse or danger to hersel
 Every number in the engine is an initial value tuned only to meet the calibration criteria, and every trait mapping is a design hypothesis. None is an empirical finding. Present results to counsellors as "in this simulation", not as research. Awaiting review (SPEC.md 17):
 
 - The trait multipliers (SPEC.md 7.5): how self-confidence, extraversion, defensiveness and readiness for change change each lever.
-- The base effects, state rules, repetition penalties and the calibrated changes in the SPEC.md Calibration log, including the lowered Breakthrough threshold (Ownership ≥ 45 and Trust ≥ 45).
+- The base effects, state rules, repetition penalties and the calibrated changes in the SPEC.md Calibration log, including the lowered Breakthrough threshold (Ownership ≥ 45 and Trust ≥ 45) and the high-ownership Breakthrough (Ownership ≥ 68 with Trust ≥ 25).
 - The Round 2 starting meters after each Round 1 ending.
 - 108 hand-tuned overrides on individual options, all listed in `docs/CONTENT-REVIEW.md`.
-- The whole script, the debrief notes and the four referral-note hints. The defensiveness hint is still marked `PLACEHOLDER:` and shows that word on screen in Meet Maya.
+- The whole script, the debrief notes and the four referral-note hints. The defensiveness hint ("When I asked, she said") is the weakest of the four.
 - The learning outcomes (SPEC.md 2).
 
 `docs/CONTENT-REVIEW.md` is generated for the reviewer: the whole script for both rounds, with every number.

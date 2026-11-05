@@ -137,7 +137,9 @@ for (const c of CASES) {
   }
 
   test(c.id + ': page numbers are unique across the case', () => {
-    const pages = Object.values(c.rounds).flatMap((r) => Object.values(r.nodes).map((n) => n.page));
+    // Node pages and every option's reply page together (options turn to their own page).
+    const pages = Object.values(c.rounds).flatMap((r) => Object.values(r.nodes).flatMap((n) => [n.page].concat(n.options.map((o) => o.page))));
+    for (const p of pages) assert.ok(Number.isInteger(p) && p > 0, 'page ' + p);
     const dupes = pages.filter((p, i) => pages.indexOf(p) !== i);
     assert.deepEqual(dupes, []);
   });
@@ -149,7 +151,7 @@ for (const c of CASES) {
     }
     for (const line of strings(c.roadNotTaken || {}, [])) if (FORBIDDEN.test(line)) bad.push('roadNotTaken: ' + line);
     for (const round of Object.values(c.rounds)) {
-      for (const line of strings([Object.values(round.endings).map((e) => e.summary), round.carryNote || {}], [])) if (FORBIDDEN.test(line)) bad.push('debrief: ' + line);
+      for (const line of strings([Object.values(round.endings).map((e) => [e.summary, e.ownershipNote || '']), round.carryNote || {}], [])) if (FORBIDDEN.test(line)) bad.push('debrief: ' + line);
     }
     for (const line of c.reflection || []) if (FORBIDDEN.test(line)) bad.push('reflection: ' + line);
     assert.deepEqual(bad, []);

@@ -19,6 +19,8 @@ Rules for every session:
 | 3 | Playable core | Every screen, both round formats, meters, persistence; placeholder figure | Play it once |
 | 4 | Illustration and debrief | SVG scene and figure system, both debriefs | **Yes: look at the screenshots** |
 | 5 | Polish and ship | Accessibility, contrast, narrow layout, pulp devices, facilitator README, Pages | Version 1 sign-off |
+| 6 | Three wordings per lever | Skilful, plausible and clumsy wordings in Round 1; subtler clumsy lines; recalibration | **Yes: approve the spec and sample pages** |
+| 7 | Flow audit and forks | FLOW-AUDIT.md rating every reaction-to-next-page pair; bridging lines; approved branch pages | **Yes: approve the branch pages** |
 
 ---
 
@@ -128,20 +130,95 @@ Commit and push. Report results, every remaining PLACEHOLDER string, and anythin
 
 ---
 
+## Session 6: Three wordings per lever in Round 1
+
+Requested after session 5: the skilful and clumsy wordings are too easy to tell apart. Run this before session 7, which audits every option's flow and should audit the final set of options.
+
+**Goal:** each Round 1 lever offers three wordings (skilful, plausible, clumsy) that a counsellor cannot sort by surface features.
+
+**Done when:** every Round 1 page has 12 options, no wording can be identified by length, punctuation or tone alone, every harness and the calibrator pass, and CONTENT-REVIEW.md lists the new wordings with their numbers.
+
+```text
+Read turn-the-page/CLAUDE.md and turn-the-page/docs/SPEC.md in full. Apply any review comments I give below first. Create a new branch to work on.
+
+Session 6 of turn-the-page/docs/BUILD-PLAN.md: three wordings per lever in Round 1.
+
+Problem: in Round 1 it is too obvious which of a lever's two wordings is skilful and which is clumsy. Each lever will offer three wordings: skilful, a new middle quality "plausible" (sounds reasonable and is often what a well-meaning counsellor would say, but misses this moment: slightly leading, a little early, a reassurance that arrives before she has said anything, a good question asked in the wrong place), and clumsy. Every existing clumsy wording is also rewritten so that it is not obviously poor.
+
+1. Design first. Update SPEC.md (7.2, 8.1, 9, 10.1, 14.2, 14.3 and the Calibration log) with:
+   - the plausible quality and its transform, as initial values to calibrate and kept in RULES (suggest: positive effects x 0.7, then Trust -1; clumsy stays x 0.4, Trust -2);
+   - format B as 4 levers x {skilful, plausible, clumsy} = 12 options per page, three wordings shown after a lever is chosen, shuffled and unlabelled;
+   - the debrief: lever counts and Copy summary report skilful / plausible / clumsy, the path replay labels "Plausible wording", the count-block key shows three styles (filled, half, hollow), never colour alone;
+   - how the calibrator copes with 12 options per decision (12^7 is about 36 million paths): memoise on the state (node, meters, the streak that repetition depends on) instead of walking every path, and state how the random-play percentages are still exact;
+   - any change to the calibration criteria in 7.8 (for example "no strategy of only plausible wordings reaches Breakthrough").
+   Reply with the spec changes and a short plan, including two or three sample pages written out in full (all 12 options) so I can judge the register. Wait for my approval.
+2. Write the content in src/content/maya.js for all 15 Round 1 pages. Rules:
+   - For each page and lever, the three wordings are within about 20% of each other in length, use the same register and person, and share sentence shape where possible (if the skilful one is a question, at least one other is too).
+   - No tells: no exclamation marks or "really", "just", "honestly" only in the weaker ones; no wording that is obviously rude or obviously warm; nothing a reader can sort without thinking about Maya at this moment.
+   - The difference is in the coaching: what it assumes, whose agenda it serves, whether it is premature, closed, leading, judgemental or rescuing. Each option's debrief note names that trade-off (never "correct", "wrong", "optimal" or "should have").
+   - Reactions for the plausible wording are believable and mild; Maya does not punish it.
+   - Each new option has a unique reply `page` (see CLAUDE.md, destination numbers), pose hints where the reaction describes something visible, and overrides only within ±5 (SPEC.md 7.6).
+   - Keep SPEC.md 9.3 (family and culture, role boundaries, no invented facts, UK English). Mark anything uncertain `PLACEHOLDER:`.
+3. Add tests/wording-tells.mjs: for every Round 1 page and lever, report each wording's length, punctuation and opening word, and flag any lever where one quality is always the longest, always the only question, or always carries a tell word. Exit 1 on flags. Add a content test that every format B page has exactly 4 x 3 options and every option has a unique page.
+4. Engine, interface and debrief changes as specified; keep every scoring number in RULES. Update the screen-state catalogue (tests/states.mjs) and the browser tests for three wordings.
+5. Recalibrate: tune overrides first, change RULES only where overrides cannot meet 7.8, and log every change in the Calibration log.
+6. Full regression: node build.mjs, node --test, node tests/calibrate.mjs, node tests/contrast.mjs, node tests/art-gallery.mjs, node tests/wording-tells.mjs, node tests/export-review.mjs, scripts/check-boundaries.sh. Screenshot the three-wording step and both debriefs at 1440 and 390 and look at them.
+
+Commit and push. Report results, the wording-tells report, every PLACEHOLDER string, and three pages where you were least sure which wording is skilful.
+```
+
+---
+
+## Session 7: Flow audit, bridging lines and branch pages
+
+Requested after session 5: sometimes Maya's reaction does not lead naturally into the opening line of the next page. Run after session 6, so that the audit covers the final options.
+
+**Goal:** every reaction leads naturally into the next page, by a bridging line where the page structure works and by a new branch page where it does not.
+
+**Done when:** docs/FLOW-AUDIT.md rates every reaction-to-next-page pair, every pair rated "bridge" has a bridging line, every approved branch page exists, every harness and the calibrator pass.
+
+```text
+Read turn-the-page/CLAUDE.md and turn-the-page/docs/SPEC.md in full. Apply any review comments I give below first. Create a new branch to work on.
+
+Session 7 of turn-the-page/docs/BUILD-PLAN.md: flow audit, bridging lines and branch pages.
+
+Problem: going from Maya's reaction on a consequence page to the next page's opening line is sometimes jarring: she says something, then the next page opens as if a different conversation had happened. Fix it case by case: a bridging line (an alternative opening line, and if needed cue, for the next page, chosen by the option that led there) wherever that is enough, and a new branch page only where a bridge cannot fix the jump.
+
+Part 1: audit (no content changes).
+1. Write tests/flow-audit.mjs. Enumerate every pair of (page, option, the reaction Maya actually gives with her profile's trait bands in that round, including the readiness band after each Round 1 ending in Round 2) and every page that option can lead to (all branches of a meter-conditioned route, and the end of the round). For each pair, write: from page, option id, lever, quality, the counsellor's line, Maya's reaction, the destination page, its opening line and its cue. Write it to docs/FLOW-AUDIT.md, grouped by destination page so all the ways into a page sit together.
+2. Read every pair and rate it in the same document:
+   - fits: the next line follows naturally;
+   - bridge: the next page works, but its opening line needs a variant for this way in (draft the variant in the document);
+   - branch: no line on the existing page can follow this reaction, because she has said or done something the next page contradicts or ignores (say what the new page would be, which act it belongs to, and where it rejoins).
+   Give a one-line reason for every bridge and branch. Also flag any end-of-round reaction that does not fit the ending text it leads to.
+3. Stop. Reply with the counts per rating and per round, every proposed branch page, and the five most jarring pairs. Wait for my approval of which branches to build.
+
+Part 2: build (after approval).
+4. Design in SPEC.md first (9, 12, 14.2, 14.3): a page's `line` and `cue` may be an object with a `default` and a `from` map keyed 'previousNodeId:optionId'; the interface picks the variant from the last history entry, and falls back to the default after a reload or a round start. This is presentation only: the engine, scores and routes do not change for bridges. Branch pages are ordinary nodes reached by an option's own `next`; they rejoin at the act's bottleneck page, keep the branch-and-bottleneck shape of SPEC.md 9, and get unique page numbers. If the node count goes above the 14-18 target per round, update the target in SPEC.md 9 and say so.
+5. Write the bridging lines and approved branch pages in src/content/maya.js, commented for a non-developer. Rules: Maya's voice and age; SPEC.md 9.3 guardrails; UK English; no invented facts; every new option on a branch page has a reaction, a debrief note written as a trade-off, a unique reply page, and pose hints where visible. Mark anything uncertain PLACEHOLDER:.
+6. Tests: content tests that every `from` key names a real page and option that can actually route to this page (on some meters), and that branch pages are reachable and rejoin; a browser test that a bridged page shows the variant after that option and the default after a reload; make tests/flow-audit.mjs regenerate FLOW-AUDIT.md with the ratings kept, and fail if a new pair has no rating. List bridges and branch pages in CONTENT-REVIEW.md.
+7. Recalibrate if branch pages were added (tune overrides first; log any RULES change).
+8. Full regression: node build.mjs, node --test, node tests/calibrate.mjs, node tests/contrast.mjs, node tests/art-gallery.mjs, node tests/flow-audit.mjs, node tests/export-review.mjs, scripts/check-boundaries.sh. Play three paths that use bridges at 390 and 1440, screenshot them and read them through.
+
+Commit and push. Report results, the final counts per rating, every PLACEHOLDER string, and any pair you rated "fits" but are unsure about.
+```
+
+---
+
 ## After version 1
 
 Each line is one session unless noted. Order is a recommendation.
 
 | # | Session | Summary |
 |---|---|---|
-| 6 | SME revisions | Apply the coaching expert's notes on script and trait hypotheses; recalibrate; regenerate CONTENT-REVIEW.md |
-| 7 | Second profile | A contrasting Maya-age profile (for example high confidence, high defensiveness) reusing the same nodes with trait-varied reactions; a profile picker after the cover; calibrator runs per profile |
-| 8 | Facilitator mode | `?facilitator` URL flag: live meter numbers, rules view, a session code so a workshop shares one seed, combined Copy summary format |
-| 9–10 | University case | A new case file (first-year undergraduate, age 18–19) with its own referral note and two rounds; a case picker; engine changes only if the spec needs new mechanics |
-| 11 | Round 3 option | A third format mixing B and C, or a timed round, if the pilot shows learners want more practice |
-| 12 | Free-text mode (exploratory) | Optional typed responses classified into a lever by Claude when opened as a claude.ai artifact; built-in fallback; needs a safeguarding review before use with real cases |
+| 8 | SME revisions | Apply the coaching expert's notes on script and trait hypotheses; recalibrate; regenerate CONTENT-REVIEW.md |
+| 9 | Second profile | A contrasting Maya-age profile (for example high confidence, high defensiveness) reusing the same nodes with trait-varied reactions; a profile picker after the cover; calibrator runs per profile |
+| 10 | Facilitator mode | `?facilitator` URL flag: live meter numbers, rules view, a session code so a workshop shares one seed, combined Copy summary format |
+| 11–12 | University case | A new case file (first-year undergraduate, age 18–19) with its own referral note and two rounds; a case picker; engine changes only if the spec needs new mechanics |
+| 13 | Round 3 option | A third format mixing B and C, or a timed round, if the pilot shows learners want more practice |
+| 14 | Free-text mode (exploratory) | Optional typed responses classified into a lever by Claude when opened as a claude.ai artifact; built-in fallback; needs a safeguarding review before use with real cases |
 
-Prompt template for sessions 6 onwards:
+Prompt template for sessions 8 onwards:
 
 ```text
 Read turn-the-page/CLAUDE.md and turn-the-page/docs/SPEC.md in full.
