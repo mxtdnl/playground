@@ -80,6 +80,9 @@ turn-the-page/
   index.html              Generated, committed (session 1: bare debug page)
   docs/SPEC.md            Specification (source of truth)
   docs/BUILD-PLAN.md      Sessions and prompts
+  docs/reference/         The slides repository's CLAUDE.md and SLIDES.md, kept as
+                          reference for the shared visual DNA (SPEC.md 11). Not rules
+                          for this folder: where they differ, SPEC.md and this file win
   src/shell.html          Document skeleton with the five slots
   src/style.css           Styles (session 1: tokens + debug styles)
   src/engine.js           RULES, scoring, routing, endings, carry-over, seeded shuffle
