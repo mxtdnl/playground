@@ -121,11 +121,11 @@ Meters clamp to 0–100. The engine is pure and deterministic: the same inputs a
 | Observe | +2 | +2 | +4 |
 | Challenge | −4 | +2 | +9 |
 
-**Clumsy wording** (Round 1 only): positive effects × 0.4, then Trust −3.
+**Clumsy wording** (Round 1 only): positive effects × 0.4, then Trust −3 (calibrated to −2; see the Calibration log).
 
 ### 7.3 State rules (initial values)
 
-- **Challenge before trust:** Challenge with Trust < 50 → Trust −10, Confidence −5, Ownership +2 (replaces the base row).
+- **Challenge before trust:** Challenge with Trust < 50 → Trust −10, Confidence −5, Ownership +2 (replaces the base row). Trust calibrated to −5; see the Calibration log.
 - **Observe before trust:** Observe with Trust < 40 → Trust −2 instead of +2 (it can feel exposing).
 - **Support at high trust:** Support with Trust ≥ 70 → Ownership −2 (reassurance starts to take the problem off her).
 
@@ -155,7 +155,7 @@ An option may carry a small authored adjustment (±1 to ±5) when its specific w
 Checked in this order:
 
 1. **Early exit:** Trust ≤ 10 at any point. Maya asks, "Can I go now?" The round ends at once.
-2. **Breakthrough:** at the end, Ownership ≥ 60 and Trust ≥ 50. Maya proposes her own next step.
+2. **Breakthrough:** at the end, Ownership ≥ 60 and Trust ≥ 50 (calibrated to Ownership ≥ 45 and Trust ≥ 45; see the Calibration log). Maya proposes her own next step.
 3. **Partial (agreement without ownership):** at the end, Trust ≥ 45 and Ownership ≥ 30. Maya agrees to the counsellor's suggestion.
 4. **Polite exit:** anything else. Maya thanks the counsellor and leaves, unmoved.
 
@@ -207,6 +207,8 @@ Every option carries: text, lever, quality (Round 1), reaction lines (with varia
 ### 9.2 Round 2: "Two weeks later" (follow-up)
 
 **Opening by Round 1 ending.** The agreed action is the pivot:
+
+Starting meters below are the initial values; the calibrated values are in the Calibration log.
 
 | Round 1 ending | Round 2 opening | Starting meters |
 |---|---|---|
@@ -448,3 +450,20 @@ Additional profiles and a profile picker; university-student cases; a facilitato
 2. SME review of the full script (`docs/CONTENT-REVIEW.md`, produced in session 2).
 3. Title confirmed: Turn the Page (subtitle optional, e.g. "a coaching adventure").
 4. Whether GitHub Pages is enabled for this repository, and from which branch.
+
+## Calibration log
+
+Session 2 (content and calibration). Overrides were tuned first; these `RULES` values changed only where no set of overrides within ±5 could meet SPEC.md 7.8. Each value remains a hypothesis for SME review.
+
+| Rule | Was | Now | Why |
+|---|---|---|---|
+| Challenge before trust, Trust (7.3) | −10 | −5 | With Maya's low-confidence multiplier (× 1.5) one early Challenge cost 15 of her 35 starting Trust (20 if clumsy). Random play in Round 1 ended early about 60% of the time against a 5–25% target, and an override of +5 on every Challenge would have been the same change hidden in content. At −5 (−8 with the multiplier) it is still the costliest single move. |
+| Clumsy wording, Trust penalty (7.2) | −3 | −2 | Half of Round 1's options are clumsy, so random play drifted down by about 2 Trust per decision and Early exit stayed above 25% after the change above. Clumsy wording still loses 60% of its gains and costs Trust. |
+| Breakthrough threshold (7.7) | Ownership ≥ 60, Trust ≥ 50 | Ownership ≥ 45, Trust ≥ 45 | From Ownership 15 and Trust 35, random play almost never reached 60/50 (0.0%; target 5–20%), and even a strong seven-decision path rarely did: Ownership gains are +4 to +9 per decision and Act 1 is capped at +6. 45/45 is reached by many different skilful routes, while no single-lever strategy reaches it. Breakthrough and Partial now share the Trust threshold, so the difference between them is Ownership alone, which is the agreement-versus-ownership point of the case. |
+| Round 2 start after Breakthrough (9.2) | Trust 80%, Ownership 25 | Trust 70%, Ownership 20 | With the lower threshold, a Breakthrough carry-over put Round 2 within a few decisions of another Breakthrough (random play 46–64%) and made Early exit almost unreachable (under 1%). 70% and 20 keep the head start (higher Trust, Confidence +10, readiness `mid`) while leaving Round 2 open in both directions. |
+| Round 2 start after Partial (9.2) | Trust 70% | Trust 60% | Same reason: random play from a Partial start reached Early exit on only 2–3% of paths. |
+| Round 2 start after Early exit (9.2) | Trust 20 | Trust 25 | From Trust 20 a single Challenge (−8) followed by one Observe before trust (−2) ended the round in two decisions, which breaks the "early exit within three decisions needs two Challenges or clumsy wordings" criterion; no override within ±5 on the opening can prevent it on every path. 25 still leaves her the most reluctant of the four openings. |
+
+Overrides: 108 of the 184 options carry one; every value is listed in `docs/CONTENT-REVIEW.md`. In Round 1 most skilful wordings carry a small Trust or Ownership bonus (+1 to +5). That is a deliberate content choice: skilful wording that fits the moment should do better than the base row, and the bonuses vary by node, so they belong in content rather than in `RULES`. Round 2 overrides were set by a constrained search within authored ranges: lines that fit the moment could only gain, lines that misfit it could only lose. They are what make Round 2 a choice of lever rather than of wording.
+
+Calibrator interpretation (unchanged from session 1): every SPEC.md 7.8 criterion is checked for Round 1 and separately for each Round 2 opening, using the median carry-over for that Round 1 ending. Reachability of all four endings is also checked from the lowest and highest carry-over.

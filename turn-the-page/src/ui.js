@@ -1,5 +1,5 @@
-// Turn the Page — interface. Session 1: a bare DEBUG page that plays the
-// case through with plain buttons and shows the meters as numbers.
+// Turn the Page — interface. Until session 3: a bare DEBUG page that plays
+// the full script (session 2) with plain buttons and shows the meters as numbers.
 // Session 3 replaces this file with the real interface (SPEC.md 13).
 // Uses the engine functions and MAYA from the same inlined script scope.
 
@@ -53,7 +53,7 @@ function render() {
   const s = ui.state;
   app.innerHTML = '';
   app.appendChild(el('h1', { text: 'Turn the Page — engine debug' }));
-  app.appendChild(el('p', { class: 'muted', text: 'Session 1 debug page. Stub content; numbers shown for testing only.' }));
+  app.appendChild(el('p', { class: 'muted', text: 'Debug page (session 2): full script for both rounds; numbers shown for testing only. Session 3 replaces this page.' }));
 
   if (!s) {
     const seedInput = el('input', { type: 'number', value: String(ui.seed), id: 'seed', 'aria-label': 'Seed' });
@@ -71,6 +71,18 @@ function render() {
   const round = MAYA.rounds[s.round];
   app.appendChild(el('p', { class: 'meters', id: 'meters', text: s.round.toUpperCase() + ' · ' + metersLine(s.meters) }));
   if (s.from) app.appendChild(el('p', { class: 'muted', text: 'Opened from Round 1 ending: ' + s.from + ' · traits ' + JSON.stringify(s.traits) }));
+
+  // Act banner: shown when the last choice left an act (or ended the round).
+  if (ui.last) {
+    const prevAct = round.nodes[ui.last.nodeId].act;
+    const nowAct = s.nodeId ? round.nodes[s.nodeId].act : null;
+    if (nowAct !== prevAct && !(s.ending === 'early')) {
+      app.appendChild(el('div', { class: 'panel', id: 'act-banner' }, [
+        el('p', { class: 'muted', text: 'End of Act ' + prevAct + ': ' + round.acts[prevAct].title }),
+        el('p', { class: 'story', text: round.acts[prevAct].cliffhanger })
+      ]));
+    }
+  }
 
   if (ui.last) {
     app.appendChild(el('div', { class: 'panel', id: 'reaction' }, [

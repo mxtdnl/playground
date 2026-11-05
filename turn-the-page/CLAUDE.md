@@ -66,7 +66,7 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - History records both the applied change after clamping (`deltas`) and the unclamped formula result (`raw`).
 - Early exit is checked after every choice and also at round start. Other endings apply once a route returns `null`.
 - Routing: an option's own `next` wins; otherwise the node's `next`, which is a node id, `null` (end of round), an object keyed by lever with a `default`, or a list of `{ to, if: { meter: { min, max } } }` evaluated on the meters after the choice.
-- Carry-over: Breakthrough → Trust round(80% of final), Confidence final + 10, Ownership 25. Partial → Trust round(70%), Confidence carries unchanged, Ownership 15. Polite → Trust 30, Early → Trust 20, other meters from the profile. Readiness rises one band after Breakthrough or Partial. Carry values live in `RULES.carry`, not in the case file.
+- Carry-over (values as calibrated in session 2; SPEC.md Calibration log): Breakthrough → Trust round(70% of final), Confidence final + 10, Ownership 20. Partial → Trust round(60%), Confidence carries unchanged, Ownership 15. Polite → Trust 30, Early → Trust 25, other meters from the profile. Readiness rises one band after Breakthrough or Partial. Carry values live in `RULES.carry`, not in the case file.
 - Cases are looked up by `caseId` from a registry filled by `createRound` (or `registerCase`), so state stays plain JSON.
 
 ## File map
@@ -77,21 +77,23 @@ turn-the-page/
   README.md               What it is, run, test, status
   package.json            "type": "module" and script aliases; no dependencies
   build.mjs               Inlines src/ into index.html
-  index.html              Generated, committed (session 1: bare debug page)
+  index.html              Generated, committed (until session 3: debug page playing the full script)
   docs/SPEC.md            Specification (source of truth)
   docs/BUILD-PLAN.md      Sessions and prompts
   src/shell.html          Document skeleton with the five slots
   src/style.css           Styles (session 1: tokens + debug styles)
   src/engine.js           RULES, scoring, routing, endings, carry-over, seeded shuffle
   src/art.js              SVG scene and figure (session 4; stub now)
-  src/content/maya.js     MAYA: real profile and referral; STUB rounds (3 nodes each)
-  src/ui.js               Interface (session 1: debug page)
+  src/content/maya.js     MAYA: profile, referral, Round 1 (15 nodes) and Round 2 (16 nodes)
+  src/ui.js               Interface (until session 3: debug page)
   tests/engine.test.mjs   node:test unit tests for every rule in SPEC.md 7 and 9.2
   tests/content.test.mjs  Content integrity checks (SPEC.md 14.3), PLACEHOLDER count
-  tests/calibrate.mjs     Path enumeration and SPEC.md 7.8 report; exits 1 on failure
+  tests/calibrate.mjs     Path enumeration and SPEC.md 7.8 report; exits 1 on failure; exports calibrate()
+  tests/export-review.mjs Writes docs/CONTENT-REVIEW.md from the content and the calibrator
+  docs/CONTENT-REVIEW.md  Generated script and numbers for SME review (do not edit by hand)
 ```
 
-Planned, not yet created: `docs/CONTENT-REVIEW.md`, `tests/export-review.mjs` (session 2); `tests/ui.test.mjs` (session 3); `tests/art-gallery.mjs` (session 4); `tests/contrast.mjs` (session 5).
+Planned, not yet created: `tests/ui.test.mjs` (session 3); `tests/art-gallery.mjs` (session 4); `tests/contrast.mjs` (session 5).
 
 ## Commands (run from `turn-the-page/`)
 
@@ -99,6 +101,7 @@ Planned, not yet created: `docs/CONTENT-REVIEW.md`, `tests/export-review.mjs` (s
 node build.mjs            # writes index.html
 node --test               # unit and content tests (finds tests/*.test.mjs)
 node tests/calibrate.mjs  # calibration report; exits 1 while any criterion fails
+node tests/export-review.mjs  # regenerates docs/CONTENT-REVIEW.md (run after any content or RULES change)
 ```
 
 `node --test tests/` does not work on Node 22 (it treats the directory as a file); use `node --test` with no arguments. Before committing, also run `scripts/check-boundaries.sh` from the repository root. Playwright and Chromium are preinstalled in cloud sessions; do not install another version.

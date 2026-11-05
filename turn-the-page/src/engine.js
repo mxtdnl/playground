@@ -28,12 +28,12 @@ export const RULES = {
 
   // Clumsy wording, Round 1 only (SPEC.md 7.2): positive effects are
   // multiplied by positiveFactor, then trustPenalty is added to Trust.
-  clumsy: { positiveFactor: 0.4, trustPenalty: -3 },
+  clumsy: { positiveFactor: 0.4, trustPenalty: -2 },
 
   // State rules (SPEC.md 7.3). Evaluated against the meters before the choice.
   state: {
     // Challenge with Trust below the threshold: this row replaces the base row.
-    challengeBeforeTrust: { lever: 'challenge', trustBelow: 50, row: { trust: -10, confidence: -5, ownership: 2 } },
+    challengeBeforeTrust: { lever: 'challenge', trustBelow: 50, row: { trust: -5, confidence: -5, ownership: 2 } },
     // Observe with Trust below the threshold: Trust effect replaced by this value.
     observeBeforeTrust: { lever: 'observe', trustBelow: 40, trust: -2 },
     // Support with Trust at or above the threshold: added to Ownership.
@@ -84,7 +84,7 @@ export const RULES = {
   // Endings (SPEC.md 7.7), checked in this order.
   endings: {
     early: { trustAtMost: 10 }, // at any point
-    breakthrough: { ownershipAtLeast: 60, trustAtLeast: 50 }, // at the end
+    breakthrough: { ownershipAtLeast: 45, trustAtLeast: 45 }, // at the end
     partial: { trustAtLeast: 45, ownershipAtLeast: 30 } // at the end; otherwise 'polite'
   },
   endingOrder: ['early', 'breakthrough', 'partial', 'polite'],
@@ -95,11 +95,13 @@ export const RULES = {
   //   confidenceBonus: added to Round 1's final Confidence.
   //   Any meter not given keeps Round 1's final value if carry: true,
   //   otherwise the profile's starting value.
+  // Calibrated in session 2 from 0.8 / Ownership 25 (breakthrough), 0.7
+  // (partial) and Trust 20 (early): see SPEC.md, Calibration log.
   carry: {
-    breakthrough: { trustCarry: 0.8, confidenceBonus: 10, ownership: 25, carry: true },
-    partial: { trustCarry: 0.7, ownership: 15, carry: true },
+    breakthrough: { trustCarry: 0.7, confidenceBonus: 10, ownership: 20, carry: true },
+    partial: { trustCarry: 0.6, ownership: 15, carry: true },
     polite: { trust: 30, carry: false },
-    early: { trust: 20, carry: false }
+    early: { trust: 25, carry: false }
   },
   // Readiness for change rises one band in Round 2 after these endings (SPEC.md 6.2).
   readinessRiseAfter: ['breakthrough', 'partial'],
