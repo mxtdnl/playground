@@ -1302,6 +1302,15 @@ export const MAYA = {
       format: 'C',
       // Opening page by Round 1 ending (SPEC.md 9.2).
       starts: { breakthrough: 'r2-01a', partial: 'r2-01b', polite: 'r2-01c', early: 'r2-01d' },
+      // The "Two weeks later" interlude before Round 2 (SPEC.md 13, screen 9):
+      // how the Round 1 ending sets the scene. Narration only; it must not
+      // tell the counsellor what Maya did or did not do (the opening page shows that).
+      interlude: {
+        breakthrough: 'Two weeks have passed. Maya knocks on your door a few minutes early. Last time she left with a step she chose herself, and she looks as if she has something to tell you. A course brochure is lying on your desk.',
+        partial: 'Two weeks have passed. Maya arrives on time, as agreed. Last time she said yes to the step you suggested. A course brochure is lying on your desk.',
+        polite: 'Two weeks have passed. Mr Okafor has asked you to see Maya again. Last time she was polite from start to finish, and nothing much changed. A course brochure is lying on your desk.',
+        early: 'Two weeks have passed. Mr Okafor has sent Maya back to see you. Last time she left before the conversation really began, and she has not forgotten it. A course brochure is lying on your desk.'
+      },
       // Act titles and the cliffhanger line shown on the act banner at the end of each act.
       acts: {
         1: { title: 'Reconnecting', cliffhanger: 'She picked up the brochure. Then she put it down again, very carefully.' },

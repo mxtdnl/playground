@@ -396,6 +396,15 @@ Format C: four unlabelled, shuffled lines, one per lever, all competent; then th
 
 Opening page by Round 1 ending: breakthrough → r2-01a, partial → r2-01b, polite → r2-01c, early → r2-01d.
 
+Interlude ("Two weeks later"), shown before the opening page:
+
+| Round 1 ending | Interlude text |
+|---|---|
+| breakthrough | Two weeks have passed. Maya knocks on your door a few minutes early. Last time she left with a step she chose herself, and she looks as if she has something to tell you. A course brochure is lying on your desk. |
+| partial | Two weeks have passed. Maya arrives on time, as agreed. Last time she said yes to the step you suggested. A course brochure is lying on your desk. |
+| polite | Two weeks have passed. Mr Okafor has asked you to see Maya again. Last time she was polite from start to finish, and nothing much changed. A course brochure is lying on your desk. |
+| early | Two weeks have passed. Mr Okafor has sent Maya back to see you. Last time she left before the conversation really began, and she has not forgotten it. A course brochure is lying on your desk. |
+
 | Act | Title | Cliffhanger (act banner) |
 |---|---|---|
 | 1 | Reconnecting | She picked up the brochure. Then she put it down again, very carefully. |

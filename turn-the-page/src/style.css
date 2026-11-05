@@ -1,6 +1,10 @@
-/* Turn the Page — styles. Session 1: bare debug page only.
-   Session 3 builds the real stylesheet from SPEC.md section 11. */
+/* Turn the Page — styles (SPEC.md section 11, "Paperback Constructivist").
+   Light paper theme with ink-night spreads (cover, endings). No dark-mode
+   switching. Hard edges: zero border-radius except 50% circles. No gradients.
+   Warm shadow on hover only. System fonts only. */
+
 :root {
+  /* Colour tokens (SPEC.md 11.1). Contrast rules are in CLAUDE.md. */
   --paper: #F3ECDC;
   --paper-card: #FFFBF2;
   --paper-deep: #E6DCC6;
@@ -14,18 +18,481 @@
   --lever-challenge: #D2401E;
   --lever-challenge-ink: #A8321A;
   --plum: #6B2E7A;
-  --ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --white: #FFFFFF;
+
+  /* Type (SPEC.md 11.2). */
   --story: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+  --ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Layout and motion. */
+  --gutter: clamp(16px, 4vw, 56px);
+  --shadow-warm: 0 8px 18px rgba(122, 72, 24, 0.28);
+  --turn: 0.35s;
+  --flash: 0.6s;
+  color-scheme: light;
 }
-* { box-sizing: border-box; border-radius: 0; }
-body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--ui); }
-#app { max-width: 760px; margin: 0 auto; padding: 16px; }
-h1, h2 { font-weight: 800; margin: 0 0 8px; }
+
+*, *::before, *::after { box-sizing: border-box; border-radius: 0; }
+html { background: var(--paper); }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+#app { position: relative; }
+h1, h2, h3 { font-family: var(--ui); font-weight: 800; line-height: 1.15; margin: 0 0 12px; }
+p { margin: 0 0 12px; }
+button { font: inherit; color: inherit; cursor: pointer; margin: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Focus is always visible (SPEC.md 15). */
+:focus-visible { outline: 3px solid var(--plum); outline-offset: 3px; }
+.night :focus-visible { outline-color: var(--lever-observe); }
+.page:focus, .page:focus-visible { outline: none; }
+
+/* Shared type roles. */
+.eyebrow {
+  font: 700 0.75rem/1.3 var(--ui);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: 0 0 12px;
+}
+.night .eyebrow { color: var(--paper); }
+.eyebrow.with-tag { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.story { font-family: var(--story); font-weight: 400; line-height: 1.6; }
 .muted { color: var(--ink-muted); }
-.story { font-family: var(--story); font-size: 1.1rem; line-height: 1.6; }
-.panel { background: var(--paper-card); border: 1px solid var(--rule); padding: 12px; margin: 12px 0; }
-.meters { font-variant-numeric: tabular-nums; font-weight: 700; }
-button { font: inherit; min-height: 44px; margin: 4px 4px 4px 0; padding: 8px 12px; border: 2px solid var(--ink); background: var(--paper-card); color: var(--ink); cursor: pointer; text-align: left; }
-button:focus-visible { outline: 3px solid var(--plum); outline-offset: 2px; }
-button.block { display: block; width: 100%; }
-pre { white-space: pre-wrap; font-size: 0.85rem; }
+
+/* Storage-unavailable notice (SPEC.md 14.4). Ink on ochre fill. */
+.notice {
+  background: var(--lever-observe);
+  color: var(--ink);
+  font: 700 0.85rem/1.4 var(--ui);
+  padding: 8px 16px;
+  text-align: center;
+}
+
+/* ---- Pages ------------------------------------------------------------- */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 24px var(--gutter) 56px;
+  overflow: hidden;
+  overflow: clip; /* clips the bleeding geometry without breaking the sticky meters */
+}
+.page > *:not(.deco) { position: relative; z-index: 1; }
+.night { background: var(--ink); color: var(--paper); }
+.narrow { max-width: 760px; margin-left: auto; margin-right: auto; }
+
+/* Page turn (SPEC.md 11.3): the old page slides off to the left with a paper
+   edge and shadow, over the new one. Instant under reduced motion. */
+.turn-out {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 40;
+  pointer-events: none;
+  background: var(--paper);
+  border-right: 6px solid var(--paper-card);
+  box-shadow: 14px 0 26px rgba(28, 31, 51, 0.32);
+  animation: turn-out var(--turn) cubic-bezier(0.55, 0, 0.75, 0.4) forwards;
+}
+@keyframes turn-out {
+  from { transform: translateX(0); }
+  to { transform: translateX(-104%); }
+}
+
+/* Running head with the page number. */
+.runhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  max-width: 1240px;
+  margin: 0 auto 24px;
+  padding-bottom: 8px;
+  border-bottom: 3px solid var(--ink);
+  font: 700 0.75rem/1.3 var(--ui);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.night .runhead { border-bottom-color: var(--paper); }
+.pageno {
+  font: italic 400 1.15rem/1 var(--story);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--plum);
+  white-space: nowrap;
+}
+.night .pageno { color: var(--lever-observe); }
+
+/* ---- Decorative geometry (SPEC.md 11.4) --------------------------------
+   Two or three large shapes per screen at 0.06-0.12 opacity, bleeding off
+   the edges, behind content and away from the meters. */
+.deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.shape { position: absolute; opacity: 0.1; }
+.shape.circle { border-radius: 50%; }
+.shape.ring { border-radius: 50%; background: transparent !important; border-style: solid; }
+.shape.triangle { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.shape.question { background: var(--lever-question); border-color: var(--lever-question); }
+.shape.support { background: var(--lever-support); border-color: var(--lever-support); }
+.shape.observe { background: var(--lever-observe); border-color: var(--lever-observe); }
+.shape.challenge { background: var(--lever-challenge); border-color: var(--lever-challenge); }
+.shape.plum { background: var(--plum); border-color: var(--plum); }
+.night .shape { opacity: 0.12; }
+
+/* ---- Buttons (SPEC.md 11.4) -------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 12px 22px;
+  background: var(--plum);
+  color: var(--white);
+  border: 3px solid var(--plum);
+  font: 800 0.85rem/1.2 var(--ui);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-warm); }
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+.night .btn { border-color: var(--paper); }
+.night .btn--ghost { color: var(--paper); }
+.btn .dest { font-weight: 700; letter-spacing: 0.04em; text-transform: none; white-space: nowrap; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.link-back {
+  display: inline-flex; align-items: center; min-height: 44px;
+  padding: 8px 0; background: none; border: 0;
+  font: 700 0.8rem/1.2 var(--ui); letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px;
+}
+
+/* ---- Lever code -------------------------------------------------------- */
+
+/* --lc fill/border colour, --lc-on text on a fill, --lc-ink text on paper. */
+.lv-question { --lc: var(--lever-question); --lc-on: var(--white); --lc-ink: var(--lever-question); }
+.lv-support { --lc: var(--lever-support); --lc-on: var(--white); --lc-ink: var(--lever-support); }
+.lv-observe { --lc: var(--lever-observe); --lc-on: var(--ink); --lc-ink: var(--lever-observe-ink); }
+.lv-challenge { --lc: var(--lever-challenge); --lc-on: var(--white); --lc-ink: var(--lever-challenge-ink); }
+
+.glyph { display: inline-block; width: 1em; height: 1em; flex: none; color: var(--lc); vertical-align: -0.12em; }
+.glyph svg { display: block; width: 100%; height: 100%; }
+.lever-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 800 0.78rem/1.2 var(--ui); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--lc-ink);
+}
+.lever-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 10px;
+  background: var(--lc); color: var(--lc-on);
+  font: 800 0.78rem/1.2 var(--ui); letter-spacing: 0.14em; text-transform: uppercase;
+}
+.lever-chip .glyph { color: var(--lc-on); }
+
+/* Lever card: paper card, thick top bar in the lever colour, glyph,
+   uppercase name, one-line definition. Selected: solid lever fill. */
+.lever-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.lever-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 44px;
+  padding: 12px 14px 14px;
+  background: var(--paper-card);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-top: 10px solid var(--lc);
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-warm); }
+.lever-card .name {
+  display: flex; align-items: center; gap: 8px;
+  font: 800 0.9rem/1.2 var(--ui); letter-spacing: 0.14em; text-transform: uppercase;
+  padding-right: 1.5rem;
+}
+.lever-card .def { font-size: 0.86rem; line-height: 1.4; color: var(--ink-muted); }
+.lever-card .dest { margin-top: auto; font-size: 0.78rem; font-weight: 700; color: var(--plum); }
+.lever-card.is-selected, .lever-card[aria-pressed="true"] { background: var(--lc); color: var(--lc-on); border-color: var(--lc); }
+.lever-card.is-selected .def, .lever-card.is-selected .dest,
+.lever-card[aria-pressed="true"] .def, .lever-card[aria-pressed="true"] .dest { color: var(--lc-on); }
+.lever-card.is-selected .glyph, .lever-card[aria-pressed="true"] .glyph { color: var(--lc-on); }
+.key {
+  position: absolute; top: 8px; right: 10px;
+  font: 700 0.72rem/1 var(--ui); color: var(--ink-muted);
+}
+.is-selected .key, [aria-pressed="true"] .key { color: inherit; }
+.lever-grid.compact .lever-card { padding: 10px 12px; }
+
+/* Line option: paper card with a serif quote and a destination page number.
+   In Round 2 it carries no lever colour until revealed. */
+.line-list { display: grid; gap: 12px; }
+.line-option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 4px 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 14px 16px;
+  background: var(--paper-card);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-left: 8px solid var(--lc, var(--ink));
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.line-option:hover { transform: translateY(-2px); box-shadow: var(--shadow-warm); }
+.line-option .num { font: 800 0.9rem/1.6 var(--ui); color: var(--ink-muted); }
+.line-option .quote { font: 400 1.08rem/1.5 var(--story); }
+.line-option .dest { grid-column: 2; justify-self: end; font: 700 0.78rem/1.2 var(--ui); color: var(--plum); }
+.line-option.is-selected { background: var(--paper-deep); }
+
+/* ---- Spread: scene, meters, story -------------------------------------- */
+
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  grid-template-areas: "scene story" "meters story";
+  gap: 24px 48px;
+  align-items: start;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+.scene-area { grid-area: scene; }
+.meters { grid-area: meters; }
+.story-col { grid-area: story; min-width: 0; }
+
+/* Placeholder scene (session 3; replaced in session 4). */
+.scene-frame { background: var(--paper-card); border: 3px solid var(--ink); }
+.scene-frame svg { display: block; width: 100%; height: auto; }
+.scene-caption {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  border-top: 3px solid var(--ink);
+  padding: 8px 12px;
+  font: 700 0.75rem/1.3 var(--ui); letter-spacing: 0.12em; text-transform: uppercase;
+}
+.scene-caption .posture { color: var(--plum); }
+
+/* Story column. */
+.speaker { font: 800 0.75rem/1.2 var(--ui); letter-spacing: 0.18em; text-transform: uppercase; color: var(--plum); margin: 0 0 8px; }
+.maya-line { font: 400 clamp(1.3rem, 1.05rem + 1vw, 1.75rem)/1.45 var(--story); margin: 0 0 16px; }
+.cue {
+  font: italic 400 1.04rem/1.6 var(--story);
+  color: var(--ink-muted);
+  border-left: 4px solid var(--rule);
+  padding-left: 14px;
+  margin: 0 0 8px;
+}
+.choices { margin-top: 28px; }
+.you-said { font: italic 400 1rem/1.55 var(--story); color: var(--ink-muted); margin: 0 0 16px; }
+.reaction { font: 400 clamp(1.2rem, 1rem + 0.8vw, 1.5rem)/1.5 var(--story); margin: 0 0 16px; }
+.picked-line {
+  font: 400 1.08rem/1.5 var(--story);
+  background: var(--paper-card);
+  border: 2px solid var(--ink);
+  border-left: 8px solid var(--ink);
+  padding: 12px 16px;
+  margin: 0 0 16px;
+}
+.reveal {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+  margin: 0 0 18px; padding: 12px 14px;
+  background: var(--paper-card); border: 2px solid var(--ink);
+}
+.reveal .verdict { font: 700 0.9rem/1.4 var(--ui); }
+
+/* ---- Meters (SPEC.md 11.4) ---------------------------------------------
+   Ten segments, uppercase labels, no numbers. Changed segments flash in the
+   causing lever's colour for 0.6s, then settle to ink, with a marker. */
+.meters { display: grid; gap: 10px; background: var(--paper); }
+.meter {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) 1.2rem;
+  align-items: center;
+  gap: 10px;
+}
+.meter-label { font: 700 0.75rem/1.2 var(--ui); letter-spacing: 0.14em; text-transform: uppercase; }
+.segs { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 3px; height: 16px; }
+.seg { background: var(--paper-deep); }
+.seg.on { background: var(--ink); }
+.seg.flash-on { animation: flash-on var(--flash) ease-out both; }
+.seg.flash-off { animation: flash-off var(--flash) ease-out both; }
+@keyframes flash-on { 0%, 45% { background: var(--flash-colour); } 100% { background: var(--ink); } }
+@keyframes flash-off { 0%, 45% { background: var(--flash-colour); } 100% { background: var(--paper-deep); } }
+.mark { font: 700 0.8rem/1 var(--ui); color: var(--ink); text-align: center; }
+
+/* ---- How it works ------------------------------------------------------ */
+
+.how-levers { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 8px 0 32px; }
+.how-meters { max-width: 520px; margin-bottom: 32px; }
+.pull {
+  font: 400 clamp(1.5rem, 1.2rem + 1.4vw, 2.2rem)/1.3 var(--story);
+  border-left: 10px solid var(--plum);
+  padding-left: 18px;
+  margin: 8px 0 24px;
+}
+.steps { padding-left: 1.2rem; margin: 0 0 12px; }
+.steps li { margin-bottom: 8px; }
+.how-title { font-size: clamp(2rem, 1.4rem + 2.4vw, 3.2rem); text-transform: uppercase; letter-spacing: 0.02em; }
+
+/* ---- Cover ------------------------------------------------------------- */
+
+.cover-inner { max-width: 1100px; margin: 0 auto; padding-top: clamp(24px, 8vh, 96px); }
+.lockup { display: flex; flex-direction: column; align-items: flex-start; margin: 0 0 32px; }
+.lockup span {
+  display: block;
+  font: 900 clamp(3.2rem, 1.6rem + 7vw, 8rem)/0.9 var(--ui);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  padding: 0.1em 0.2em 0.04em;
+}
+.lockup .lk1 { background: var(--lever-question); color: var(--white); }
+.lockup .lk2 { background: var(--lever-observe); color: var(--ink); margin-left: 1.1em; }
+.lockup .lk3 { background: var(--lever-challenge); color: var(--white); margin-left: 0.45em; }
+.lockup .lk4 {
+  background: var(--lever-support); color: var(--white);
+  font-size: clamp(0.85rem, 0.7rem + 0.6vw, 1.15rem); font-weight: 800; letter-spacing: 0.22em;
+  padding: 0.6em 1em; margin-left: 2.2em;
+}
+.premise { font: 400 clamp(1.15rem, 1rem + 0.6vw, 1.45rem)/1.55 var(--story); max-width: 38rem; }
+
+/* ---- Referral note ----------------------------------------------------- */
+
+.referral {
+  position: relative;
+  max-width: 640px;
+  margin: 36px auto 0;
+  padding: 44px 36px 32px;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  transform: rotate(-1.2deg);
+}
+.referral::before {
+  content: '';
+  position: absolute;
+  top: -14px; left: 50%;
+  width: 128px; height: 28px;
+  background: var(--plum);
+  transform: translateX(-50%) rotate(2deg);
+}
+.referral h1 { font-size: 1.1rem; letter-spacing: 0.16em; text-transform: uppercase; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 18px; }
+.field { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 4px 12px; margin-bottom: 10px; }
+.field-label { font: 700 0.72rem/1.6 var(--ui); letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted); }
+.field-value { font: 400 1.02rem/1.55 var(--story); }
+.referral .actions { justify-content: flex-end; }
+
+/* ---- Act banner (SPEC.md 11.3) ----------------------------------------- */
+
+.act-1 { --act: var(--lever-question); }
+.act-2 { --act: var(--lever-observe); }
+.act-3 { --act: var(--lever-challenge); }
+.banner {
+  display: grid;
+  grid-template-columns: clamp(28px, 6vw, 96px) minmax(0, 1fr);
+  margin: clamp(24px, 10vh, 120px) calc(-1 * var(--gutter)) 0;
+  background: var(--ink);
+  color: var(--paper);
+}
+.banner .slab { background: var(--act); }
+.banner .banner-body { padding: clamp(28px, 6vh, 64px) var(--gutter); max-width: 1000px; }
+.banner .tag {
+  display: inline-block; background: var(--plum); color: var(--white);
+  font: 800 0.75rem/1.2 var(--ui); letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 6px 12px; margin-bottom: 20px;
+}
+.cliff { font: 400 clamp(1.6rem, 1.1rem + 2.2vw, 2.8rem)/1.3 var(--story); margin: 0; }
+/* Aligned with the banner text: the slab width past the page gutter. */
+.banner-actions { margin: 28px 0 0 clamp(28px, 6vw, 96px); }
+
+/* ---- Ending page (SPEC.md 11.3) ---------------------------------------- */
+
+.ending-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 48px;
+  align-items: center;
+  max-width: 1100px;
+  margin: clamp(16px, 6vh, 72px) auto 0;
+}
+.emblem svg { display: block; width: 100%; max-width: 340px; height: auto; margin: 0 auto; }
+.ending-title { font-size: clamp(2.2rem, 1.4rem + 3vw, 4rem); text-transform: uppercase; letter-spacing: 0.01em; }
+.ending-text { font: 400 clamp(1.15rem, 1rem + 0.6vw, 1.45rem)/1.6 var(--story); }
+
+/* ---- Interlude --------------------------------------------------------- */
+
+.interlude-inner { padding-top: clamp(24px, 10vh, 120px); }
+.interlude-title { font: italic 400 clamp(2.6rem, 1.6rem + 4vw, 5rem)/1.05 var(--story); color: var(--plum); margin: 4px 0 24px; }
+.interlude-text { font: 400 clamp(1.15rem, 1rem + 0.6vw, 1.45rem)/1.6 var(--story); max-width: 38rem; }
+
+/* ---- Minimal debrief (session 3; replaced in session 4) ---------------- */
+
+.path { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 14px; }
+.path li { background: var(--paper-card); border: 2px solid var(--ink); border-left: 8px solid var(--lc, var(--ink)); padding: 14px 16px; }
+.path .path-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 8px; font: 700 0.8rem/1.3 var(--ui); }
+.path .path-head .pageno { font-size: 1rem; }
+.path .said { font: 400 1.04rem/1.5 var(--story); margin-bottom: 6px; }
+.path .reacted { font: italic 400 1rem/1.5 var(--story); color: var(--ink-muted); margin-bottom: 6px; }
+.path .note { font-size: 0.9rem; margin: 0; }
+.ending-card { background: var(--ink); color: var(--paper); padding: 18px 20px; border-left: 10px solid var(--plum); }
+.ending-card h2 { margin-bottom: 6px; }
+.ending-card p { margin: 0; font: 400 1.05rem/1.5 var(--story); }
+
+/* ---- Narrow layout (SPEC.md 13): single column below 860px, meters in a
+   sticky top strip, touch targets of at least 44px. ------------------- */
+
+@media (max-width: 859px) {
+  .spread { grid-template-columns: minmax(0, 1fr); grid-template-areas: "meters" "scene" "story"; gap: 16px; }
+  .spread .meters {
+    position: sticky; top: 0; z-index: 5;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 10px var(--gutter);
+    border-bottom: 3px solid var(--ink);
+  }
+  .meter { grid-template-columns: minmax(0, 1fr) auto; gap: 4px 6px; }
+  .meter-label { font-size: 0.66rem; letter-spacing: 0.1em; }
+  .meter .segs { grid-column: 1 / -1; grid-row: 2; height: 12px; gap: 2px; }
+  .mark { grid-column: 2; grid-row: 1; }
+  .how-levers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ending-inner { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .emblem svg { max-width: 200px; }
+  .referral { padding: 40px 20px 24px; transform: rotate(-0.6deg); }
+  .field { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .choices { margin-top: 20px; }
+}
+@media (max-width: 420px) {
+  .lever-card .def { font-size: 0.8rem; }
+  .lever-card .name { font-size: 0.82rem; letter-spacing: 0.1em; }
+  .lockup .lk2 { margin-left: 0.6em; }
+  .lockup .lk4 { margin-left: 1em; }
+  .actions .btn { flex: 1 1 100%; }
+}
+
+/* Reduced motion: page turns, meter flashes and hover lifts are flattened. */
+@media (prefers-reduced-motion: reduce) {
+  .turn-out { display: none; }
+  .seg.flash-on, .seg.flash-off { animation: none; }
+  .btn, .lever-card, .line-option { transition: none; }
+  .btn:hover, button.lever-card:hover, .line-option:hover { transform: none; }
+}
