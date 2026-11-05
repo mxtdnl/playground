@@ -1,6 +1,6 @@
 # Turn the Page
 
-**Status:** active (version 1 built: sessions 1–5 done. Awaiting review by a developmental-coaching expert before use with counsellors.)
+**Status:** active (version 1 built: sessions 1–5 done; session 6 added three wordings per lever in Round 1. Awaiting review by a developmental-coaching expert before use with counsellors.)
 
 An illustrated, choose-your-own-adventure coaching simulation for high school guidance, career and university counsellors. Counsellors practise four levers (Question, Support, Observe, Challenge) across two conversations with a fictional student, Maya, 16, and watch her trust, confidence and ownership respond.
 
@@ -16,7 +16,7 @@ The four learning outcomes (SPEC.md 2; still to be confirmed with the expert):
 
 1. Name the four levers and recognise each one in a counsellor's actual words (Round 2).
 2. Explain why the same lever helps at one moment and harms at another, given the student's trust, confidence and traits.
-3. Tell a skilful use of a lever from a clumsy use of the same lever (Round 1).
+3. Tell a skilful use of a lever from a plausible one (reasonable, but not right for this moment) and a clumsy one (Round 1).
 4. Tell a student who *agrees* to a plan from one who *owns* it, and identify moves that build ownership.
 
 There is no single right path. Several different routes reach every ending, and the debrief describes trade-offs, not right and wrong answers. During play the only feedback is Maya's reaction, her posture in the picture and the three meters. Explanation waits for the debrief.
@@ -38,8 +38,8 @@ An early exit (Maya leaves) ends a round after as few as three decisions. That i
 
 - **Before.** Open the link on the machine you will present from and check it loads. Each participant needs their own device and browser: progress is saved in that browser only. Tell participants that closing the tab is safe, because reopening the page offers **Resume**. In a private window, or where the browser blocks storage, an ochre notice says that progress will not be saved. The simulation still works.
 - **Introduce (3 min).** Show the How it works page: the four levers with their colours and shapes, and the three meters. Say plainly that the meters have no numbers and that there is no single right path.
-- **Round 1, solo (10 min).** Ask people to play without discussion. Encourage them to use Back to compare a lever's two wordings before choosing.
-- **Pair discussion (5 min).** Using Debrief 1: where did trust move most, and why? Which clumsy wording looked reasonable at the time? **Try a different route** replays Round 1. Use it if there is time, or as homework.
+- **Round 1, solo (10 min).** Ask people to play without discussion. Encourage them to use Back to compare a lever's three wordings before choosing. The three are written to be hard to sort by tone or length: the difference is what each assumes about Maya at that moment.
+- **Pair discussion (5 min).** Using Debrief 1: where did trust move most, and why? Which plausible or clumsy wording looked reasonable at the time, and what did it miss? **Try a different route** replays Round 1. Use it if there is time, or as homework.
 - **Round 2, solo (10 min).** The levers are now hidden, and each choice is followed by Name that lever.
 - **Plenary (10–15 min).** Use the three reflection prompts at the end of Debrief 2. Compare endings across the room: the same Round 1 ending can lead to very different Round 2 openings.
 - **Same option order for everyone.** Adding `?seed=` and a number to the address (for example `.../turn-the-page/?seed=42`) shows every participant the options in the same order, which makes it easier to talk about "option 2 on page 12". It changes nothing else.
@@ -48,7 +48,7 @@ An early exit (Maya leaves) ends a round after as few as three decisions. That i
 
 ### Using Copy summary
 
-At the end of Debrief 2, **Copy summary** copies a few lines of plain text: each round's ending, how often each lever was used and in what order, skilful wording in Round 1, and the lever-recognition score in Round 2. It contains no names and nothing the participant typed, so participants can paste it into a shared document or chat to compare results across the room. If the browser blocks the clipboard, the text is selected instead: press Ctrl+C (Cmd+C on a Mac) to copy it. The simulation never sends anything anywhere: sharing happens only when a participant pastes the text.
+At the end of Debrief 2, **Copy summary** copies a few lines of plain text: each round's ending, how often each lever was used and in what order, the Round 1 wording split (skilful, plausible, clumsy), and the lever-recognition score in Round 2. It contains no names and nothing the participant typed, so participants can paste it into a shared document or chat to compare results across the room. If the browser blocks the clipboard, the text is selected instead: press Ctrl+C (Cmd+C on a Mac) to copy it. The simulation never sends anything anywhere: sharing happens only when a participant pastes the text.
 
 ### Safeguarding
 
@@ -90,6 +90,8 @@ node tests/calibrate.mjs
 node tests/export-review.mjs
 ```
 
+If you change a Round 1 wording, also run `node tests/wording-tells.mjs`: it flags a lever where one quality is always the longest, the only question or the only one with a word like "really" or "just", and any page where the three wordings differ in length by more than 25%.
+
 The build writes `index.html` (never edit it by hand). The tests check that every page links up, every option has a reaction and a debrief note, and that debrief text avoids "correct", "wrong", "optimal" and "should have". The calibrator confirms that every ending can still be reached; it matters when you change an `override` or a `next`, because those change the numbers. Changing words alone does not affect it. The last command regenerates the review document.
 
 3. Commit `src/content/maya.js`, `index.html` and `docs/CONTENT-REVIEW.md` together, and merge to `main` to publish.
@@ -124,10 +126,15 @@ node tests/contrast.mjs
 node tests/art-gallery.mjs
 ```
 
+```bash
+node tests/wording-tells.mjs
+```
+
 - `node --test`: engine, content, interface (`tests/ui.test.mjs`) and accessibility (`tests/a11y.test.mjs`) tests. The accessibility tests cover every screen state at 1440, 390 and 360px wide: focus order and visible focus, 44px targets, headings, labelled images, decorative geometry, the narrow single-column layout with its sticky meter strip, a keyboard-only playthrough, reduced motion, alt text on all 31 pages and the print stylesheet. They write screenshots of every state to `tests/screenshots/states/` (not committed). The browser tests use the Playwright and Chromium preinstalled in cloud sessions and are skipped where Playwright is not available.
-- `tests/calibrate.mjs`: the calibration report (SPEC.md 7.8); exits 1 while any criterion fails.
-- `tests/contrast.mjs`: WCAG AA contrast for every visible text node and meaningful graphic in 59 screen states at two sizes; exits 1 on any failure.
+- `tests/calibrate.mjs`: the calibration report (SPEC.md 7.8), memoised so Round 1's 30 million paths take about 20 seconds; exits 1 while any criterion fails.
+- `tests/contrast.mjs`: WCAG AA contrast for every visible text node and meaningful graphic in 60 screen states at two sizes; exits 1 on any failure.
 - `tests/art-gallery.mjs`: the art gallery images in `tests/screenshots/art/`; exits 1 if a geometry check fails.
+- `tests/wording-tells.mjs`: length, punctuation and opening word of every Round 1 wording, with surface tells flagged (SPEC.md 9.4, 14.3); exits 1 on any flag.
 
 ## Notes
 

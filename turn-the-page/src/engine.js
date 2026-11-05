@@ -26,9 +26,16 @@ export const RULES = {
     challenge: { trust: -4, confidence: 2, ownership: 9 }
   },
 
-  // Clumsy wording, Round 1 only (SPEC.md 7.2): positive effects are
-  // multiplied by positiveFactor, then trustPenalty is added to Trust.
-  clumsy: { positiveFactor: 0.4, trustPenalty: -2 },
+  // Wording quality, Round 1 only (SPEC.md 7.2). A skilful wording uses the
+  // base row. For the others, positive effects are multiplied by
+  // positiveFactor, then trustPenalty is added to Trust.
+  // Plausible added in session 6 (initial value); clumsy calibrated in
+  // session 2 from Trust -3 (SPEC.md, Calibration log).
+  wording: {
+    plausible: { positiveFactor: 0.7, trustPenalty: -1 },
+    clumsy: { positiveFactor: 0.4, trustPenalty: -2 }
+  },
+  qualities: ['skilful', 'plausible', 'clumsy'],
 
   // State rules (SPEC.md 7.3). Evaluated against the meters before the choice.
   state: {
@@ -194,6 +201,21 @@ export function getNode(state, nodeId) {
   return node;
 }
 
+// The part of a state that decides everything after it (SPEC.md 7.8):
+// the node, the meters, and the last lever with the length of its run capped
+// at streakLength - 1 (the only part of history computeDeltas reads; traits
+// are fixed within a round). Two states with the same key have the same
+// future, so the calibrator memoises on it. If a rule starts reading more of
+// the history, extend this key.
+export function futureKey(state) {
+  const h = state.history;
+  let run = 0;
+  const last = h.length ? h[h.length - 1].lever : '';
+  for (let i = h.length - 1; i >= 0 && h[i].lever === last; i--) run++;
+  run = Math.min(run, RULES.repetition.streakLength - 1);
+  return state.nodeId + '|' + RULES.meters.map(function (m) { return state.meters[m]; }).join(',') + '|' + last + ':' + run + '|' + (state.ending || '');
+}
+
 // Length of the run of `lever` at the end of history, counting the current choice.
 export function streakFor(history, lever) {
   let n = 1;
@@ -256,7 +278,7 @@ export function reactionFor(option, traits) {
 // Order of operations (decided in session 1; see README or CLAUDE.md):
 //   1. Base row, with state-rule replacements applied (Challenge or Observe
 //      before trust) since SPEC.md 7.3 says those replace the base values.
-//   2. Clumsy transform (positives x 0.4, then Trust -3).
+//   2. Wording transform (plausible or clumsy; RULES.wording).
 //   3. Trait multipliers, judged on the sign of the value from step 2.
 //   4. Repetition: positives halved from the third consecutive use.
 //   5. Additive terms: Support at high trust, repetition penalties, override.
@@ -281,11 +303,12 @@ export function computeDeltas(ctx) {
     trace.push('observeBeforeTrust');
   }
 
-  // 2. Clumsy wording.
-  if (ctx.quality === 'clumsy') {
-    for (const m of RULES.meters) if (row[m] > 0) row[m] *= RULES.clumsy.positiveFactor;
-    row.trust += RULES.clumsy.trustPenalty;
-    trace.push('clumsy');
+  // 2. Wording quality (plausible or clumsy; skilful has no transform).
+  const wording = RULES.wording[ctx.quality];
+  if (wording) {
+    for (const m of RULES.meters) if (row[m] > 0) row[m] *= wording.positiveFactor;
+    row.trust += wording.trustPenalty;
+    trace.push(ctx.quality);
   }
 
   // 3. Trait multipliers.

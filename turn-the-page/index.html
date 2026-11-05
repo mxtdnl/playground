@@ -496,9 +496,13 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 .counts { list-style: none; padding: 0; margin: 8px 0 12px; display: grid; gap: 8px; }
 .count-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) auto; align-items: center; gap: 4px 14px; background: var(--paper-card); border: 2px solid var(--rule); padding: 8px 12px; }
 .count-blocks { display: flex; gap: 4px; flex-wrap: wrap; }
-/* Ink edge: the block reads at 3:1 in every lever colour; hollow = clumsy. */
+/* Ink edge: the block reads at 3:1 in every lever colour. Filled = skilful, lower half = plausible, hollow = clumsy (SPEC.md 10.1). */
 .cb { display: inline-block; width: 18px; height: 18px; background: var(--lc); border: 2px solid var(--ink); }
+.cb.cb-plausible { background: var(--paper-card); box-shadow: inset 0 -7px 0 var(--lc); } /* lower half filled; no gradient */
 .cb.cb-clumsy { background: transparent; }
+.cb.lv-key { --lc: var(--ink); }
+.cb-key { list-style: none; margin: 0.5rem 0 0.9rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; font-size: 0.85rem; color: var(--ink-muted); }
+.cb-key li { display: inline-flex; align-items: center; gap: 0.45rem; }
 .count-n { font: 700 0.85rem/1.3 var(--ui); }
 .count-q { grid-column: 2 / -1; font-size: 0.85rem; color: var(--ink-muted); }
 .count-total { max-width: 46rem; }
@@ -679,9 +683,16 @@ const RULES = {
     challenge: { trust: -4, confidence: 2, ownership: 9 }
   },
 
-  // Clumsy wording, Round 1 only (SPEC.md 7.2): positive effects are
-  // multiplied by positiveFactor, then trustPenalty is added to Trust.
-  clumsy: { positiveFactor: 0.4, trustPenalty: -2 },
+  // Wording quality, Round 1 only (SPEC.md 7.2). A skilful wording uses the
+  // base row. For the others, positive effects are multiplied by
+  // positiveFactor, then trustPenalty is added to Trust.
+  // Plausible added in session 6 (initial value); clumsy calibrated in
+  // session 2 from Trust -3 (SPEC.md, Calibration log).
+  wording: {
+    plausible: { positiveFactor: 0.7, trustPenalty: -1 },
+    clumsy: { positiveFactor: 0.4, trustPenalty: -2 }
+  },
+  qualities: ['skilful', 'plausible', 'clumsy'],
 
   // State rules (SPEC.md 7.3). Evaluated against the meters before the choice.
   state: {
@@ -847,6 +858,21 @@ function getNode(state, nodeId) {
   return node;
 }
 
+// The part of a state that decides everything after it (SPEC.md 7.8):
+// the node, the meters, and the last lever with the length of its run capped
+// at streakLength - 1 (the only part of history computeDeltas reads; traits
+// are fixed within a round). Two states with the same key have the same
+// future, so the calibrator memoises on it. If a rule starts reading more of
+// the history, extend this key.
+function futureKey(state) {
+  const h = state.history;
+  let run = 0;
+  const last = h.length ? h[h.length - 1].lever : '';
+  for (let i = h.length - 1; i >= 0 && h[i].lever === last; i--) run++;
+  run = Math.min(run, RULES.repetition.streakLength - 1);
+  return state.nodeId + '|' + RULES.meters.map(function (m) { return state.meters[m]; }).join(',') + '|' + last + ':' + run + '|' + (state.ending || '');
+}
+
 // Length of the run of `lever` at the end of history, counting the current choice.
 function streakFor(history, lever) {
   let n = 1;
@@ -909,7 +935,7 @@ function reactionFor(option, traits) {
 // Order of operations (decided in session 1; see README or CLAUDE.md):
 //   1. Base row, with state-rule replacements applied (Challenge or Observe
 //      before trust) since SPEC.md 7.3 says those replace the base values.
-//   2. Clumsy transform (positives x 0.4, then Trust -3).
+//   2. Wording transform (plausible or clumsy; RULES.wording).
 //   3. Trait multipliers, judged on the sign of the value from step 2.
 //   4. Repetition: positives halved from the third consecutive use.
 //   5. Additive terms: Support at high trust, repetition penalties, override.
@@ -934,11 +960,12 @@ function computeDeltas(ctx) {
     trace.push('observeBeforeTrust');
   }
 
-  // 2. Clumsy wording.
-  if (ctx.quality === 'clumsy') {
-    for (const m of RULES.meters) if (row[m] > 0) row[m] *= RULES.clumsy.positiveFactor;
-    row.trust += RULES.clumsy.trustPenalty;
-    trace.push('clumsy');
+  // 2. Wording quality (plausible or clumsy; skilful has no transform).
+  const wording = RULES.wording[ctx.quality];
+  if (wording) {
+    for (const m of RULES.meters) if (row[m] > 0) row[m] *= wording.positiveFactor;
+    row.trust += wording.trustPenalty;
+    trace.push(ctx.quality);
   }
 
   // 3. Trait multipliers.
@@ -1523,15 +1550,15 @@ function renderScene(sceneState) {
 //   next      where the page leads after a choice: a node id, null (the round
 //             ends), an object keyed by lever (with a `default`), or a list of
 //             { to, if: { trust: { min } } } checked on the meters AFTER the choice
-//   options   eight in Round 1 (four levers x skilful/clumsy), four in Round 2
+//   options   twelve in Round 1 (four levers x skilful/plausible/clumsy), four in Round 2
 //
 // How an option works:
-//   id        unique within its node ('q-s' = question/skilful ... 'c-c'; Round 2: 'q', 's', 'o', 'c')
+//   id        unique within its node ('q-s' = question/skilful, 'q-p' plausible ... 'c-c'; Round 2: 'q', 's', 'o', 'c')
 //   page      the page number of the reply page this option turns to (shown on the
 //             option as "→ p. 143" and at the top of Maya's reaction). Decorative,
 //             but unique across the whole case, like the pages of the nodes
 //   lever     'question' | 'support' | 'observe' | 'challenge'
-//   quality   Round 1 only: 'skilful' or 'clumsy'
+//   quality   Round 1 only: 'skilful', 'plausible' or 'clumsy' (SPEC.md 7.2, 9.4)
 //   text      what the counsellor says
 //   reaction  Maya's reaction; `default` is what Maya says. Variants keyed
 //             'trait:band' (for example 'readiness:mid') replace it when the
@@ -1589,7 +1616,7 @@ const MAYA = {
   rounds: {
 
     // ---------------------------------------------------------------------
-    // ROUND 1 — "Just lazy". Format B: pick a lever, then one of two wordings.
+    // ROUND 1 — "Just lazy". Format B: pick a lever, then one of three wordings (skilful, plausible, clumsy).
     // Act 1 is two shared pages; Acts 2 and 3 branch by lever and by Trust,
     // then rejoin at a shared page (r1-05, r1-07). Seven decisions per path.
     r1: {
@@ -1623,13 +1650,22 @@ const MAYA = {
               debrief: 'An open start that put her experience before the grades. It gave her room, though at this point she had little to fill it with.'
             },
             {
+              id: 'q-p', page: 273, lever: 'question', quality: 'plausible',
+              pose: { arms: 'bag' },
+              text: 'Thanks for coming. What do you think has made the grades slip this term?',
+              reaction: {
+                default: '"I don\'t know. I just stopped keeping up." She keeps hold of the strap.'
+              },
+              debrief: 'A reasonable question about causes, asked before she had settled. She answered it, inside the frame of the grades she came in braced for.'
+            },
+            {
               id: 'q-c', page: 112, lever: 'question', quality: 'clumsy',
               pose: { gaze: 'floor' },
-              text: 'Why do you think you\'ve been lazy?',
+              text: 'Thanks for coming. Is it mainly the homework, or are lessons harder too?',
               reaction: {
-                default: '"I just am. I don\'t know." She looks at the floor.'
+                default: '"Both, I guess." She looks at the floor.'
               },
-              debrief: 'Leading: it took her word "lazy" as the starting point. You got an answer quickly, and it kept her inside her own label.'
+              debrief: 'An either-or question that set the options for her. It was easy to answer, and it narrowed the talk to schoolwork before she had said what was going on.'
             },
             {
               id: 's-s', page: 166, lever: 'support', quality: 'skilful',
@@ -1643,13 +1679,22 @@ const MAYA = {
               debrief: 'Lowered the stakes before anything else. Trust rose quickly; she had not yet done any of the thinking.'
             },
             {
+              id: 's-p', page: 321, lever: 'support', quality: 'plausible',
+              pose: { arms: 'bag' },
+              text: 'Thanks for coming in. Lots of students have a term like this, and it usually settles down.',
+              reaction: {
+                default: '"Maybe." She nods, but her hand stays on the strap.'
+              },
+              debrief: 'Normalising, and kindly meant. It reassured her before she had said anything, so it reassured a version of the problem you had guessed.'
+            },
+            {
               id: 's-c', page: 169, lever: 'support', quality: 'clumsy',
               pose: { mouth: 'slightSmile' },
-              text: 'Oh, I\'m sure you\'re not lazy at all!',
+              text: 'Thanks for coming in. I don\'t think you\'re lazy at all, from what Mr Okafor has told me.',
               reaction: {
-                default: '"You don\'t know that." A half-smile, as if you have missed the point.'
+                default: '"He doesn\'t know either." A half-smile, as if you have missed the point.'
               },
-              debrief: 'Warm, but premature: it contradicted her before you had heard her. The reassurance arrived before any understanding.'
+              debrief: 'Warm, and it contradicted her account before you had heard it. It also told her she had been discussed, which made the reassurance harder to trust.'
             },
             {
               id: 'o-s', page: 41, lever: 'observe', quality: 'skilful',
@@ -1663,13 +1708,22 @@ const MAYA = {
               debrief: 'Named something real in what she said, without judging it. At low trust an observation can feel exposing; this one was gentle enough to open a door.'
             },
             {
+              id: 'o-p', page: 259, lever: 'observe', quality: 'plausible',
+              pose: { chair: 'back' },
+              text: 'You\'re sitting near the door with your bag still in your hand. It looks as if you\'re not sure how long this will take.',
+              reaction: {
+                default: '"I\'ve got class after." She sits back a little anyway.'
+              },
+              debrief: 'Accurate: you described what you could see. At this level of trust a comment on her body can feel like being watched, and she explained it away.'
+            },
+            {
               id: 'o-c', page: 79, lever: 'observe', quality: 'clumsy',
               pose: { arms: 'bag' },
-              text: 'You look like you really don\'t want to be here.',
+              text: 'You said "lazy" very quickly, before I\'d asked anything. It sounds like you\'ve already decided that\'s the answer.',
               reaction: {
-                default: '"Well, I didn\'t ask to come." She pulls the bag closer.'
+                default: '"Well, it is the answer." She grips the strap.'
               },
-              debrief: 'An honest observation, delivered as a judgement about her. It was accurate, and it put her on the defensive.'
+              debrief: 'Started from what she said and ended on a judgement about her. "Already decided" sounded like criticism, and she held her position.'
             },
             {
               id: 'c-s', page: 191, lever: 'challenge', quality: 'skilful',
@@ -1683,14 +1737,22 @@ const MAYA = {
               debrief: 'A thoughtful reframe, offered before there was trust to hold it. It planted a seed and cost some rapport.'
             },
             {
+              id: 'c-p', page: 257, lever: 'challenge', quality: 'plausible',
+              text: '"Lazy" is one explanation. Usually there\'s something else behind it.',
+              reaction: {
+                default: '"Like what?" She sounds tired rather than curious.'
+              },
+              debrief: 'A fair point, made as a general rule. It suggested you knew her story before she had told it.'
+            },
+            {
               id: 'c-c', page: 180, lever: 'challenge', quality: 'clumsy',
               pose: { arms: 'crossed', mouth: 'tight' },
-              text: 'Are you, though?',
+              text: '"Lazy" is one explanation. It doesn\'t sound like the real one to me.',
               reaction: {
-                default: 'She folds her arms. "Yes." The room goes quiet.'
+                default: 'She folds her arms. "Well, it is." The room goes quiet.'
               },
               override: { trust: -2 },
-              debrief: 'Direct and quick. It questioned her before she felt safe, and she closed the topic down.'
+              debrief: 'Set your view against hers before there was trust to hold it. Her explanation became something to defend.'
             }
           ]
         },
@@ -1712,8 +1774,16 @@ const MAYA = {
               debrief: 'Asked her to set the purpose of the conversation. It handed her some ownership early, though she had to think on the spot.'
             },
             {
+              id: 'q-p', page: 267, lever: 'question', quality: 'plausible',
+              text: 'What do you think Mr Okafor is hoping we\'ll get out of today?',
+              reaction: {
+                default: '"For me to stop being lazy, probably." She shrugs.'
+              },
+              debrief: 'Invited her view, but of someone else\'s purpose. She answered for Mr Okafor, and the conversation stayed his.'
+            },
+            {
               id: 'q-c', page: 184, lever: 'question', quality: 'clumsy',
-              text: 'Shall we make a plan to get your grades back up?',
+              text: 'Shall we use today to make a plan for getting the grades back up?',
               reaction: {
                 default: '"I guess." She says it as if she has said it many times before.'
               },
@@ -1730,14 +1800,23 @@ const MAYA = {
               debrief: 'Removed the threat and let her set the pace. Trust rose; the purpose of the conversation stayed vague.'
             },
             {
+              id: 's-p', page: 319, lever: 'support', quality: 'plausible',
+              pose: { arms: 'bag' },
+              text: 'It\'s not a warning. Lots of students come in here, and it usually turns out to be nothing serious.',
+              reaction: {
+                default: '"OK." Her hands stay on the bag.'
+              },
+              debrief: 'Lowered the stakes by making it ordinary. It reassured her, and it also told her the answer before she had said anything.'
+            },
+            {
               id: 's-c', page: 163, lever: 'support', quality: 'clumsy',
               pose: { mouth: 'flat' },
-              text: 'Don\'t worry, we\'ll have you back on track in no time.',
+              text: 'It\'s not a warning. We\'ll work out what\'s going wrong and get you back on track in no time.',
               reaction: {
                 default: '"Right." She does not look convinced.'
               },
               override: { ownership: -2 },
-              debrief: 'Rescuing: it promised an outcome and took the problem onto your shoulders. Kind, and it left her nothing to do.'
+              debrief: 'Rescuing: it promised an outcome and took the problem onto your shoulders. Kind, and it assumed there was a problem to fix before she had said what it was.'
             },
             {
               id: 'o-s', page: 150, lever: 'observe', quality: 'skilful',
@@ -1750,13 +1829,22 @@ const MAYA = {
               debrief: 'Reflected her own words back. It showed you were listening and let her name what she was afraid of.'
             },
             {
+              id: 'o-p', page: 16, lever: 'observe', quality: 'plausible',
+              pose: { arms: 'bag' },
+              text: 'You\'re holding on to your bag with both hands. It looks like you\'re ready to leave.',
+              reaction: {
+                default: '"I\'m fine." She loosens her grip a little.'
+              },
+              debrief: 'An accurate description of what you could see. It pointed at her wish to leave rather than at what she had asked, so she brushed it off.'
+            },
+            {
               id: 'o-c', page: 85, lever: 'observe', quality: 'clumsy',
               pose: { arms: 'bag', mouth: 'tight' },
-              text: 'You seem very defensive.',
+              text: 'You asked if it\'s a warning. It sounds like you think you deserve one.',
               reaction: {
-                default: '"I\'m not defensive." Her hands tighten on the bag.'
+                default: '"I didn\'t say that." Her hands tighten on the bag.'
               },
-              debrief: 'Labelled her rather than describing what you saw or heard. A label is easy to argue with, and she did.'
+              debrief: 'Began by reflecting her words, then added a meaning she had not given them. It was easy to argue with, and she did.'
             },
             {
               id: 'c-s', page: 8, lever: 'challenge', quality: 'skilful',
@@ -1769,14 +1857,23 @@ const MAYA = {
               debrief: 'Offered a different view of why she was here. It questioned her story about being in trouble; how it landed depended on the trust built so far.'
             },
             {
+              id: 'c-p', page: 14, lever: 'challenge', quality: 'plausible',
+              pose: { gaze: 'floor' },
+              text: 'I don\'t think Mr Okafor sees this as a warning. He\'s worried about you and wants to help you catch up.',
+              reaction: {
+                default: '"Catch up. Right." She looks down at the bag.'
+              },
+              debrief: 'Offered a kinder view of why she was here, then brought it back to catching up. It eased the fear and kept the grades at the centre.'
+            },
+            {
               id: 'c-c', page: 33, lever: 'challenge', quality: 'clumsy',
               pose: { gaze: 'door' },
-              text: 'Well, two missed deadlines is a pretty serious warning sign.',
+              text: 'I don\'t think Mr Okafor sees this as a warning yet. But two missed deadlines is a pattern he can\'t ignore.',
               reaction: {
                 default: '"So it is a warning." She looks at the door.'
               },
               override: { trust: -2 },
-              debrief: 'Judgemental: it confirmed her fear before exploring it. The facts were accurate; the framing turned them into a verdict.'
+              debrief: 'Started as reassurance and ended as a verdict. The facts were accurate; "yet" confirmed the fear she came in with.'
             }
           ]
         },
@@ -1799,13 +1896,20 @@ const MAYA = {
               debrief: 'Followed her own words into the detail. She explored, and noticed something about herself.'
             },
             {
-              id: 'q-c', page: 101, lever: 'question', quality: 'clumsy',
-              pose: { arms: 'lap' },
-              text: 'Have you tried going to bed earlier?',
+              id: 'q-p', page: 326, lever: 'question', quality: 'plausible',
+              text: 'What time do you usually get to sleep?',
               reaction: {
-                default: '"Yeah. Obviously." She stops picking at the strap.'
+                default: '"One? Two, sometimes." She shrugs. "It\'s not that late."'
               },
-              debrief: 'Closed and premature: it jumped to a solution she had already thought of. It ended the exploring.'
+              debrief: 'A practical question that went straight to the sleep, which is where an adult would look first. She gave you the number and not much else.'
+            },
+            {
+              id: 'q-c', page: 101, lever: 'question', quality: 'clumsy',
+              text: 'Have you tried going to bed a bit earlier?',
+              reaction: {
+                default: '"Yeah. It doesn\'t work." She stops picking at the strap.'
+              },
+              debrief: 'Advice in the shape of a question. It assumed the answer was the bedtime, and she had already tried that.'
             },
             {
               id: 's-s', page: 39, lever: 'support', quality: 'skilful',
@@ -1818,16 +1922,24 @@ const MAYA = {
               debrief: 'Named the feeling accurately. She felt understood; the conversation stayed with the feeling rather than moving on.'
             },
             {
+              id: 's-p', page: 318, lever: 'support', quality: 'plausible',
+              text: 'That sounds exhausting. No wonder starting anything in the evening feels so hard.',
+              reaction: {
+                default: '"Yeah." She nods. "So it\'s the sleep, I suppose."'
+              },
+              debrief: 'Validating, and it accepted her explanation whole. She felt understood and settled on tiredness as the full story.'
+            },
+            {
               id: 's-c', page: 153, lever: 'support', quality: 'clumsy',
-              text: 'Oh, everyone your age stays up too late. It\'s completely normal.',
+              text: 'That sounds exhausting. Try not to worry about it too much, it\'ll sort itself out.',
               reaction: {
                 default: '"OK." She seems to have nothing to add.'
               },
-              debrief: 'Normalising, but it made her experience ordinary before she had finished describing it.'
+              debrief: 'Comforting, and it closed the subject. If it will sort itself out, there is nothing left for her to think about.'
             },
             {
               id: 'o-s', page: 10, lever: 'observe', quality: 'skilful',
-              text: 'You said "so I don\'t". Not "I can\'t".',
+              text: 'You said "so I don\'t". You didn\'t say "I can\'t".',
               reaction: {
                 default: 'She thinks about it. "I suppose. It\'s easier not to start than to start and be rubbish at it."'
               },
@@ -1835,13 +1947,21 @@ const MAYA = {
               debrief: 'Fed back a detail of her own words. It let her notice a choice inside the habit, and she did the thinking.'
             },
             {
-              id: 'o-c', page: 188, lever: 'observe', quality: 'clumsy',
-              pose: { arms: 'lap', shoulders: 'raised' },
-              text: 'You obviously aren\'t sleeping enough. You look very tired.',
+              id: 'o-p', page: 310, lever: 'observe', quality: 'plausible',
+              text: 'You started with the late nights, not the work.',
               reaction: {
-                default: '"Thanks." She pulls her sleeves down over her hands.'
+                default: '"Because that\'s what it is." She shrugs.'
               },
-              debrief: 'Based on what you could see, but it came out as a comment on her appearance. It stung more than it helped.'
+              debrief: 'Noticed the order she told it in, which was accurate. It pointed at the sleep story she had already chosen, so it confirmed it.'
+            },
+            {
+              id: 'o-c', page: 188, lever: 'observe', quality: 'clumsy',
+              pose: { arms: 'lap', head: 'down' },
+              text: 'You said "so I don\'t". It sounds like you choose not to.',
+              reaction: {
+                default: '"I don\'t choose it." She pulls her sleeves down over her hands.'
+              },
+              debrief: 'Took her exact words and turned them into a verdict about her will. She defended herself instead of thinking about it.'
             },
             {
               id: 'c-s', page: 110, lever: 'challenge', quality: 'skilful',
@@ -1853,13 +1973,21 @@ const MAYA = {
               debrief: 'Questioned her label with care. It offered a new frame; whether she could take it depended on the trust built so far.'
             },
             {
+              id: 'c-p', page: 170, lever: 'challenge', quality: 'plausible',
+              text: 'Being that tired is real. It sounds more like a sleep problem than a laziness problem.',
+              reaction: {
+                default: '"Maybe." She considers it, without much interest.'
+              },
+              debrief: 'Replaced her label with a kinder one of yours. It eased the self-criticism, and the new explanation was still not hers.'
+            },
+            {
               id: 'c-c', page: 75, lever: 'challenge', quality: 'clumsy',
-              pose: { gaze: 'window', mouth: 'flat' },
-              text: 'Well, that\'s a choice you\'re making every night.',
+              pose: { gaze: 'window' },
+              text: 'Being that tired is real, but staying up is a choice you are making every night.',
               reaction: {
                 default: '"I know." Flat. She looks away.'
               },
-              debrief: 'True, and delivered as a verdict. It handed her the responsibility before she was ready to hold it.'
+              debrief: 'Accurate, and it put the whole problem down to her choices. She agreed, and the agreement closed the subject.'
             }
           ]
         },
@@ -1881,12 +2009,20 @@ const MAYA = {
               debrief: 'Slowed down on the exact moment things stall for her. She described it in her own words, which is where ownership starts.'
             },
             {
+              id: 'q-p', page: 53, lever: 'question', quality: 'plausible',
+              text: 'What is it you\'re meant to be working on?',
+              reaction: {
+                default: '"Chemistry, mostly. English." She lists it flatly.'
+              },
+              debrief: 'A useful practical question. It moved to the content of the work and away from what happens to her when she sits down.'
+            },
+            {
               id: 'q-c', page: 90, lever: 'question', quality: 'clumsy',
-              text: 'Is it because the work is too hard?',
+              text: 'Is it that the work feels too hard?',
               reaction: {
                 default: '"No. I mean, some of it. I don\'t know."'
               },
-              debrief: 'Closed and leading: it offered her an explanation to agree with. She half-agreed, and the real answer stayed hidden.'
+              debrief: 'Offered her a ready-made reason. It was easy to half-agree with, and it guessed rather than asked.'
             },
             {
               id: 's-s', page: 122, lever: 'support', quality: 'skilful',
@@ -1899,12 +2035,21 @@ const MAYA = {
               debrief: 'Acknowledged the feeling without hurrying her. Trust grew; nothing new came out yet.'
             },
             {
+              id: 's-p', page: 215, lever: 'support', quality: 'plausible',
+              pose: { gaze: 'floor' },
+              text: 'That happens to a lot of people. Starting is often the hardest part.',
+              reaction: {
+                default: '"I guess." She looks back at the desk.'
+              },
+              debrief: 'Normalising, and true. It told her she was not alone, and it made her experience general just as she was describing her own.'
+            },
+            {
               id: 's-c', page: 125, lever: 'support', quality: 'clumsy',
-              text: 'Don\'t be so hard on yourself. You\'ll get there.',
+              text: 'Don\'t be so hard on yourself. You\'ll get there when you\'re ready.',
               reaction: {
                 default: '"Maybe." She does not sound convinced.'
               },
-              debrief: 'Encouraging, and it skipped past what she had just told you. Reassurance without understanding can feel like being hurried along.'
+              debrief: 'Kind, and it skipped past the feeling to a promise. She had just said she could not start; being told she would did not help her see why.'
             },
             {
               id: 'o-s', page: 132, lever: 'observe', quality: 'skilful',
@@ -1917,13 +2062,21 @@ const MAYA = {
               debrief: 'Reflected back what she valued in her own words. It gave her a better story about herself, and she took it.'
             },
             {
+              id: 'o-p', page: 286, lever: 'observe', quality: 'plausible',
+              text: 'You said you sit down to do it. So you are getting as far as the desk.',
+              reaction: {
+                default: '"I suppose." A small shrug.'
+              },
+              debrief: 'Picked out something she was doing, which is encouraging. It sounded a little like a consolation prize, and she did not take it further.'
+            },
+            {
               id: 'o-c', page: 196, lever: 'observe', quality: 'clumsy',
               pose: { mouth: 'tight' },
-              text: 'You look like you\'ve given up on it.',
+              text: 'You said "it\'s not like I don\'t try". It sounds like you want me to believe that.',
               reaction: {
-                default: '"I haven\'t given up." Sharper than she meant.'
+                default: '"Because it\'s true." Sharper than she meant.'
               },
-              debrief: 'An observation of her mood turned into a conclusion about her. She defended herself instead of exploring.'
+              debrief: 'Reflected her words with a hint of doubt attached. She heard the doubt and defended herself.'
             },
             {
               id: 'c-s', page: 32, lever: 'challenge', quality: 'skilful',
@@ -1936,13 +2089,21 @@ const MAYA = {
               debrief: 'Pushed back on her label using her own evidence. A strong reframe; it asked her to see herself differently, which takes trust.'
             },
             {
+              id: 'c-p', page: 151, lever: 'challenge', quality: 'plausible',
+              text: 'You keep sitting down to do it. Maybe the trick is a smaller first step.',
+              reaction: {
+                default: '"Maybe." She does not seem to know what that would be.'
+              },
+              debrief: 'Moved straight to a solution. The idea is sensible; it arrived before she understood the problem, so it was your idea to try.'
+            },
+            {
               id: 'c-c', page: 120, lever: 'challenge', quality: 'clumsy',
               pose: { arms: 'crossed' },
-              text: 'But sitting there isn\'t enough, is it? You have to actually do it.',
+              text: 'You keep sitting down to do it, but sitting there isn\'t the same as doing it.',
               reaction: {
                 default: '"I know that." She folds her arms.'
               },
-              debrief: 'A push that told her what she already knew. It put the pressure back on just as she had started to open up.'
+              debrief: 'A fair point, made as a reprimand. It told her something she already knew and left her defending herself.'
             }
           ]
         },
@@ -1964,12 +2125,20 @@ const MAYA = {
               debrief: 'Turned her complaint into something she could say for herself. She answered honestly, and the not-knowing became the subject.'
             },
             {
+              id: 'q-p', page: 17, lever: 'question', quality: 'plausible',
+              text: 'What do you usually say when people ask you what\'s wrong?',
+              reaction: {
+                default: '"That I\'m fine. That I\'m tired." She shrugs. "Same as now."'
+              },
+              debrief: 'Asked about the pattern she was tired of, which is a reasonable thread. It also had her rehearse the answer she gives everyone.'
+            },
+            {
               id: 'q-c', page: 103, lever: 'question', quality: 'clumsy',
-              text: 'So is something wrong?',
+              text: 'So when they ask, is there something you\'d rather not say?',
               reaction: {
                 default: '"No. That\'s what I mean." She sighs.'
               },
-              debrief: 'The very question she had just said she was tired of. Closed, and it confirmed her point.'
+              debrief: 'Asked the very question she had just said she was tired of, in a gentler form. She gave the same answer she gives everyone.'
             },
             {
               id: 's-s', page: 182, lever: 'support', quality: 'skilful',
@@ -1982,12 +2151,21 @@ const MAYA = {
               debrief: 'Took her side on the thing she found hard, with a light touch. Trust rose; the exploring waited.'
             },
             {
-              id: 's-c', page: 80, lever: 'support', quality: 'clumsy',
-              text: 'Nothing\'s wrong with you. You\'re doing fine.',
+              id: 's-p', page: 38, lever: 'support', quality: 'plausible',
+              pose: { gaze: 'floor' },
+              text: 'That sounds tiring. People only ask because they care about you, you know.',
               reaction: {
-                default: '"My grades say I\'m not."'
+                default: '"I know." She says it to the floor.'
               },
-              debrief: 'Meant kindly, and easy for her to disprove. Reassurance that does not match the facts tends to cost credibility.'
+              debrief: 'Defended the people asking, which is fair to them. It asked her to see their side before you had seen hers.'
+            },
+            {
+              id: 's-c', page: 80, lever: 'support', quality: 'clumsy',
+              text: 'That sounds tiring. Nothing is wrong with you, so you don\'t need to explain.',
+              reaction: {
+                default: '"My grades say there is."'
+              },
+              debrief: 'Reassurance that contradicted the reason she was here. It was kind, and she argued with it.'
             },
             {
               id: 'o-s', page: 30, lever: 'observe', quality: 'skilful',
@@ -1999,13 +2177,21 @@ const MAYA = {
               debrief: 'Picked out one word and reflected its weight. She told you more than she meant to, without being asked directly.'
             },
             {
+              id: 'o-p', page: 309, lever: 'observe', quality: 'plausible',
+              text: 'You put your bag down a minute ago. You seem a bit more settled than when you came in.',
+              reaction: {
+                default: '"I suppose." She glances at the bag, then back at you.'
+              },
+              debrief: 'Accurate and warm. It moved attention to how she was sitting just as she had said something about other people.'
+            },
+            {
               id: 'o-c', page: 187, lever: 'observe', quality: 'clumsy',
               pose: { arms: 'crossed' },
-              text: 'You\'re very guarded, aren\'t you?',
+              text: 'You said "everyone". It sounds like you feel everyone is against you at the moment.',
               reaction: {
-                default: '"Not really." Her arms tighten.'
+                default: '"I didn\'t say against me." Her arms tighten.'
               },
-              debrief: 'A label, not an observation. It gave her something to deny rather than something to look at.'
+              debrief: 'Went one step beyond her word and made it bigger. She pushed back on the exaggeration and did not add anything.'
             },
             {
               id: 'c-s', page: 113, lever: 'challenge', quality: 'skilful',
@@ -2018,13 +2204,21 @@ const MAYA = {
               debrief: 'Offered a different reading of the attention she resented. It could reframe the nagging as care, if she trusted you enough to hear it.'
             },
             {
+              id: 'c-p', page: 314, lever: 'challenge', quality: 'plausible',
+              text: 'I don\'t think people ask to nag you. Most of them can see you\'re having a hard time this term.',
+              reaction: {
+                default: '"Maybe." She does not sound convinced.'
+              },
+              debrief: 'Offered a kinder reading of the people asking. It was general, so it was easy for her to set aside.'
+            },
+            {
               id: 'c-c', page: 123, lever: 'challenge', quality: 'clumsy',
               pose: { gaze: 'window' },
-              text: 'People ask because your grades have dropped. That\'s fair, isn\'t it?',
+              text: 'I don\'t think people ask to nag you. Your grades have dropped, so it\'s a fair thing for them to ask.',
               reaction: {
                 default: '"I didn\'t say it wasn\'t fair." She looks away.'
               },
-              debrief: 'Defended the people asking rather than exploring her experience of it. She felt contradicted and pulled back.'
+              debrief: 'A reasonable point, and it took the others\' side. She felt told off rather than heard.'
             }
           ]
         },
@@ -2046,12 +2240,21 @@ const MAYA = {
               debrief: 'Stayed curious after a push had landed badly. It kept the door open, although she was not ready to walk through it.'
             },
             {
+              id: 'q-p', page: 270, lever: 'question', quality: 'plausible',
+              pose: { arms: 'crossed' },
+              text: 'What would make it feel worth it?',
+              reaction: {
+                default: '"Dunno. Nothing, probably." Her arms stay folded.'
+              },
+              debrief: 'A forward-looking question, asked before she had said why it felt pointless. It was too far ahead of her to answer.'
+            },
+            {
               id: 'q-c', page: 165, lever: 'question', quality: 'clumsy',
               text: 'Don\'t you care about your grades?',
               reaction: {
-                default: '"Obviously I care." Too fast.'
+                default: '"Of course I care." Too fast.'
               },
-              debrief: 'A closed question with an accusation inside it. She gave the expected answer and nothing else.'
+              debrief: 'A closed question with a judgement folded into it. She gave the answer it invited, quickly.'
             },
             {
               id: 's-s', page: 57, lever: 'support', quality: 'skilful',
@@ -2064,12 +2267,20 @@ const MAYA = {
               debrief: 'Repaired the moment by owning your part in it. Trust recovered; the conversation itself had not moved on yet.'
             },
             {
+              id: 's-p', page: 232, lever: 'support', quality: 'plausible',
+              text: 'That\'s OK. Lots of people feel like that at some point in school.',
+              reaction: {
+                default: '"Yeah, well." She keeps looking at the clock.'
+              },
+              debrief: 'Normalising, which lowers the stakes. It also accepted "pointless" as the end of the matter.'
+            },
+            {
               id: 's-c', page: 11, lever: 'support', quality: 'clumsy',
-              text: 'Hey, it\'s not pointless! You\'ve got so much potential.',
+              text: 'It\'s not pointless. You\'ve got a lot of potential, you know.',
               reaction: {
                 default: '"Everyone says that." She sounds tired.'
               },
-              debrief: 'Upbeat, and it argued with her feeling instead of acknowledging it. She had heard it before.'
+              debrief: 'Encouragement that argued with her. She has heard it before, and it told her you had not heard her.'
             },
             {
               id: 'o-s', page: 146, lever: 'observe', quality: 'skilful',
@@ -2082,12 +2293,20 @@ const MAYA = {
               debrief: 'Caught a small word that carried a lot. It let her remember a different version of herself without being told to.'
             },
             {
-              id: 'o-c', page: 160, lever: 'observe', quality: 'clumsy',
-              text: 'You\'ve folded your arms. I can tell you\'re shutting me out.',
+              id: 'o-p', page: 255, lever: 'observe', quality: 'plausible',
+              text: 'You keep looking at the clock. It seems like you want this to be over.',
               reaction: {
-                default: '"I\'m just sitting here." She does not move.'
+                default: '"Kind of." She looks at you, then back at the clock.'
               },
-              debrief: 'Started with what you saw and finished with a conclusion about her. The conclusion was what she heard.'
+              debrief: 'Accurate, and honest about what you saw. It named her wish to leave, which she could only agree with.'
+            },
+            {
+              id: 'o-c', page: 160, lever: 'observe', quality: 'clumsy',
+              text: 'You\'ve folded your arms. It looks like you\'ve decided not to talk to me.',
+              reaction: {
+                default: '"I\'m sitting here, aren\'t I?" She does not move.'
+              },
+              debrief: 'Read her posture as a decision about you. It made the moment about the relationship, and she held her ground.'
             },
             {
               id: 'c-s', page: 68, lever: 'challenge', quality: 'skilful',
@@ -2099,13 +2318,21 @@ const MAYA = {
               debrief: 'Offered evidence against her own word. It was a fair push; with trust this low it was always going to cost something.'
             },
             {
+              id: 'c-p', page: 278, lever: 'challenge', quality: 'plausible',
+              text: 'Pointless is a strong word. It can\'t be completely pointless if you\'re still here.',
+              reaction: {
+                default: '"I had to come." She shrugs.'
+              },
+              debrief: 'A gentle argument with her word. Logic is easy to answer with a fact, and she had one ready.'
+            },
+            {
               id: 'c-c', page: 67, lever: 'challenge', quality: 'clumsy',
               pose: { gaze: 'door' },
-              text: 'That\'s a bit of an excuse, isn\'t it?',
+              text: 'Pointless is a strong word. It sounds more like a reason not to bother trying.',
               reaction: {
-                default: '"Can you just... not." She looks at the door.'
+                default: '"Can you not." She looks at the door.'
               },
-              debrief: 'Called her feeling an excuse. It pushed hard at the moment she was least able to take it.'
+              debrief: 'Challenged her word by questioning her motive. It landed as an accusation before there was trust to hold it.'
             }
           ]
         },
@@ -2127,13 +2354,22 @@ const MAYA = {
               debrief: 'Went underneath the habit to the thought driving it. She named it herself, which is harder to forget than being told.'
             },
             {
+              id: 'q-p', page: 268, lever: 'question', quality: 'plausible',
+              pose: { gaze: 'phone' },
+              text: 'What were you doing on your phone for those two hours?',
+              reaction: {
+                default: '"Scrolling. Nothing, really." She turns the phone over.'
+              },
+              debrief: 'Followed the most visible detail. It kept the conversation on the phone rather than on what she was avoiding.'
+            },
+            {
               id: 'q-c', page: 76, lever: 'question', quality: 'clumsy',
-              pose: { props: [], gaze: 'floor' },
-              text: 'So the phone is the problem, really?',
+              pose: { props: [] },
+              text: 'So is the phone the main problem, do you think?',
               reaction: {
                 default: '"I guess." She puts it away, as if caught.'
               },
-              debrief: 'Leading: it handed her a tidy explanation. She accepted it, and the phone became the culprit instead of the clue.'
+              debrief: 'A leading question with the answer in it. She agreed, and put the phone out of sight, which hid the cue.'
             },
             {
               id: 's-s', page: 21, lever: 'support', quality: 'skilful',
@@ -2145,17 +2381,25 @@ const MAYA = {
               debrief: 'Recognised how unpleasant the avoiding is. She admitted it out loud; the cue in her hands went unremarked.'
             },
             {
+              id: 's-p', page: 74, lever: 'support', quality: 'plausible',
+              text: 'Two hours goes quickly on a phone. It happens to everyone, adults included.',
+              reaction: {
+                default: '"I suppose." She turns the phone over again.'
+              },
+              debrief: 'Normalised it, which took away some shame. It also made it sound like a phone habit rather than avoidance.'
+            },
+            {
               id: 's-c', page: 73, lever: 'support', quality: 'clumsy',
-              text: 'Everyone puts things off. Don\'t worry about it.',
+              text: 'Two hours is a lot, but everyone puts things off. Try not to worry about it.',
               reaction: {
                 default: '"Yeah, but not every night."'
               },
-              debrief: 'Normalised it so quickly that she had to put you right. The kindness made the problem smaller than it was.'
+              debrief: 'Reassured her by making it small. She put you right: for her it was every night.'
             },
             {
               id: 'o-s', page: 197, lever: 'observe', quality: 'skilful',
               pose: { props: [], head: 'down' },
-              text: 'I noticed you picked up your phone just as you mentioned next year.',
+              text: 'I noticed you picked up your phone as soon as you mentioned next year.',
               reaction: {
                 default: 'She looks at it in her hand, then puts it face down on her knee. "I didn\'t even notice."',
                 'extraversion:low': 'She stops turning the phone. A long silence. Then a very small nod.'
@@ -2164,14 +2408,22 @@ const MAYA = {
               debrief: 'Used a real, specific cue and did not turn it into a criticism. It showed her a pattern she had not seen for herself.'
             },
             {
+              id: 'o-p', page: 290, lever: 'observe', quality: 'plausible',
+              text: 'I noticed you said it\'s the same every night. That sounds like a routine now.',
+              reaction: {
+                default: '"Pretty much." She keeps turning the phone.'
+              },
+              debrief: 'An accurate reflection of the pattern. It stayed with the evenings and missed the moment the phone came out.'
+            },
+            {
               id: 'o-c', page: 97, lever: 'observe', quality: 'clumsy',
-              pose: { props: [], mouth: 'tight' },
-              text: 'You\'re on your phone again. Is this boring you?',
+              pose: { props: [] },
+              text: 'I noticed you picked up your phone while we were talking. Is this boring you?',
               reaction: {
                 default: '"No. Sorry." She pushes it into her pocket. Her face closes a little.'
               },
               override: { trust: -2 },
-              debrief: 'Noticed the phone, and read it as rudeness rather than as a signal. The cue was there; the interpretation cost trust.'
+              debrief: 'Saw the right thing and read it as rudeness. She apologised and put the phone away, and with it the thing worth noticing.'
             },
             {
               id: 'c-s', page: 88, lever: 'challenge', quality: 'skilful',
@@ -2184,13 +2436,22 @@ const MAYA = {
               debrief: 'Offered a different explanation for the same behaviour. It went close to the real issue; how close she let it come depended on trust.'
             },
             {
+              id: 'c-p', page: 287, lever: 'challenge', quality: 'plausible',
+              pose: { gaze: 'phone' },
+              text: 'You\'re calling that lazy. It sounds more like the phone is the problem.',
+              reaction: {
+                default: '"Maybe." She looks at the phone as if it might agree.'
+              },
+              debrief: 'Swapped her label for a more obvious one. It was easier to accept than "lazy", and it pointed away from what the phone was helping her avoid.'
+            },
+            {
               id: 'c-c', page: 25, lever: 'challenge', quality: 'clumsy',
-              pose: { props: [], gaze: 'door' },
-              text: 'Two hours on your phone? Well, that\'s where your grades went, then.',
+              pose: { gaze: 'door', props: [] },
+              text: 'You\'re calling that lazy. Two hours a night is where the grades have gone.',
               reaction: {
                 default: '"Wow. OK." She puts the phone away and looks at the door.'
               },
-              debrief: 'Turned what she had just shared into evidence against her. She had been open; she will be less so now.'
+              debrief: 'Connected the facts accurately and turned them into a verdict. She heard blame rather than a different view.'
             }
           ]
         },
@@ -2213,13 +2474,22 @@ const MAYA = {
               debrief: 'An open question aimed at the right place. With trust this low she could only give a small answer, but it was hers.'
             },
             {
+              id: 'q-p', page: 199, lever: 'question', quality: 'plausible',
+              pose: { gaze: 'phone' },
+              text: 'What subjects are you thinking of taking next year?',
+              reaction: {
+                default: '"Haven\'t decided." She keeps her eyes on the screen.'
+              },
+              debrief: 'A practical question about next year. It asked for decisions while the cue was that next year itself was hard to look at.'
+            },
+            {
               id: 'q-c', page: 174, lever: 'question', quality: 'clumsy',
               pose: { gaze: 'phone' },
-              text: 'Are you worried about the exams?',
+              text: 'Are you worried about the exams next year, is that it?',
               reaction: {
                 default: '"Not really." She scrolls.'
               },
-              debrief: 'Closed: it could be answered with one word, and was.'
+              debrief: 'Named a feeling for her and asked her to confirm it. A closed question is easy to deflect, and she did.'
             },
             {
               id: 's-s', page: 140, lever: 'support', quality: 'skilful',
@@ -2232,18 +2502,27 @@ const MAYA = {
               debrief: 'Took the pressure off when she was shutting down. Trust recovered; the topic was put on hold.'
             },
             {
+              id: 's-p', page: 298, lever: 'support', quality: 'plausible',
+              pose: { gaze: 'phone' },
+              text: 'It\'s OK. Most people your age can\'t be bothered with exams yet.',
+              reaction: {
+                default: '"Yeah." She keeps scrolling.'
+              },
+              debrief: 'Met her where she was, and agreed with "can\'t be bothered". It kept her comfortable and the subject closed.'
+            },
+            {
               id: 's-c', page: 171, lever: 'support', quality: 'clumsy',
               pose: { gaze: 'phone' },
-              text: 'Don\'t worry, the exams are ages away.',
+              text: 'It\'s OK. The exams are ages away, so there\'s nothing to worry about.',
               reaction: {
                 default: '"Right." She keeps scrolling.'
               },
-              debrief: 'Reassurance that was not quite true. It closed the subject she most needed to open.'
+              debrief: 'Tried to remove the worry by moving it further away. It did not match what her phone was telling you.'
             },
             {
               id: 'o-s', page: 106, lever: 'observe', quality: 'skilful',
               pose: { arms: 'lap' },
-              text: 'Every time next year comes up, you look at your phone. I\'m not telling you off. I just noticed it.',
+              text: 'Every time next year comes up, you look at your phone. I\'m not telling you off. I noticed it, that\'s all.',
               reaction: {
                 default: 'She stops scrolling. A pause. "It\'s easier than thinking about it."',
                 'extraversion:low': 'She stops scrolling. She does not look up, but she puts the phone away.'
@@ -2252,14 +2531,23 @@ const MAYA = {
               debrief: 'Named the pattern and removed the threat in the same breath. When she was saying least, what she was doing said most.'
             },
             {
+              id: 'o-p', page: 266, lever: 'observe', quality: 'plausible',
+              pose: { gaze: 'phone' },
+              text: 'You\'ve had your phone out most of the time. I\'m not telling you off. I wondered if you\'d noticed.',
+              reaction: {
+                default: '"Sorry." She puts it face down, but her eyes stay on it.'
+              },
+              debrief: 'Named the phone without blame. It noticed the habit and missed the pattern of when she reached for it.'
+            },
+            {
               id: 'o-c', page: 86, lever: 'observe', quality: 'clumsy',
               pose: { gaze: 'phone' },
-              text: 'You\'re more interested in your phone than in this conversation.',
+              text: 'Every time next year comes up, you look at your phone. It\'s hard to talk to you while you\'re on it.',
               reaction: {
                 default: '"I\'m listening." She does not look up.'
               },
               override: { trust: -3 },
-              debrief: 'Saw the cue and read it as rudeness. It turned a clue into a complaint.'
+              debrief: 'Saw the pattern and used it as a complaint. It made the phone a matter of manners rather than something to understand.'
             },
             {
               id: 'c-s', page: 72, lever: 'challenge', quality: 'skilful',
@@ -2272,13 +2560,21 @@ const MAYA = {
               debrief: 'Offered a different explanation for "can\'t be bothered". It was close to the truth, and pushing at low trust carries a cost.'
             },
             {
+              id: 'c-p', page: 274, lever: 'challenge', quality: 'plausible',
+              text: 'I don\'t think you can\'t be bothered. I think you\'re more tired than you\'re letting on.',
+              reaction: {
+                default: '"Maybe." She shrugs, still scrolling.'
+              },
+              debrief: 'Pushed back on "can\'t be bothered", which was a fair push. The alternative you offered was a guess, and not the one the cue pointed to.'
+            },
+            {
               id: 'c-c', page: 94, lever: 'challenge', quality: 'clumsy',
               pose: { chair: 'edge' },
-              text: 'If you can\'t be bothered, there\'s not much I can do for you.',
+              text: 'I don\'t think you can\'t be bothered. I think you\'re scared of failing the exams.',
               reaction: {
-                default: '"Fine." She half stands up, then sits back down.'
+                default: '"I\'m not scared." She half stands up, then sits back down.'
               },
-              debrief: 'Called her bluff. It left her with nowhere to go except the door.'
+              debrief: 'Named a fear for her, confidently. Even if it was close, being told what she feels made her defend herself.'
             }
           ]
         },
@@ -2301,12 +2597,21 @@ const MAYA = {
               debrief: 'Asked about her experience of the decision rather than the decision itself. She did not explain, but she stayed with it.'
             },
             {
+              id: 'q-p', page: 63, lever: 'question', quality: 'plausible',
+              pose: { gaze: 'window' },
+              text: 'What has everyone decided you\'ll be doing?',
+              reaction: {
+                default: '"It\'s... a plan. It\'s fine." She keeps looking at the window.'
+              },
+              debrief: 'The natural next question. It asked for something she had not offered, and kept the attention on what others had decided rather than on her.'
+            },
+            {
               id: 'q-c', page: 176, lever: 'question', quality: 'clumsy',
-              text: 'Who\'s decided? Your parents?',
+              text: 'Who\'s decided that? Is it your family?',
               reaction: {
                 default: '"I didn\'t say that." She closes the subject.'
               },
-              debrief: 'Leading: it guessed the answer and named her family before she had. She shut the topic rather than choosing to explain.'
+              debrief: 'Put an answer inside the question and named her family before she had. She shut the topic rather than choose to explain.'
             },
             {
               id: 's-s', page: 100, lever: 'support', quality: 'skilful',
@@ -2318,14 +2623,23 @@ const MAYA = {
               debrief: 'Acknowledged the weight without prying. It kept her safe; what she meant stayed unsaid.'
             },
             {
+              id: 's-p', page: 317, lever: 'support', quality: 'plausible',
+              pose: { gaze: 'window' },
+              text: 'That\'s a lot. Plenty of people your age feel that.',
+              reaction: {
+                default: '"I suppose." She keeps looking at the window.'
+              },
+              debrief: 'Kind, and it filed her experience under something common before you knew what it was.'
+            },
+            {
               id: 's-c', page: 186, lever: 'support', quality: 'clumsy',
               pose: { gaze: 'floor' },
-              text: 'Don\'t worry about after school yet. That\'s years away.',
+              text: 'There\'s still plenty of time to work that out.',
               reaction: {
-                default: '"It isn\'t, though." She looks at the floor.'
+                default: '"Is there?" She looks at the floor.'
               },
               override: { ownership: -2 },
-              debrief: 'Tried to lift the weight by shrinking the future. For someone two years from finishing school, it did not ring true.'
+              debrief: 'Tried to lift the weight by giving her more time. Two years from finishing school, it did not match how close it felt to her.'
             },
             {
               id: 'o-s', page: 91, lever: 'observe', quality: 'skilful',
@@ -2337,13 +2651,22 @@ const MAYA = {
               debrief: 'Reflected exactly what she had and had not said. It showed her where she was missing from her own sentence.'
             },
             {
+              id: 'o-p', page: 71, lever: 'observe', quality: 'plausible',
+              pose: { gaze: 'window' },
+              text: 'You said that to the window. It seems hard to say it while looking at me.',
+              reaction: {
+                default: '"It\'s easier." She glances at you, then back at the window.'
+              },
+              debrief: 'Noticed something real about how she said it. Commenting on her discomfort drew attention to her rather than to what she had said.'
+            },
+            {
               id: 'o-c', page: 92, lever: 'observe', quality: 'clumsy',
               pose: { mouth: 'tight' },
-              text: 'You\'ve gone quiet. That clearly upsets you.',
+              text: 'You said "everyone\'s decided". It sounds like you don\'t agree with them.',
               reaction: {
-                default: '"It doesn\'t upset me." It clearly does.'
+                default: '"I didn\'t say that." Her mouth tightens.'
               },
-              debrief: 'Accurate, and announced as a fact about her feelings. She denied it, as most people would.'
+              debrief: 'Went one step beyond her words and gave her a position she had not taken. She disowned it rather than explore it.'
             },
             {
               id: 'c-s', page: 156, lever: 'challenge', quality: 'skilful',
@@ -2356,14 +2679,23 @@ const MAYA = {
               debrief: 'Put her own view back on the table without criticising anyone else\'s. A real push; it needed enough trust to be heard as interest, not as taking sides.'
             },
             {
+              id: 'c-p', page: 300, lever: 'challenge', quality: 'plausible',
+              pose: { gaze: 'window' },
+              text: 'Maybe. But you\'d be the one living it. Is it what you\'d choose yourself?',
+              reaction: {
+                default: '"I don\'t know. Maybe." She shrugs, still facing the window.'
+              },
+              debrief: 'A real push, asked as a yes-or-no question before she had said what the decision was. She could only answer it vaguely.'
+            },
+            {
               id: 'c-c', page: 158, lever: 'challenge', quality: 'clumsy',
               pose: { gaze: 'window' },
-              text: 'Well, nobody can decide your future for you.',
+              text: 'Maybe. But you\'re the one living it, so they need to hear what you think.',
               reaction: {
-                default: '"You don\'t know that." She looks away.'
+                default: '"You don\'t know them." She looks away.'
               },
               override: { trust: -2 },
-              debrief: 'A slogan, and one that quietly took sides against whoever had "decided". She dismissed it easily.'
+              debrief: 'Pushed her towards a conversation at home and cast her family as the obstacle. It took a side she had not taken.'
             }
           ]
         },
@@ -2385,17 +2717,26 @@ const MAYA = {
               debrief: 'Asked her to picture a small, near future. She described a change in her own words, which made it hers.'
             },
             {
-              id: 'q-c', page: 28, lever: 'question', quality: 'clumsy',
-              text: 'Do you want to feel better about school?',
+              id: 'q-p', page: 301, lever: 'question', quality: 'plausible',
+              pose: { gaze: 'window' },
+              text: 'What do you think is the main thing making it feel like this?',
               reaction: {
-                default: '"Obviously."'
+                default: '"I don\'t know. Everything?" She looks away again.'
               },
-              debrief: 'A question with only one possible answer. She gave it.'
+              debrief: 'A fair question about causes. She had just turned towards wanting a change, and it turned her back to the problem.'
+            },
+            {
+              id: 'q-c', page: 28, lever: 'question', quality: 'clumsy',
+              text: 'Do you want to feel better about school by the time we next meet?',
+              reaction: {
+                default: '"Well, yes."'
+              },
+              debrief: 'A closed question with only one possible answer. It got a yes and no picture of what better would be.'
             },
             {
               id: 's-s', page: 15, lever: 'support', quality: 'skilful',
               pose: { shoulders: 'relaxed' },
-              text: 'That makes sense. Feeling stuck every evening sounds really draining.',
+              text: 'That makes sense. Feeling stuck every evening sounds draining.',
               reaction: {
                 default: '"It is." She breathes out.'
               },
@@ -2403,16 +2744,24 @@ const MAYA = {
               debrief: 'Stayed with the feeling she had just named. She felt heard; the future stayed unexplored.'
             },
             {
-              id: 's-c', page: 126, lever: 'support', quality: 'clumsy',
-              text: 'It will stop. These things always pass.',
+              id: 's-p', page: 297, lever: 'support', quality: 'plausible',
+              text: 'That makes sense. It will stop, though. Things like this usually pass.',
               reaction: {
-                default: '"Will it?" She does not sound sure.'
+                default: '"I hope so." She does not sound sure.'
               },
-              debrief: 'A promise you could not keep. Comforting for a moment, and it asked nothing of her.'
+              debrief: 'Hopeful, and it arrived before she had said what "this" was. It promised an end without anything for her to do.'
+            },
+            {
+              id: 's-c', page: 126, lever: 'support', quality: 'clumsy',
+              text: 'That makes sense. Let\'s work out together how to make it stop, then.',
+              reaction: {
+                default: '"OK." She waits for you to start.'
+              },
+              debrief: 'Generous and practical, and it took the lead from her. "Together" quickly became you doing the working out.'
             },
             {
               id: 'o-s', page: 117, lever: 'observe', quality: 'skilful',
-              text: 'When you said that, you sat up a little. It sounds like you really want things to change.',
+              text: 'When you said that, you sat up a little. It sounds like you want things to change.',
               reaction: {
                 default: '"I do. I just don\'t know how."'
               },
@@ -2420,12 +2769,22 @@ const MAYA = {
               debrief: 'Linked what you saw to what she said. It let her hear her own wish for change.'
             },
             {
-              id: 'o-c', page: 24, lever: 'observe', quality: 'clumsy',
-              text: 'You obviously know what you need to do.',
+              id: 'o-p', page: 159, lever: 'observe', quality: 'plausible',
+              pose: { gaze: 'window' },
+              text: 'When you said that, you looked at me. It\'s the first time you\'ve done that today.',
               reaction: {
-                default: '"Do I?"'
+                default: '"Is it?" She looks away again.'
               },
-              debrief: 'Presented as confidence in her, received as pressure. The observation was about you, not her.'
+              debrief: 'Accurate, and it made her aware of being watched. She stepped back from the moment you had noticed.'
+            },
+            {
+              id: 'o-c', page: 24, lever: 'observe', quality: 'clumsy',
+              pose: { chair: 'back' },
+              text: 'When you said that, you sat up a little. It sounds like you know what to do about it.',
+              reaction: {
+                default: '"Do I?" She slumps back in the chair.'
+              },
+              debrief: 'Read her wish for change as knowing the answer. It put pressure on her to have one.'
             },
             {
               id: 'c-s', page: 109, lever: 'challenge', quality: 'skilful',
@@ -2437,12 +2796,20 @@ const MAYA = {
               debrief: 'Challenged her sense of helplessness. A hopeful push; it needed trust to sound like belief rather than blame.'
             },
             {
+              id: 'c-p', page: 291, lever: 'challenge', quality: 'plausible',
+              text: 'I think it\'ll start to feel better once the homework is under control.',
+              reaction: {
+                default: '"Maybe." She does not sound convinced.'
+              },
+              debrief: 'A sensible view from the outside. It made the homework the answer before she had said what would help.'
+            },
+            {
               id: 'c-c', page: 143, lever: 'challenge', quality: 'clumsy',
-              text: 'Well, it won\'t stop by itself.',
+              text: 'I think it won\'t stop by itself, though. Something will have to change.',
               reaction: {
                 default: '"I know that." Flat.'
               },
-              debrief: 'True and blunt. It told her what she knew and left her feeling told off.'
+              debrief: 'True, and said as a warning. It told her what she already knew and gave her nothing to work with.'
             }
           ]
         },
@@ -2464,12 +2831,20 @@ const MAYA = {
               debrief: 'Moved from comfort to the future at the moment she felt safest. She did the picturing herself.'
             },
             {
+              id: 'q-p', page: 220, lever: 'question', quality: 'plausible',
+              text: 'Who would you feel able to talk to about it, outside school?',
+              reaction: {
+                default: '"I don\'t know. No one, really." She shrugs.'
+              },
+              debrief: 'A caring question that looked for support beyond this room. It moved away from the conversation she had just started having with you.'
+            },
+            {
               id: 'q-c', page: 189, lever: 'question', quality: 'clumsy',
-              text: 'Would it help to talk about it more?',
+              text: 'Would it help to talk about it more often, maybe here with me?',
               reaction: {
                 default: '"Maybe."'
               },
-              debrief: 'A closed question when she had just started talking. It invited a yes or no, and got neither.'
+              debrief: 'A kind offer as a closed question. She said maybe; it did not ask what she wanted.'
             },
             {
               id: 's-s', page: 129, lever: 'support', quality: 'skilful',
@@ -2481,13 +2856,20 @@ const MAYA = {
               debrief: 'Warm and true. More comfort at this point kept her safe, and it kept the next step with you.'
             },
             {
+              id: 's-p', page: 329, lever: 'support', quality: 'plausible',
+              text: 'I\'m glad. Talking always helps.',
+              reaction: {
+                default: '"I guess." She smiles a little.'
+              },
+              debrief: 'Warm, and a general rule. It praised the talking and moved past what she had said.'
+            },
+            {
               id: 's-c', page: 44, lever: 'support', quality: 'clumsy',
-              pose: { shoulders: 'relaxed' },
-              text: 'You can always come to me with anything. I\'ll sort it out.',
+              text: 'You can come to me. I\'ll sort it out.',
               reaction: {
                 default: '"OK." She looks relieved, and a little let off.'
               },
-              debrief: 'A generous offer that moved the problem to your desk. Relief came at the cost of her ownership.'
+              debrief: 'Generous, and it took the problem off her. Relief is not the same as a step of her own.'
             },
             {
               id: 'o-s', page: 27, lever: 'observe', quality: 'skilful',
@@ -2500,13 +2882,21 @@ const MAYA = {
               debrief: 'Showed her something she was already doing differently. Small, and it was hers.'
             },
             {
+              id: 'o-p', page: 34, lever: 'observe', quality: 'plausible',
+              text: 'You said you don\'t really talk about it. That must make it feel heavier.',
+              reaction: {
+                default: '"I suppose." She shrugs.'
+              },
+              debrief: 'An empathic guess about how it felt. It was probably close, and it told her the feeling rather than letting her name it.'
+            },
+            {
               id: 'o-c', page: 164, lever: 'observe', quality: 'clumsy',
-              pose: { head: 'up' },
-              text: 'You look really down about it all.',
+              pose: { chair: 'back' },
+              text: 'You said it\'s a lot. You look as if it\'s all getting on top of you.',
               reaction: {
                 default: '"I\'m fine." She sits up straighter, as if to prove it.'
               },
-              debrief: 'Described her mood for her. She disagreed in order to keep some control.'
+              debrief: 'Described her state rather than what you saw or heard. She had just admitted something, and the label made her take it back.'
             },
             {
               id: 'c-s', page: 198, lever: 'challenge', quality: 'skilful',
@@ -2518,12 +2908,20 @@ const MAYA = {
               debrief: 'Questioned her way of coping, gently. A push that relied on the warmth already there.'
             },
             {
+              id: 'c-p', page: 241, lever: 'challenge', quality: 'plausible',
+              text: 'Not talking about it is one way to cope. It might help to tell someone at home.',
+              reaction: {
+                default: '"Maybe." She does not look keen.'
+              },
+              debrief: 'A reasonable suggestion, made early. It pointed her towards home before you knew what home meant in this.'
+            },
+            {
               id: 'c-c', page: 96, lever: 'challenge', quality: 'clumsy',
-              text: 'Then you need to start talking about it, don\'t you?',
+              text: 'Not talking about it is one way to cope, but you\'ll need to start talking at some point.',
               reaction: {
                 default: '"I guess."'
               },
-              debrief: 'Turned her admission into an instruction. She agreed, without owning it.'
+              debrief: 'A fair point as an instruction. She agreed, and the instruction was yours.'
             }
           ]
         },
@@ -2545,12 +2943,21 @@ const MAYA = {
               debrief: 'Gave her the question she had just asked herself. She answered it, which made the future hers.'
             },
             {
+              id: 'q-p', page: 293, lever: 'question', quality: 'plausible',
+              pose: { gaze: 'window' },
+              text: 'What do you think you might want to do after school?',
+              reaction: {
+                default: '"I don\'t know." She looks at the window. "Something."'
+              },
+              debrief: 'The big question, asked at the first opening. It was too large a step from "I didn\'t say what I want".'
+            },
+            {
               id: 'q-c', page: 99, lever: 'question', quality: 'clumsy',
-              text: 'Do you know what you want?',
+              text: 'Do you know what you want, deep down, or not yet?',
               reaction: {
                 default: '"No." Quickly.'
               },
-              debrief: 'Closed, and asked at the moment she was least sure. It invited the easiest answer.'
+              debrief: 'A closed question that made her choose between knowing and not knowing. "No" was the quick way out.'
             },
             {
               id: 's-s', page: 148, lever: 'support', quality: 'skilful',
@@ -2562,12 +2969,20 @@ const MAYA = {
               debrief: 'Normalised not knowing, kindly. It eased the pressure, and it eased the question away too.'
             },
             {
-              id: 's-c', page: 157, lever: 'support', quality: 'clumsy',
-              text: 'You don\'t need to know yet. Don\'t worry about it.',
+              id: 's-p', page: 281, lever: 'support', quality: 'plausible',
+              text: 'That\'s OK. You don\'t need to know yet. There\'s plenty of time.',
               reaction: {
                 default: '"OK." She lets it go.'
               },
-              debrief: 'Rescued her from an uncomfortable thought she had arrived at herself. Comfortable; the thought was lost.'
+              debrief: 'Took the pressure off, which she may have needed. It also closed the door she had just opened.'
+            },
+            {
+              id: 's-c', page: 157, lever: 'support', quality: 'clumsy',
+              text: 'That\'s OK. We can work out what you want together, step by step.',
+              reaction: {
+                default: '"OK." She lets you take it.'
+              },
+              debrief: 'A generous offer of help. "Together" put you in charge of finding out what she wanted.'
             },
             {
               id: 'o-s', page: 142, lever: 'observe', quality: 'skilful',
@@ -2580,12 +2995,21 @@ const MAYA = {
               debrief: 'Noticed the gap between her laugh and her face. It let her drop the act without being told to.'
             },
             {
-              id: 'o-c', page: 115, lever: 'observe', quality: 'clumsy',
-              text: 'You clearly have no idea what you want.',
+              id: 'o-p', page: 313, lever: 'observe', quality: 'plausible',
+              pose: { gaze: 'floor' },
+              text: 'You said that quietly, as if you\'d noticed it for the first time.',
               reaction: {
-                default: '"Thanks."'
+                default: '"Kind of." She looks at her hands.'
               },
-              debrief: 'Took her own observation and handed it back as a criticism. It sounded like a verdict.'
+              debrief: 'A gentle, accurate observation. It stayed with how she said it rather than with what she had realised.'
+            },
+            {
+              id: 'o-c', page: 115, lever: 'observe', quality: 'clumsy',
+              text: 'You laughed, but it sounds like you don\'t know what you want.',
+              reaction: {
+                default: '"Thanks." The laugh is gone.'
+              },
+              debrief: 'Started with what you saw and ended with a conclusion about her. The conclusion stung.'
             },
             {
               id: 'c-s', page: 130, lever: 'challenge', quality: 'skilful',
@@ -2598,12 +3022,20 @@ const MAYA = {
               debrief: 'Pushed on her not-knowing. With trust in place it can feel like belief in her; without it, like pressure.'
             },
             {
-              id: 'c-c', page: 77, lever: 'challenge', quality: 'clumsy',
-              text: 'Well, you need to work that out, then.',
+              id: 'c-p', page: 289, lever: 'challenge', quality: 'plausible',
+              text: 'I think you might want something different from what everyone has decided.',
               reaction: {
-                default: '"Yeah. Obviously."'
+                default: '"Maybe." She does not say what.'
               },
-              debrief: 'An instruction where an invitation was possible. She agreed and closed off.'
+              debrief: 'A perceptive guess, said for her. It may have been close; she could agree without owning it.'
+            },
+            {
+              id: 'c-c', page: 77, lever: 'challenge', quality: 'clumsy',
+              text: 'I think you need to work out what you want, then, before someone else does.',
+              reaction: {
+                default: '"Yeah. I know."'
+              },
+              debrief: 'Pushed for urgency and hinted at others deciding for her. It took a side and added pressure.'
             }
           ]
         },
@@ -2625,12 +3057,20 @@ const MAYA = {
               debrief: 'Followed a push with an open question. The push opened the door; the question let her walk through it.'
             },
             {
+              id: 'q-p', page: 271, lever: 'question', quality: 'plausible',
+              text: 'What do you think would make the biggest difference to your grades right now?',
+              reaction: {
+                default: '"Doing the homework, I guess." It sounds like the expected answer.'
+              },
+              debrief: 'Asked for her view, on the grades and on the biggest change. She gave the answer she knew was expected.'
+            },
+            {
               id: 'q-c', page: 55, lever: 'question', quality: 'clumsy',
-              text: 'Would getting your homework in on time be a good change?',
+              text: 'Would getting your homework in on time be a good change to start with?',
               reaction: {
                 default: '"I guess."'
               },
-              debrief: 'A suggestion dressed as a question. She accepted your idea instead of finding hers.'
+              debrief: 'Your change, phrased as a question. A yes was easy and did not commit her to anything.'
             },
             {
               id: 's-s', page: 50, lever: 'support', quality: 'skilful',
@@ -2643,17 +3083,24 @@ const MAYA = {
               debrief: 'Recognised the effort she had made. Trust rose; the change she might make stayed undefined.'
             },
             {
+              id: 's-p', page: 251, lever: 'support', quality: 'plausible',
+              text: 'Not knowing yet is fine. We can always come back to it next time.',
+              reaction: {
+                default: '"OK." She seems a little relieved.'
+              },
+              debrief: 'Gave her room, which was kind. It let her off just as she had started thinking.'
+            },
+            {
               id: 's-c', page: 185, lever: 'support', quality: 'clumsy',
-              pose: { gaze: 'counsellor' },
-              text: 'Don\'t worry, I\'ll help you work out what to change.',
+              text: 'Not knowing yet is fine. I\'ll help you work out what to change.',
               reaction: {
                 default: '"OK." She waits for you to tell her.'
               },
-              debrief: 'Offered help at the moment she was about to think for herself. She waited for your answer instead.'
+              debrief: 'Offered help, and in doing so took over the thinking. She waited for your answer.'
             },
             {
               id: 'o-s', page: 179, lever: 'observe', quality: 'skilful',
-              text: 'You\'ve stopped looking at the door. You\'re really thinking about this.',
+              text: 'You\'ve stopped looking at the door. You seem to be thinking about this.',
               reaction: {
                 default: '"I am, actually."'
               },
@@ -2661,17 +3108,26 @@ const MAYA = {
               debrief: 'Showed her the change in her own behaviour. It affirmed her engagement without telling her what to think.'
             },
             {
-              id: 'o-c', page: 18, lever: 'observe', quality: 'clumsy',
-              text: 'You clearly need to change something.',
+              id: 'o-p', page: 144, lever: 'observe', quality: 'plausible',
+              pose: { gaze: 'door' },
+              text: 'You\'ve sat back in the chair. You seem more relaxed than when you came in.',
               reaction: {
-                default: '"I know."'
+                default: '"I suppose." She glances at the door, then back.'
               },
-              debrief: 'An observation that was really a judgement. It gave her nothing new.'
+              debrief: 'Accurate and warm. It noticed the comfort and missed the thinking, and drew her eye back to the door.'
+            },
+            {
+              id: 'o-c', page: 18, lever: 'observe', quality: 'clumsy',
+              text: 'You\'ve stopped looking at the door. You seem to know what needs to change.',
+              reaction: {
+                default: '"I don\'t, though."'
+              },
+              debrief: 'Read her thinking as knowing. It put her on the spot to have an answer.'
             },
             {
               id: 'c-s', page: 60, lever: 'challenge', quality: 'skilful',
               pose: { mouth: 'tight' },
-              text: 'I think you already have one idea. You just don\'t trust it yet.',
+              text: 'I think you already have one idea. You don\'t trust it yet, that\'s all.',
               reaction: {
                 default: '"...Maybe the phone thing." She pulls a face.'
               },
@@ -2679,12 +3135,20 @@ const MAYA = {
               debrief: 'A second push, made with trust already in place. It worked because it pointed at her idea, not yours.'
             },
             {
+              id: 'c-p', page: 193, lever: 'challenge', quality: 'plausible',
+              text: 'I think the phone might be the place to start. It came up a few times.',
+              reaction: {
+                default: '"Maybe." She pulls a face.'
+              },
+              debrief: 'A sensible starting point, offered by you. She could accept it without it being hers.'
+            },
+            {
               id: 'c-c', page: 78, lever: 'challenge', quality: 'clumsy',
-              text: 'You have to change something, or nothing will change.',
+              text: 'I think you have to change something, or nothing will change, will it?',
               reaction: {
                 default: '"Yeah, I get it."'
               },
-              debrief: 'Logical and flat. It added pressure without adding direction.'
+              debrief: 'True, and said as pressure. It asked her to agree rather than to think.'
             }
           ]
         },
@@ -2706,12 +3170,22 @@ const MAYA = {
               debrief: 'Accepted her criticism and turned it into curiosity. It recovered some ground and let her put you right.'
             },
             {
-              id: 'q-c', page: 108, lever: 'question', quality: 'clumsy',
-              text: 'Is it that you don\'t want to talk about after school?',
+              id: 'q-p', page: 263, lever: 'question', quality: 'plausible',
+              pose: { arms: 'bag' },
+              text: 'You\'re right, I might not. Is it after school?',
               reaction: {
-                default: '"I don\'t want to talk about any of it."'
+                default: '"Partly." She keeps the bag on her lap.'
               },
-              debrief: 'A guess, offered as a yes-or-no question. She took the chance to close everything.'
+              debrief: 'Owned the gap and then filled it with a guess. She confirmed part of it and kept the rest.'
+            },
+            {
+              id: 'q-c', page: 108, lever: 'question', quality: 'clumsy',
+              pose: { arms: 'bag' },
+              text: 'You\'re right. Can you help me get it, then?',
+              reaction: {
+                default: '"Not really." Her hands stay on the bag.'
+              },
+              debrief: 'Agreed, then put the work of explaining back on her. At that moment, the "then" sounded like a test.'
             },
             {
               id: 's-s', page: 135, lever: 'support', quality: 'skilful',
@@ -2724,17 +3198,26 @@ const MAYA = {
               debrief: 'Repaired the rupture openly. Trust came back; there was less time left to use it.'
             },
             {
+              id: 's-p', page: 262, lever: 'support', quality: 'plausible',
+              pose: { arms: 'bag' },
+              text: 'That\'s fair. Sorry. I was only trying to help you, that\'s all.',
+              reaction: {
+                default: '"I know." She keeps the bag on her lap.'
+              },
+              debrief: 'Apologised, which helped, and then explained yourself. It made the repair about your intentions.'
+            },
+            {
               id: 's-c', page: 134, lever: 'support', quality: 'clumsy',
-              text: 'I do get it, honestly. I was sixteen once.',
+              text: 'That\'s fair. But I do get it more than you think. I was sixteen once.',
               reaction: {
                 default: '"Not like this."'
               },
-              debrief: 'Claimed understanding she had just told you was missing. It made the gap between you wider.'
+              debrief: 'Tried to close the gap by sharing your own past. She heard that you knew better.'
             },
             {
               id: 'o-s', page: 47, lever: 'observe', quality: 'skilful',
               pose: { arms: 'bag', chair: 'edge' },
-              text: 'You\'ve picked up your bag. I think I pushed too hard just now.',
+              text: 'You\'ve picked up your bag. I think I pushed too hard a moment ago.',
               reaction: {
                 default: '"A bit." The bag stays on her lap, but she does not stand.'
               },
@@ -2742,13 +3225,22 @@ const MAYA = {
               debrief: 'Read the bag accurately and said so without blame. Naming the rupture helped repair it.'
             },
             {
+              id: 'o-p', page: 282, lever: 'observe', quality: 'plausible',
+              pose: { arms: 'bag' },
+              text: 'You\'ve picked up your bag. Do you want to stop for today?',
+              reaction: {
+                default: '"No. I don\'t know." She does not stand.'
+              },
+              debrief: 'Respected her signal and offered her the door. It was considerate, and it left the repair to her.'
+            },
+            {
               id: 'o-c', page: 37, lever: 'observe', quality: 'clumsy',
-              pose: { mouth: 'tight', shoulders: 'raised' },
-              text: 'You\'re getting really worked up about this.',
+              pose: { arms: 'bag' },
+              text: 'You\'ve picked up your bag. You seem quite worked up about this.',
               reaction: {
                 default: '"I\'m not worked up." Her voice is louder.'
               },
-              debrief: 'Described her reaction as a problem. She had to defend herself instead of being understood.'
+              debrief: 'Saw the bag and labelled her feeling. A label is easy to deny, and she did.'
             },
             {
               id: 'c-s', page: 22, lever: 'challenge', quality: 'skilful',
@@ -2760,13 +3252,21 @@ const MAYA = {
               debrief: 'Held your ground and expressed belief in her. A second push while she was upset; a risk, and she stayed.'
             },
             {
+              id: 'c-p', page: 302, lever: 'challenge', quality: 'plausible',
+              text: 'Maybe I don\'t. But it would help if you told me, then.',
+              reaction: {
+                default: '"Maybe." She does not start.'
+              },
+              debrief: 'A logical push. It was reasonable, and it asked her to do the repair.'
+            },
+            {
               id: 'c-c', page: 121, lever: 'challenge', quality: 'clumsy',
               pose: { chair: 'edge' },
-              text: 'I think you just don\'t want to hear it.',
+              text: 'Maybe I don\'t. But I think you don\'t want to hear it, either.',
               reaction: {
                 default: 'She stands up. Then, slowly, she sits down again.'
               },
-              debrief: 'Pushed again when she had just pushed back. It escalated rather than explored.'
+              debrief: 'Matched her push with one of your own. It turned the moment into a stand-off.'
             }
           ]
         },
@@ -2789,13 +3289,21 @@ const MAYA = {
               debrief: 'Asked her for the next step and waited. Whatever she chose, it was hers to try.'
             },
             {
-              id: 'q-c', page: 141, lever: 'question', quality: 'clumsy',
-              text: 'Will you promise to hand in your next piece of homework on time?',
+              id: 'q-p', page: 230, lever: 'question', quality: 'plausible',
+              text: 'What do you think would help most with the homework deadlines?',
               reaction: {
-                default: '"I guess."'
+                default: '"Start earlier, I guess." It sounds like something she has been told.'
+              },
+              debrief: 'Invited her answer, on the deadlines that brought her here. She gave the answer she knew was expected.'
+            },
+            {
+              id: 'q-c', page: 141, lever: 'question', quality: 'clumsy',
+              text: 'Could you try handing in the next piece of homework on time?',
+              reaction: {
+                default: '"I can try." She says it to the clock.'
               },
               override: { ownership: -2 },
-              debrief: 'Got a yes quickly. It was your plan and her agreement, which is not the same as her commitment.'
+              debrief: 'Your step, phrased as a question. A yes was easy to give and easy to forget.'
             },
             {
               id: 's-s', page: 175, lever: 'support', quality: 'skilful',
@@ -2808,14 +3316,22 @@ const MAYA = {
               debrief: 'Took the pressure off and kept the relationship going. She left lighter, without a step of her own.'
             },
             {
+              id: 's-p', page: 3, lever: 'support', quality: 'plausible',
+              text: 'You don\'t have to fix everything this week. Even one finished piece of homework would be a good start.',
+              reaction: {
+                default: '"OK. I\'ll try." She nods, a bit too quickly.'
+              },
+              debrief: 'Encouraging, and it chose the step for her. She agreed to a reasonable target that was yours.'
+            },
+            {
               id: 's-c', page: 154, lever: 'support', quality: 'clumsy',
               pose: { chair: 'back', shoulders: 'relaxed' },
-              text: 'Don\'t worry, I\'ll talk to your teachers and sort out some extensions for you.',
+              text: 'You don\'t have to fix everything this week. I\'ll have a word with your teachers about the deadlines.',
               reaction: {
-                default: '"Really? OK. Thanks." She relaxes. The problem is yours now.'
+                default: '"Oh. OK. Thanks." She relaxes. The problem is yours now.'
               },
               override: { ownership: -4 },
-              debrief: 'Generous, and it took the problem off her completely. It also promised something that was not yours alone to give.'
+              debrief: 'Generous, and it took the problem off her. It also promised something that depended on other staff.'
             },
             {
               id: 'o-s', page: 69, lever: 'observe', quality: 'skilful',
@@ -2828,12 +3344,20 @@ const MAYA = {
               debrief: 'Gave her back a thread from her own words and left the conclusion to her. She started to build on it.'
             },
             {
+              id: 'o-p', page: 283, lever: 'observe', quality: 'plausible',
+              text: 'You\'ve talked about your phone a few times. That seems to be where the evening goes.',
+              reaction: {
+                default: '"Yeah. I could leave it downstairs, I guess." She does not sound sure.'
+              },
+              debrief: 'An accurate thread from her own words, picked because it pointed at an obvious fix. She took the fix you had pointed to.'
+            },
+            {
               id: 'o-c', page: 42, lever: 'observe', quality: 'clumsy',
-              text: 'You obviously know what you need to do.',
+              text: 'You\'ve talked about the work in a lot of detail. It sounds like you already know what to do.',
               reaction: {
                 default: '"Not really. That\'s why I\'m here."'
               },
-              debrief: 'Assumed an answer she did not have. It left her with the pressure and none of the help.'
+              debrief: 'Assumed she had an answer she did not have. It left her with the pressure and none of the help.'
             },
             {
               id: 'c-s', page: 52, lever: 'challenge', quality: 'skilful',
@@ -2846,13 +3370,21 @@ const MAYA = {
               debrief: 'Refused to take the problem off her, kindly. It is a push; with enough trust it hands her the pen.'
             },
             {
+              id: 'c-p', page: 285, lever: 'challenge', quality: 'plausible',
+              text: 'I could give you a plan, but plans from me don\'t usually stick. Shall we make one together?',
+              reaction: {
+                default: '"OK. If you want." She waits for you to start.'
+              },
+              debrief: 'Offered partnership, which sounds generous. As a yes-or-no question it left you holding the pen.'
+            },
+            {
               id: 'c-c', page: 61, lever: 'challenge', quality: 'clumsy',
               pose: { arms: 'bag', chair: 'edge', gaze: 'door' },
-              text: 'Saying "I don\'t know" isn\'t going to get your grades back up.',
+              text: 'I could give you a plan, but you\'d need to stick to it this time. Are you up for that?',
               reaction: {
-                default: '"I didn\'t say I don\'t know." She picks up her bag.'
+                default: '"This time?" She picks up her bag.'
               },
-              debrief: 'A reprimand at the last moment. It ended the session on her failure rather than her next step.'
+              debrief: '"This time" carried a judgement about last time. The push landed on her past rather than her next step.'
             }
           ]
         }
@@ -3754,6 +4286,8 @@ const CHANGE_WORDS = { little: 4, lot: 10 }; // |change| <= little: "a little"; 
 const LEVEL_WORDS = ['very low', 'very low', 'very low', 'low', 'low', 'middling', 'middling', 'high', 'high', 'very high', 'very high'];
 
 const ROUND_LABELS = { r1: 'Round 1', r2: 'Round 2' };
+// Wording quality as shown in the debrief (Round 1 only; SPEC.md 10.1).
+const QUALITY_LABELS = { skilful: 'Skilful wording', plausible: 'Plausible wording', clumsy: 'Clumsy wording' };
 const SCREEN_NAMES = ['cover', 'how', 'referral', 'scene', 'consequence', 'act', 'ending', 'debrief', 'interlude'];
 
 // ---------------------------------------------------------------------------
@@ -4002,11 +4536,12 @@ function roundLabel(st) {
 
 // Destination pages for a set of options (SPEC.md 11.3): each option turns
 // to its own reply page (the option's `page`), so every fork shows a
-// different number. A lever card lists both of its wordings' pages in
-// ascending order, so the numbers never give away which one is skilful.
+// different number. A lever card lists its three wordings' pages in
+// ascending order ('→ p. 13, 46 or 112'), so the numbers never give away
+// which one is skilful.
 function destLabel(options) {
   const pages = options.map(function (o) { return o.page; }).sort(function (a, b) { return a - b; });
-  return '→ p. ' + pages.join(' or ');
+  return '→ p. ' + (pages.length > 1 ? pages.slice(0, -1).join(', ') + ' or ' + pages[pages.length - 1] : pages[0]);
 }
 
 // ---------------------------------------------------------------------------
@@ -4562,7 +5097,7 @@ function section(id, title, kids, intro) {
 
 function leverStats(st) {
   const out = {};
-  RULES.levers.forEach(function (l) { out[l] = { n: 0, skilful: 0, clumsy: 0 }; });
+  RULES.levers.forEach(function (l) { out[l] = { n: 0 }; RULES.qualities.forEach(function (q) { out[l][q] = 0; }); });
   st.history.forEach(function (e) {
     out[e.lever].n += 1;
     if (e.quality) out[e.lever][e.quality] += 1;
@@ -4570,27 +5105,46 @@ function leverStats(st) {
   return out;
 }
 
+// Wording quality counts for a format B round, e.g. { skilful: 3, plausible: 2, clumsy: 2 }.
+function wordingCounts(st) {
+  const out = {};
+  RULES.qualities.forEach(function (q) { out[q] = st.history.filter(function (e) { return e.quality === q; }).length; });
+  return out;
+}
+
+// 'Wording over 7 decisions: 3 skilful, 2 plausible, 2 clumsy' (debrief and Copy summary).
+function wordingLine(st) {
+  const c = wordingCounts(st);
+  return 'Wording over ' + st.history.length + ' decision' + (st.history.length === 1 ? '' : 's') + ': ' + RULES.qualities.map(function (q) { return c[q] + ' ' + q; }).join(', ');
+}
+
 function leverCountsView(st) {
   const stats = leverStats(st);
   const isB = MAYA.rounds[st.round].format === 'B';
-  const skilful = st.history.filter(function (e) { return e.quality === 'skilful'; }).length;
+  const wc = wordingCounts(st);
+  // Count blocks (SPEC.md 10.1): filled = skilful, lower half = plausible,
+  // hollow = clumsy, each with an ink edge; the key names all three.
+  const block = function (lever, quality) { return h('span', { class: 'cb lv-' + lever + (quality ? ' cb-' + quality : '') }); };
   const rows = RULES.levers.map(function (l) {
     const s = stats[l];
     const blocks = h('span', { class: 'count-blocks', 'aria-hidden': 'true' }, st.history.filter(function (e) { return e.lever === l; }).map(function (e) {
-      return h('span', { class: 'cb lv-' + l + (e.quality === 'clumsy' ? ' cb-clumsy' : '') });
+      return block(l, e.quality);
     }));
     return h('li', { class: 'count-row', 'data-lever-count': l + ':' + s.n }, [
       leverTag(l),
       blocks,
       h('span', { class: 'count-n', text: s.n === 1 ? 'once' : s.n === 0 ? 'not used' : s.n + ' times' }),
-      isB && s.n ? h('span', { class: 'count-q', text: s.skilful + ' skilful · ' + s.clumsy + ' clumsy' }) : null
+      isB && s.n ? h('span', { class: 'count-q', text: RULES.qualities.map(function (q) { return s[q] + ' ' + q; }).join(' · ') }) : null
     ]);
   });
   return [
     h('ul', { class: 'counts' }, rows),
-    isB ? h('p', { class: 'count-total', 'data-skilful': skilful + '/' + st.history.length }, [
-      h('strong', { text: 'Skilful wording ' + skilful + ' of ' + st.history.length + '. ' }),
-      'Clumsy wordings (hollow blocks above) were leading, closed, judgemental, premature or rescuing. They kept less of the lever\'s gain and cost some trust.'
+    isB ? h('ul', { class: 'cb-key', 'aria-label': 'Key to the blocks' }, RULES.qualities.map(function (q) {
+      return h('li', {}, [block('key', q), h('span', { text: QUALITY_LABELS[q] })]);
+    })) : null,
+    isB ? h('p', { class: 'count-total', 'data-wording': RULES.qualities.map(function (q) { return wc[q]; }).join('/') + '/' + st.history.length }, [
+      h('strong', { text: wordingLine(st) + '. ' }),
+      'Plausible wordings sounded reasonable but missed the moment: a little early, slightly leading, or reassuring before she had said anything. Clumsy wordings were leading, closed, judgemental, premature or rescuing. Both kept less of the lever\'s gain; clumsy ones cost more trust.'
     ]) : null
   ];
 }
@@ -4614,7 +5168,7 @@ function pathReplay(st, turning) {
       h('div', { class: 'path-head' }, [
         h('span', { class: 'pageno', text: 'p. ' + node.page }),
         leverTag(e.lever),
-        e.quality ? h('span', { class: 'quality q-' + e.quality, text: e.quality === 'skilful' ? 'Skilful wording' : 'Clumsy wording' }) : null,
+        e.quality ? h('span', { class: 'quality q-' + e.quality, text: QUALITY_LABELS[e.quality] }) : null,
         isC ? h('span', { class: 'muted' }, e.guessCorrect ? ['✓ You named it'] : ['✗ You named ', leverTag(e.guess)]) : null
       ]),
       h('p', { class: 'said', text: quoted(option.text) }),
@@ -4736,7 +5290,7 @@ function summaryText(r1, r2) {
     lines.push(ROUND_LABELS[st.round] + ' (' + round.title + '): ' + round.endings[st.ending].title);
     lines.push('  Levers: ' + RULES.levers.map(function (l) { return LEVER_INFO[l].name + ' ' + stats[l].n; }).join(', '));
     lines.push('  Order: ' + st.history.map(function (e) { return LEVER_INFO[e.lever].name; }).join(' → '));
-    if (round.format === 'B') lines.push('  Skilful wording: ' + st.history.filter(function (e) { return e.quality === 'skilful'; }).length + ' of ' + st.history.length);
+    if (round.format === 'B') lines.push('  ' + wordingLine(st));
     if (round.format === 'C') lines.push('  Lever recognition: ' + st.history.filter(function (e) { return e.guessCorrect; }).length + ' of ' + st.history.length);
   });
   return lines.join('\n');

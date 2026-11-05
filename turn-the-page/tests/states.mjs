@@ -30,15 +30,22 @@ export function loadChromium() {
 // ---------------------------------------------------------------------------
 // Fixed paths from the engine (as in ui.test.mjs).
 
-function orderFor(options, target) {
-  if (target !== 'early') return options;
-  const score = (o) => (o.lever === 'challenge' ? 0 : 2) + (o.quality === 'clumsy' ? 0 : 1);
-  return options.slice().sort((a, b) => score(a) - score(b));
+// Early exit: Challenges and clumsy wordings first. Other endings: a fixed
+// pattern of preferred wording quality per decision (Round 1), so the paths and
+// their debriefs show skilful, plausible and clumsy wordings (SPEC.md 10.1).
+const QUALITY_PATTERN = ['skilful', 'plausible', 'skilful', 'clumsy', 'skilful', 'skilful', 'plausible'];
+function orderFor(options, target, depth) {
+  if (target === 'early') {
+    const score = (o) => (o.lever === 'challenge' ? 0 : 2) + (o.quality === 'clumsy' ? 0 : 1);
+    return options.slice().sort((a, b) => score(a) - score(b));
+  }
+  const want = QUALITY_PATTERN[(depth || 0) % QUALITY_PATTERN.length];
+  return options.filter((o) => o.quality === want).concat(options.filter((o) => o.quality !== want));
 }
 
 export function findPath(state, target) {
   if (state.ending) return state.ending === target ? [] : null;
-  for (const o of orderFor(getNode(state).options, target)) {
+  for (const o of orderFor(getNode(state).options, target, state.history.length)) {
     const rest = findPath(applyChoice(state, o.id), target);
     if (rest) return [o.id].concat(rest);
   }
@@ -120,6 +127,7 @@ export function catalogue() {
   LEVERS.forEach((l, i) => add({ name: 'r1-lever-selected-' + l, save: save('scene', r1First), steps: press(i + 1), screen: 'scene' }));
   LEVERS.forEach((l) => add({ name: 'r1-wording-' + l, save: save('scene', r1First, null, { lever: l }), screen: 'scene' }));
   add({ name: 'r1-wording-selected', save: save('scene', r1First, null, { lever: 'challenge' }), steps: press(2), screen: 'scene' });
+  add({ name: 'r1-wording-selected-third', save: save('scene', r1First, null, { lever: 'question' }), steps: press(3), screen: 'scene' });
 
   // Consequences with the meters flashing in each lever's colour (motion on).
   LEVERS.forEach((l) => {
@@ -166,8 +174,11 @@ export function everyNodeState() {
   // on the page, the meters and the last two levers, not on the page alone.
   const found = {};
   const seen = new Set();
+  const target = { r1: Object.keys(MAYA.rounds.r1.nodes).length, r2: Object.keys(MAYA.rounds.r2.nodes).length };
+  const foundIn = (round) => Object.keys(found).filter((k) => k.startsWith(round + ':')).length;
   const visit = (s, r1) => {
     if (s.ending) return;
+    if (foundIn(s.round) === target[s.round]) return; // every page of this round already has a state
     const key = s.round + ':' + s.nodeId + ':' + RULES.meters.map((m) => s.meters[m]).join(',') + ':' + s.history.slice(-2).map((e) => e.lever).join(',');
     if (seen.has(key)) return;
     seen.add(key);

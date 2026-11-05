@@ -9,6 +9,7 @@
     "test:ui": "node --test tests/ui.test.mjs",
     "test:a11y": "node --test tests/a11y.test.mjs",
     "calibrate": "node tests/calibrate.mjs",
-    "contrast": "node tests/contrast.mjs"
+    "contrast": "node tests/contrast.mjs",
+    "tells": "node tests/wording-tells.mjs"
   }
 }

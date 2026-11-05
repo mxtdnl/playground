@@ -20,7 +20,7 @@ By the end, a counsellor can:
 
 1. Name the four levers and recognise each in a counsellor's actual words (Round 2).
 2. Explain why the same lever helps at one moment and harms at another, with reference to the student's state (trust, confidence) and traits.
-3. Distinguish a skilful from a clumsy use of the same lever (Round 1).
+3. Distinguish a skilful use of a lever from a plausible one (reasonable, but not right for this moment) and from a clumsy one (Round 1).
 4. Distinguish a student who *agrees* to a plan from one who *owns* it, and identify moves that build ownership.
 
 ## 3. Design principles
@@ -121,7 +121,15 @@ Meters clamp to 0–100. The engine is pure and deterministic: the same inputs a
 | Observe | +2 | +2 | +4 |
 | Challenge | −4 | +2 | +9 |
 
-**Clumsy wording** (Round 1 only): positive effects × 0.4, then Trust −3 (calibrated to −2; see the Calibration log).
+**Wording quality** (Round 1 only). Each lever has three wordings. The skilful wording uses the base row; the other two transform it:
+
+| Quality | What it is | Transform (initial values to calibrate, in `RULES.wording`) |
+|---|---|---|
+| Skilful | Fits Maya at this moment | Base row unchanged |
+| Plausible | Sounds reasonable and is often what a well-meaning counsellor would say, but misses this moment: slightly leading, a little early, a reassurance before she has said anything, a good question in the wrong place | Positive effects × 0.7, then Trust −1 (added in session 6) |
+| Clumsy | Leading, closed, judgemental, premature or rescuing, without being rude | Positive effects × 0.4, then Trust −3 (calibrated to −2; see the Calibration log) |
+
+The transform sits where the clumsy transform always has (after the state-rule replacements, before trait multipliers), so the order of operations does not change. Node overrides then make each wording fit or misfit its page.
 
 ### 7.3 State rules (initial values)
 
@@ -161,13 +169,21 @@ Checked in this order:
 
 ### 7.8 Calibration criteria (enforced by `tests/calibrate.mjs`)
 
-The calibrator enumerates every path through each round (Round 1 has 8 options per decision, Round 2 has 4) and must report:
+The calibrator covers every path through each round (Round 1 has 12 options per decision, Round 2 has 4) and must report:
 
 - Every ending is reachable in both rounds, from every Round 2 starting state.
 - Breakthrough is reachable by at least three paths whose first three levers differ.
 - No single-lever strategy reaches Breakthrough (for example, all Support, or all skilful Question).
-- Uniformly random play reaches Breakthrough on 5–20% of paths, and Early exit on 5–25%.
-- Early exit within three decisions requires at least two Challenges or clumsy wordings.
+- Uniformly random play reaches Breakthrough on 5–20% of paths (2–20% in Round 1 since session 6; see the Calibration log), and Early exit on 5–25%.
+- Early exit within three decisions requires at least two Challenges or clumsy wordings (a plausible wording does not count as risky).
+- Round 1: no strategy of only plausible wordings reaches Breakthrough (any levers, plausible at every decision). Added in session 6: plausible counselling may earn agreement, not ownership.
+- Round 1: wording quality matters on average. Random play restricted to one quality (random lever, then always skilful, always plausible or always clumsy) reaches Breakthrough or Partial at a strictly falling rate from skilful to plausible to clumsy, and Early exit at a strictly rising rate. Added in session 6. (The approved draft said Breakthrough alone; that cannot hold together with the plausible-only criterion above, which makes plausible and clumsy both 0%.)
+
+**Method (session 6).** Seven decisions at 12 options are 12⁷, about 36 million paths, too many to walk one by one. The calibrator memoises instead. What happens after a decision depends only on the *future key*: the node, the three meters, and the last lever with the length of its run capped at `RULES.repetition.streakLength − 1` (the only part of history the formula reads; traits are fixed within a round). The engine exports this key (`futureKey(state)`) beside `computeDeltas`, so a rule that starts reading more of the history must extend it. For each key the calibrator stores, once: the probability of each ending under uniform random play, the number of paths to each ending, whether each ending is reachable, and the set of distinct final states (for the Round 2 carry-overs).
+
+- **Random-play percentages are still exact.** Uniform random play picks a lever and then a wording, each option with probability 1/12 (1/4 in Round 2). The probability of an ending from a state is the mean of its probability from each child state, and every path that arrives at the same key has the same future. The memoised sum is therefore the same sum as full enumeration, grouped differently; only floating-point rounding order differs (below 10⁻¹²). Path counts are integers summed the same way and are exact.
+- **Criteria about a path's shape** use explicit prefixes over the memoised table: the first three decisions are enumerated (12³ = 1,728 prefixes) for "three different opening triples" and "early exit within three decisions"; restricted walks (one lever only; plausible only; one quality only) use the same memoisation over the restricted option set.
+- **Cross-check.** A unit test compares the memoised results with brute-force enumeration on Round 2 (every opening) and on Round 1 restricted to two wordings per lever, where full enumeration is still feasible.
 
 ## 8. Round formats
 
@@ -175,11 +191,11 @@ The calibrator enumerates every path through each round (Round 1 has 8 options p
 
 1. The scene shows Maya's line and any cue.
 2. The counsellor picks one of four **lever cards**.
-3. Two wordings of that lever appear: one skilful, one clumsy. Their order is shuffled. Neither is labelled.
+3. Three wordings of that lever appear: one skilful, one plausible, one clumsy. Their order is shuffled (seeded, per decision). None is labelled; each shows only its reply page. The lever card lists its three wordings' pages in ascending order (`→ p. 13, 46 or 112`).
 4. The counsellor picks one. Maya's reaction appears and the meters move.
 5. **Continue** turns the page.
 
-The counsellor can go back from step 3 to step 2 before committing. Once a wording is chosen, the choice is final.
+The counsellor can go back from step 3 to step 2 before committing. Once a wording is chosen, the choice is final. Format B has 4 levers × {skilful, plausible, clumsy} = 12 options per page. Keys `1`–`3` select a wording.
 
 ### 8.2 Round 2: hidden lever (format C)
 
@@ -189,13 +205,13 @@ The counsellor can go back from step 3 to step 2 before committing. Once a wordi
 4. **Name that lever:** the counsellor taps the lever they think the line used. This is a recognition item with a single defensible answer, so it is marked correct or incorrect. It does not affect the meters.
 5. The lever is revealed, Maya's reaction appears and the meters move.
 
-Round 2 has no clumsy/skilful split; all four lines are competent. The difficulty is choosing the right lever for the moment.
+Round 2 has no wording-quality split; all four lines are competent. The difficulty is choosing the right lever for the moment.
 
 ## 9. Case content
 
 Branch-and-bottleneck structure: three acts per round, and every act ends at a shared node. Within an act, the next node is chosen by the lever used (and, optionally, by a meter condition), so paths split for one or two scenes and then rejoin. Target: 14–18 nodes per round.
 
-Every option carries: text, lever, quality (Round 1), reaction lines (with variants by trait band where relevant), next node, any override, and a **debrief note** written as a trade-off.
+Every option carries: text, lever, quality (Round 1: `skilful`, `plausible` or `clumsy`), a unique reply page, reaction lines (with variants by trait band where relevant), next node, any override, and a **debrief note** written as a trade-off.
 
 ### 9.1 Round 1: "Just lazy"
 
@@ -229,14 +245,27 @@ Starting meters below are the initial values; the calibrated values are in the C
 - **No invented facts.** No statistics, studies or named real organisations. Stand-ins are prefixed `PLACEHOLDER:` and listed in the build report.
 - **Language.** UK English (counsellor, programme), plain international register, no idioms that do not travel.
 
+### 9.4 Writing the three wordings (Round 1)
+
+The point is that a counsellor cannot sort the three wordings without thinking about Maya at this moment.
+
+- **Surface parity.** On each page, a lever's three wordings are within about 20% of each other in length, in the same register and person, and share a sentence shape where possible (if the skilful one is a question, at least one other is too; where useful they open the same way).
+- **No tells.** No exclamation marks; "really", "just", "honestly", "actually", "obviously", "clearly" never appear only in the weaker wordings; nothing obviously rude or obviously warm.
+- **The difference is the coaching:** what the line assumes, whose agenda it serves, and whether it is premature, closed, leading, judgemental or rescuing. Clumsy wordings are rewritten from session 2 so that they are not obviously poor; skilful wordings change only where needed for parity.
+- **Reactions.** Maya's reaction to a plausible wording is believable and mild: she goes along, answers inside the frame offered, or gives less. She does not punish it. The meters carry the difference.
+- **Debrief notes** name the trade-off of each wording (what it gained, what it cost), never "correct", "wrong", "optimal" or "should have".
+- Every option has a unique reply page, pose hints where the reaction describes something visible, and overrides only within ±5 (7.6). Section 9.3 applies in full.
+
+`tests/wording-tells.mjs` checks the surface rules (14.3).
+
 ## 10. Debrief
 
 ### 10.1 Debrief 1 (after Round 1)
 
 1. **Ending card:** the ending's name and one line of what happened.
 2. **Meter traces:** three small line charts across the decisions, with markers in each choice's lever colour.
-3. **Your levers:** count of each lever used, and skilful versus clumsy wording.
-4. **Path replay:** each decision with the chosen line, Maya's reaction, the meter change and the debrief note. The two biggest turning points are highlighted.
+3. **Your levers:** count of each lever used, split into skilful / plausible / clumsy wording (`2 skilful · 1 plausible · 0 clumsy`), and a total line (`Wording over 7 decisions: 3 skilful, 2 plausible, 2 clumsy`). The count blocks use three styles with an ink edge: filled (skilful), lower half filled (plausible), hollow (clumsy); a key under the counts shows the three styles with their names, so quality never relies on colour or fill alone.
+4. **Path replay:** each decision with the chosen line, its wording quality as a text tag ("Skilful wording", "Plausible wording", "Clumsy wording"), Maya's reaction, the meter change and the debrief note. The two biggest turning points are highlighted.
 5. **Road not taken:** at the two turning points, a short authored line on what another lever tended to do there. Precomputed; no live simulation.
 6. **Meet Maya:** her trait profile revealed, mapped to the referral-note hints and to the moments in the replay where each trait showed.
 7. **Try again:** replay Round 1, or continue to Round 2.
@@ -248,7 +277,7 @@ Everything in Debrief 1 for Round 2, plus:
 - **Lever recognition:** "You named the lever correctly 5 of 7 times", with the misses shown.
 - **Two sessions side by side:** meter traces across both rounds, and how the Round 1 ending shaped the Round 2 opening.
 - **Reflection prompts:** three questions for self-study or the facilitator (text only; nothing is stored).
-- **Copy summary:** plain text of the endings, lever counts and recognition score for pasting into a shared document. No names or free text.
+- **Copy summary:** plain text of the endings, lever counts, the Round 1 wording split (`Wording over 7 decisions: 3 skilful, 2 plausible, 2 clumsy`) and recognition score for pasting into a shared document. No names or free text.
 
 ## 11. Visual language: "Paperback Constructivist"
 
@@ -362,6 +391,7 @@ turn-the-page/
   tests/contrast.mjs      Playwright: WCAG walk of every text node in every screen state
   tests/a11y.test.mjs     Playwright: section 15 checks, narrow layout, decoration, print (session 5)
   tests/states.mjs        Screen-state catalogue shared by the two above
+  tests/wording-tells.mjs Surface tells in Round 1 wordings (section 9.4; session 6)
   tests/export-review.mjs Writes docs/CONTENT-REVIEW.md from the content files
 ```
 
@@ -397,10 +427,10 @@ const CASE = {
           line: 'Mr Okafor sent me. I know — my grades. I\'m just being lazy.',
           cue: 'She sits on the edge of the chair, bag still on her shoulder.',
           options: [
-            { id: 'q1', lever: 'question', quality: 'skilful', text: '...',
+            { id: 'q-s', page: 46, lever: 'question', quality: 'skilful', text: '...',   // quality: skilful | plausible | clumsy
               reaction: { default: '...', 'extraversion:low': '...' },
               next: 'r1-02', override: { ownership: 2 }, debrief: '...' }
-            // eight options in format B, four in format C
+            // twelve options in format B (ids q-s, q-p, q-c, s-s ...), four in format C
           ],
           next: { question: 'r1-02a', default: 'r1-02' } // optional lever routing
         }
@@ -418,7 +448,9 @@ const CASE = {
 
 - Every `next` resolves to an existing node, and every node is reachable.
 - Each act ends at a single bottleneck node.
-- Format B nodes have exactly four levers × {skilful, clumsy}; format C nodes have one option per lever.
+- Format B nodes have exactly four levers × {skilful, plausible, clumsy} = 12 options; format C nodes have one option per lever.
+- Page numbers are unique across the case, node pages and every option's reply page together.
+- `tests/wording-tells.mjs` (separate script, exits 1 on a flag): for every Round 1 page and lever it reports each wording's length, end punctuation and opening word, and flags (a) a lever where one quality is the longest on every page, (b) a lever where one quality is the only question on every page, (c) a lever where one quality carries a tell word on every page, (d) a page where a tell word or `!` appears only in a weaker wording, (e) a page where the longest wording is more than 1.25 × the shortest (1.2 to 1.25 is listed as a warning), and (f) a page where the skilful wording is a question and neither other one is.
 - Every option has reaction text, a debrief note and a lever.
 - Page numbers are unique.
 - Debrief notes do not contain "correct", "wrong", "optimal" or "should have".
@@ -468,6 +500,15 @@ Session 2 (content and calibration). Overrides were tuned first; these `RULES` v
 | Round 2 start after Early exit (9.2) | Trust 20 | Trust 25 | From Trust 20 a single Challenge (−8) followed by one Observe before trust (−2) ended the round in two decisions, which breaks the "early exit within three decisions needs two Challenges or clumsy wordings" criterion; no override within ±5 on the opening can prevent it on every path. 25 still leaves her the most reluctant of the four openings. |
 | High-ownership Breakthrough (7.7), added after session 5 | none | Ownership ≥ 68 and Trust ≥ 25 | Requested so that a path with exceptionally high ownership but middling trust is not a Polite exit. At 60–65 the path of seven skilful Questions (Ownership 65, Trust 42) became a Breakthrough, breaking the "no single-lever strategy" criterion; 68 is the lowest value that keeps it. The rule rarely fires (well under 1% of random paths). A Polite exit that ends with Breakthrough-level Ownership shows the ending's `ownershipNote` in the debrief instead. |
 
-Overrides: 108 of the 184 options carry one; every value is listed in `docs/CONTENT-REVIEW.md`. In Round 1 most skilful wordings carry a small Trust or Ownership bonus (+1 to +5). That is a deliberate content choice: skilful wording that fits the moment should do better than the base row, and the bonuses vary by node, so they belong in content rather than in `RULES`. Round 2 overrides were set by a constrained search within authored ranges: lines that fit the moment could only gain, lines that misfit it could only lose. They are what make Round 2 a choice of lever rather than of wording.
+Overrides (session 2): 108 of the then 184 options carried one, and still do (of 244 since session 6); every value is listed in `docs/CONTENT-REVIEW.md`. In Round 1 most skilful wordings carry a small Trust or Ownership bonus (+1 to +5). That is a deliberate content choice: skilful wording that fits the moment should do better than the base row, and the bonuses vary by node, so they belong in content rather than in `RULES`. Round 2 overrides were set by a constrained search within authored ranges: lines that fit the moment could only gain, lines that misfit it could only lose. They are what make Round 2 a choice of lever rather than of wording.
+
+Session 6 (three wordings). The plausible transform is new: positive effects × 0.7, then Trust −1, as an initial value. Rows are added here as calibration changes `RULES`; override changes are summarised below the table.
+
+| Rule | Was | Now | Why |
+|---|---|---|---|
+| Plausible wording (7.2) | none | × 0.7, Trust −1 | Initial value, kept: with it every criterion passes, plausible-only play reaches Partial at most (1.8% of its random paths; never Breakthrough), and one-quality random play orders Early exit 2.8% / 20.7% / 62.1% for skilful / plausible / clumsy. |
+| Round 1 random-play Breakthrough target (7.8) | 5–20% | 2–20% | A criterion change, not a `RULES` change. With three wordings, random play picks the skilful one 1 time in 3 instead of 1 in 2, and the point of this session is that guessing works less: random-play Breakthrough fell from 6.2% to 2.8% with no change to any rule or skilful override. Raising it back to 5% was tried four ways. (1) A plausible Trust penalty of 0, or × 0.8: at most 4.4%. (2) Trust thresholds of 40–43 for Breakthrough and Partial: at most 4.5%. (3) +1 or +2 Trust on every skilful Question, Support and Observe, and +1 Ownership on skilful wordings in Acts 2 and 3: 5.0–5.8%, but seven-decision Question-only and Observe-only strategies then reached Breakthrough (up to 133 paths), and Round 2 after Breakthrough lost its Early exit from the highest Trust carry. (4) Bonuses on skilful Support and Challenge only: 3.2–3.9%, with the same Round 2 failure. Every route to 5% was a blanket bonus that broke a stronger criterion, so the floor moved instead. Round 2 keeps 5–20%. Review: if the SME prefers to keep 5%, the next option is a `RULES` change to the base rows, not more overrides. |
+
+Overrides in session 6: the 60 new plausible wordings carry none, so they show the transform alone; the 60 rewritten clumsy wordings keep the session 2 overrides of the lines they replace (Trust −2 or −3, Ownership −2 to −4 where they rescue); skilful overrides are unchanged. Round 1 now has 30.1 million paths; the memoised calibrator visits 722,803 distinct states.
 
 Calibrator interpretation (unchanged from session 1): every SPEC.md 7.8 criterion is checked for Round 1 and separately for each Round 2 opening, using the median carry-over for that Round 1 ending. Reachability of all four endings is also checked from the lowest and highest carry-over.

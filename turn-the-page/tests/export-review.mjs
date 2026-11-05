@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { RULES, computeDeltas, routeFor } from '../src/engine.js';
 import { MAYA } from '../src/content/maya.js';
 import { calibrate } from './calibrate.mjs';
+import { wordingTells } from './wording-tells.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const C = MAYA;
@@ -85,7 +86,7 @@ for (const [rid, round] of Object.entries(C.rounds)) {
   const nodes = round.nodes;
   w('## ' + ROUND_TITLES[rid]);
   w();
-  w('Format ' + round.format + (round.format === 'B' ? ': the counsellor picks a lever, then one of two wordings (skilful or clumsy, unlabelled, shuffled).' : ': four unlabelled, shuffled lines, one per lever, all competent; then the counsellor names the lever.') + ' ' + Object.keys(nodes).length + ' pages.');
+  w('Format ' + round.format + (round.format === 'B' ? ': the counsellor picks a lever, then one of three wordings (skilful, plausible or clumsy, unlabelled, shuffled).' : ': four unlabelled, shuffled lines, one per lever, all competent; then the counsellor names the lever.') + ' ' + Object.keys(nodes).length + ' pages.');
   w();
   if (round.starts) {
     w('Opening page by Round 1 ending: ' + Object.entries(round.starts).map(([e, n]) => e + ' → ' + n).join(', ') + '.');
@@ -234,7 +235,7 @@ w();
 const S = RULES.state;
 w('| Rule | Value |');
 w('|---|---|');
-w('| Clumsy wording (Round 1) | positive effects × ' + RULES.clumsy.positiveFactor + ', then Trust ' + signed(RULES.clumsy.trustPenalty) + ' |');
+for (const q of Object.keys(RULES.wording)) w('| ' + q[0].toUpperCase() + q.slice(1) + ' wording (Round 1) | positive effects × ' + RULES.wording[q].positiveFactor + ', then Trust ' + signed(RULES.wording[q].trustPenalty) + ' |');
 w('| Challenge before trust | Trust < ' + S.challengeBeforeTrust.trustBelow + ': row replaced by ' + row(S.challengeBeforeTrust.row) + ' |');
 w('| Observe before trust | Trust < ' + S.observeBeforeTrust.trustBelow + ': Trust effect ' + signed(S.observeBeforeTrust.trust) + ' |');
 w('| Support at high trust | Trust ≥ ' + S.supportAtHighTrust.trustAtLeast + ': Ownership ' + signed(S.supportAtHighTrust.ownership) + ' |');
@@ -261,10 +262,21 @@ w();
 const report = calibrate(C);
 w('## Calibration report');
 w();
-w('From `node tests/calibrate.mjs` (SPEC.md 7.8). Round 1 has 8 options per decision and Round 2 has 4; "random play" picks each option with equal probability. Round 2 criteria use the median carry-over for each Round 1 ending; reachability is also checked from the lowest and highest.');
+w('From `node tests/calibrate.mjs` (SPEC.md 7.8). Round 1 has 12 options per decision and Round 2 has 4; "random play" picks each option with equal probability. Every path is covered by a memoised walk over distinct states, so the percentages are exact. Round 2 criteria use the median carry-over for each Round 1 ending; reachability is also checked from the lowest and highest.');
 w();
 w('```text');
 w(report.text.replace(/ in [0-9.]+s\./, '.'));
+w('```');
+w();
+
+// --- Wording tells -------------------------------------------------------------
+const tells = wordingTells(C);
+w('## Wording tells (Round 1)');
+w();
+w('From `node tests/wording-tells.mjs` (SPEC.md 9.4, 14.3): length, end punctuation and opening word of each wording, and anything that would let a reader sort the three qualities by surface features.');
+w();
+w('```text');
+w(tells.text);
 w('```');
 w();
 

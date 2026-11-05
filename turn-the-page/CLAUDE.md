@@ -60,7 +60,7 @@ Type: story text in `Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Anti
 
 Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC.md update.
 
-- Order per decision: base row → state-rule *replacements* (Challenge with Trust < 50 replaces the row; Observe with Trust < 40 replaces Trust) → clumsy transform → trait multipliers (judged on the sign at that point, so they also scale the replacement row and the clumsy Trust penalty) → repetition halving of positives → additive terms (Support at Trust ≥ 70, repetition penalties, node override) → round half away from zero → trait caps (readiness `low` caps the final Ownership delta at +6 in Act 1, override included) → clamp 0–100.
+- Order per decision: base row → state-rule *replacements* (Challenge with Trust < 50 replaces the row; Observe with Trust < 40 replaces Trust) → wording transform (plausible or clumsy, `RULES.wording`) → trait multipliers (judged on the sign at that point, so they also scale the replacement row and the wording Trust penalty) → repetition halving of positives → additive terms (Support at Trust ≥ 70, repetition penalties, node override) → round half away from zero → trait caps (readiness `low` caps the final Ownership delta at +6 in Act 1, override included) → clamp 0–100.
 - All state and trait conditions use the meters *before* the choice. "Act 1" means the node's `act` in either round.
 - Repetition applies from the third consecutive use onwards (fourth, fifth...), within a round.
 - History records both the applied change after clamping (`deltas`) and the unclamped formula result (`raw`).
@@ -73,9 +73,9 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 ## Interface decisions (session 3)
 
 - Flow: Cover → How it works → Referral → scene/consequence pairs → act banner whenever the act changes (and after Act 3) → Ending → minimal Debrief → Interlude → Round 2. Early exit skips the act banner. Round 2 replays go through the Interlude again with the same Round 1 carry-over.
-- Round 1: clicking a lever card opens its two wordings; Back (or Escape) returns to the levers until a wording is chosen. Round 2: choosing a line leads straight to Name that lever (no back); the choice is applied with the guess, then the consequence page reveals the lever.
+- Round 1: clicking a lever card opens its three wordings (skilful, plausible, clumsy; shuffled, unlabelled; keys `1`–`3`); Back (or Escape) returns to the levers until a wording is chosen. Round 2: choosing a line leads straight to Name that lever (no back); the choice is applied with the guess, then the consequence page reveals the lever.
 - Keyboard: `1`–`4` select (focus and highlight) a lever, line or guess; `Enter` confirms; `Escape` goes back; `Enter` with nothing selected presses the page's primary button. A mouse click selects and confirms at once.
-- Destination numbers (changed after session 5): every option has its own reply page (`page` on the option, unique across the case with the node pages). The option shows `→ p. N`, a lever card lists its wordings' pages in ascending order (`→ p. 23 or 141`), the consequence page carries the option's page, and Continue shows the next node's page. Decorative only: they never reveal the route or the wording quality.
+- Destination numbers (changed after session 5): every option has its own reply page (`page` on the option, unique across the case with the node pages). The option shows `→ p. N`, a lever card lists its wordings' pages in ascending order (`→ p. 23, 88 or 141`), the consequence page carries the option's page, and Continue shows the next node's page. Decorative only: they never reveal the route or the wording quality.
 - Meters: ten segments, `Math.round(value / 10)` filled. A change that does not cross a segment boundary still flashes the edge segment. The aria-live text says "a little" for a change of 1–4, nothing for 5–9 and "a lot" for 10 or more. These are presentation only; scoring numbers stay in `RULES`.
 - Persistence: one JSON object under `turn-the-page:maya:v1` (`v`, `screen`, the engine `state`, the finished Round 1 state `r1`, the half-made choice `lever`/`picked`, `seed`). Only authored text and ids are stored. The cover is never saved, so it always offers Resume. A save that fails validation is ignored. If storage throws (on the probe or any later save) an ochre notice says progress will not be saved.
 - Seeds: a new seed per round start (time and `Math.random` in the UI only); `?seed=N` fixes it for testing.
@@ -84,13 +84,13 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 ## Illustration and debrief decisions (session 4)
 
 - Posture: the mean of Trust and Confidence picks a band (closed < 20, guarded 20, neutral 40, open 50, animated 60). The profile's `poseBias` moves the floors by 4 towards the bias: with Maya's `guarded`, neutral needs 44 and closed needs below 16. Each posture has a default for all six pose parameters (`POSTURE_POSES` in art.js). These bands are presentation only and live in art.js, not RULES.
-- Overrides: on a scene page the node's `scene.pose` overrides individual parameters. On a consequence page the chosen option's `pose` (authored where the reaction describes something visible: 101 of 184 options) overrides the posture from the meters after the choice; parameters it does not set follow the meters. The page's props carry over unless the option sets `props` (`[]` puts the phone away). `gaze: 'phone'` implies the phone prop. The content test checks every hint against `POSE_PARAMS`.
+- Overrides: on a scene page the node's `scene.pose` overrides individual parameters. On a consequence page the chosen option's `pose` (authored where the reaction describes something visible: 126 of 244 options since session 6) overrides the posture from the meters after the choice; parameters it does not set follow the meters. The page's props carry over unless the option sets `props` (`[]` puts the phone away). `gaze: 'phone'` implies the phone prop. The content test checks every hint against `POSE_PARAMS`.
 - Composition: Maya faces left towards you; your silhouette fills the bottom-left corner; the window (time of day) is top left, the door (her way out) right. Maya and her chair are drawn at 1.45x about a floor point so her face reads at 390px. Round 1 is early afternoon; Round 2 has a low red sun, warm light on the wall, a later clock and the brochure on the desk. The clock advances 5 minutes and the sun sinks a little per decision.
 - Interpolation: art.js turns a pose into a numeric vector (`sceneVector`), blended by `lerpScene`. ui.js redraws for 0.4s between two pictures in the same round, and draws at once under reduced motion or after a reload.
 - Debrief turning points: the authored `turningPoints` the path reached, topped up with the decisions that moved the meters most when the round ended early. Road not taken always shows both authored turning points; an unreached one says so and lists all four levers.
 - Trace charts show no numbers: an ink line, lever-glyph markers with an ink outline (ochre fails 3:1 on paper alone), dashed ending thresholds from `RULES.endings`, plum columns at turning points, native tooltips. Debrief 2 draws both rounds on one axis with a break for the two weeks.
 - Meet Maya lists, per trait, the referral hint and the moments where it showed: a trait multiplier or cap in the engine's `trace`, or a reaction written for that trait band.
-- Copy summary: plain text (round, ending, lever counts, order, skilful wording, recognition) via the Clipboard API, falling back to selecting the text. Ending `summary`, `rounds.r2.carryNote` and `reflection` are content, listed in CONTENT-REVIEW.md and checked for the forbidden words.
+- Copy summary: plain text (round, ending, lever counts, order, Round 1 wording split, recognition) via the Clipboard API, falling back to selecting the text. Ending `summary`, `rounds.r2.carryNote` and `reflection` are content, listed in CONTENT-REVIEW.md and checked for the forbidden words.
 
 ## Polish decisions (session 5)
 
@@ -102,6 +102,14 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - In Debrief 2's two-session traces the threshold lines are named in a note under the charts, not on the chart (the labels collided with the markers at 390px).
 - Print: only the debriefs print (white paper, no decoration or buttons, three traces in a row, cards kept whole); any other screen prints a one-line note. Each debrief has a Print this debrief button.
 - Hosting: GitHub Pages is enabled for the repository and deploys `main` (checked in session 5 through the public deployments API), so the page is at `https://mxtdnl.github.io/playground/turn-the-page/` once merged.
+
+## Three wordings (session 6)
+
+- Round 1 has 4 levers x {skilful, plausible, clumsy} = 12 options per page; option ids are `q-s`, `q-p`, `q-c` ... `c-c`, so saves from before session 6 still validate. Plausible: positive effects x 0.7, then Trust -1; clumsy: x 0.4, Trust -2 (`RULES.wording`). Plausible wordings carry no overrides; rewritten clumsy wordings kept their session 2 overrides.
+- Writing rules for the three wordings are in SPEC.md 9.4; `tests/wording-tells.mjs` checks the surface ones (length within 1.25x, question shape, tell words, `!`). Run it after editing any Round 1 wording.
+- Debrief 1: count blocks are filled (skilful), lower half filled with an inset shadow (plausible; no gradient) or hollow (clumsy), all with an ink edge, plus a key naming the three; the path replay tags each decision "Skilful/Plausible/Clumsy wording"; the total line reads "Wording over 7 decisions: 3 skilful, 2 plausible, 2 clumsy" (also in Copy summary).
+- Calibrator: memoised on `futureKey(state)` from the engine (node, meters, last lever and its run capped at streakLength - 1). If a rule starts reading more of the history, extend `futureKey`. A unit test compares it with brute force. Round 1's random-play Breakthrough floor is 2% (SPEC.md Calibration log, session 6).
+- Test fixtures (`tests/states.mjs`, `tests/ui.test.mjs`) pick Round 1 paths with a fixed quality pattern so the debriefs show all three wordings.
 
 ## File map
 
@@ -126,15 +134,18 @@ turn-the-page/
   src/ui.js               Every screen in SPEC.md 13 incl. Debrief 1 and 2, pose tweening, keyboard, persistence
   tests/engine.test.mjs   node:test unit tests for every rule in SPEC.md 7 and 9.2
   tests/content.test.mjs  Content integrity checks (SPEC.md 14.3), PLACEHOLDER count
-  tests/calibrate.mjs     Path enumeration and SPEC.md 7.8 report; exits 1 on failure; exports calibrate()
+  tests/calibrate.mjs     Memoised walk of every path and SPEC.md 7.8 report; exits 1 on failure; exports
+                          calibrate(), solver(), bruteForce()
   tests/export-review.mjs Writes docs/CONTENT-REVIEW.md from the content and the calibrator
   docs/CONTENT-REVIEW.md  Generated script and numbers for SME review (do not edit by hand)
   tests/ui.test.mjs       Playwright: both rounds to every ending, resume, storage throwing, keyboard, scene art,
                           both debriefs (Breakthrough and Early exit paths), screenshots
   tests/art-gallery.mjs   Renders every posture, sample page and consequence hints, every pose value, tweens;
                           geometry checks (limbs attached); not part of `node --test`
-  tests/states.mjs        Screen-state catalogue shared by contrast.mjs and a11y.test.mjs (59 states reached
+  tests/states.mjs        Screen-state catalogue shared by contrast.mjs and a11y.test.mjs (60 states reached
                           by writing a save and pressing Resume), one state per page, browser helpers
+  tests/wording-tells.mjs Length, punctuation, opening word of every Round 1 wording; flags surface tells
+                          (SPEC.md 9.4, 14.3); exits 1 on a flag; not part of `node --test`
   tests/wcag.mjs          pageAudit(): in-page WCAG contrast measurement (text, graphics, focus indicator)
   tests/contrast.mjs      WCAG AA walk of every text node in every catalogue state at 1440 and 390; exits 1 on
                           failure; not part of `node --test`
@@ -158,6 +169,7 @@ node tests/calibrate.mjs  # calibration report; exits 1 while any criterion fail
 node tests/export-review.mjs  # regenerates docs/CONTENT-REVIEW.md (run after any content or RULES change)
 node tests/art-gallery.mjs    # renders the art gallery; exits 1 if a geometry check fails
 node tests/contrast.mjs   # WCAG AA contrast walk of every screen state; exits 1 on any failure
+node tests/wording-tells.mjs  # surface tells in Round 1 wordings; exits 1 on any flag
 ```
 
 `node --test tests/` does not work on Node 22 (it treats the directory as a file); use `node --test` with no arguments. Before committing, also run `scripts/check-boundaries.sh` from the repository root. Playwright and Chromium are preinstalled in cloud sessions; do not install another version.
