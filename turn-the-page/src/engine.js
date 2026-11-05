@@ -85,6 +85,9 @@ export const RULES = {
   endings: {
     early: { trustAtMost: 10 }, // at any point
     breakthrough: { ownershipAtLeast: 45, trustAtLeast: 45 }, // at the end
+    // Also a Breakthrough at the end: exceptionally high ownership, as long as
+    // trust has not fallen below 25 (added after session 5; SPEC.md 7.7).
+    highOwnership: { ownershipAtLeast: 68, trustAtLeast: 25 },
     partial: { trustAtLeast: 45, ownershipAtLeast: 30 } // at the end; otherwise 'polite'
   },
   endingOrder: ['early', 'breakthrough', 'partial', 'polite'],
@@ -435,6 +438,7 @@ export function checkEnding(state) {
   if (m.trust <= E.early.trustAtMost) return 'early';
   if (state.nodeId !== null) return null;
   if (m.ownership >= E.breakthrough.ownershipAtLeast && m.trust >= E.breakthrough.trustAtLeast) return 'breakthrough';
+  if (m.ownership >= E.highOwnership.ownershipAtLeast && m.trust >= E.highOwnership.trustAtLeast) return 'breakthrough';
   if (m.trust >= E.partial.trustAtLeast && m.ownership >= E.partial.ownershipAtLeast) return 'partial';
   return 'polite';
 }

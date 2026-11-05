@@ -155,7 +155,7 @@ An option may carry a small authored adjustment (±1 to ±5) when its specific w
 Checked in this order:
 
 1. **Early exit:** Trust ≤ 10 at any point. Maya asks, "Can I go now?" The round ends at once.
-2. **Breakthrough:** at the end, Ownership ≥ 60 and Trust ≥ 50 (calibrated to Ownership ≥ 45 and Trust ≥ 45; see the Calibration log). Maya proposes her own next step.
+2. **Breakthrough:** at the end, Ownership ≥ 60 and Trust ≥ 50 (calibrated to Ownership ≥ 45 and Trust ≥ 45; see the Calibration log). Also a Breakthrough: exceptionally high Ownership (≥ 68) as long as Trust is 25 or more. Maya proposes her own next step.
 3. **Partial (agreement without ownership):** at the end, Trust ≥ 45 and Ownership ≥ 30. Maya agrees to the counsellor's suggestion.
 4. **Polite exit:** anything else. Maya thanks the counsellor and leaves, unmoved.
 
@@ -297,16 +297,17 @@ Measured contrast (WCAG):
 
 ### 11.3 Pulp devices
 
-- **Page numbers:** every node has a non-sequential page number (`p. 47`). Choice buttons show their destination in small type (`→ p. 63`).
+- **Page numbers:** every node has a non-sequential page number (`p. 47`). Every option turns to its own reply page, with a page number unique across the case: the option shows it in small type (`→ p. 63`), a Round 1 lever card shows the pages of both its wordings in ascending order (`→ p. 23 or 141`), and the consequence page carries it as its page number. Continue then shows the next node's page. The numbers are decorative and do not reveal routes or wording quality.
 - **Page turn:** a horizontal slide with a paper edge and shadow, about 0.35s. Instant under reduced motion.
-- **Act banners:** full-width `--ink` blocks with a cliffhanger line in large serif and a slab of the act's colour.
+- **Act banners:** full-width `--ink` blocks with a cliffhanger line in large serif and a slab of the act's colour carrying the act number.
+- **Print:** the debriefs only, on white paper without decoration or buttons, so a counsellor can print their path.
 - **Ending pages:** a night-ink spread with a large geometric emblem per ending.
 
 ### 11.4 Components
 
 - **Lever card:** paper card, thick top bar in the lever colour, glyph, uppercase name, one-line definition. Selected: solid lever fill with white or ink text (per the contrast table).
 - **Line option:** paper card with a serif quote and a destination page number. In Round 2 it carries no lever colour until revealed.
-- **Meters:** three ten-segment bars with uppercase labels. Changed segments flash in the causing lever's colour for 0.6s, then settle to ink, with a ▲ or ▼ marker. No numbers. An `aria-live` region announces "Trust rose a little", "Ownership rose a lot", and so on.
+- **Meters:** three ten-segment bars with uppercase labels. Changed segments flash in the causing lever's colour for 0.6s, with an ink edge so ochre keeps 3:1, then settle to ink, with a ▲ or ▼ marker. No numbers. An `aria-live` region announces "Trust rose a little", "Ownership rose a lot", and so on.
 - **Referral note:** a paper card on a slight tilt, with a plum tape strip and typewriter-style labels in the interface font.
 - **Buttons:** plum fill, white uppercase text; hover shifts up 2px with a warm shadow. Ghost variant has a thick ink border.
 - **Decorative geometry:** two or three large shapes per screen at 0.06–0.12 opacity, bleeding off edges, in contrasting lever colours, kept behind content and away from the meters.
@@ -359,6 +360,8 @@ turn-the-page/
   tests/content.test.mjs  Content integrity (section 14.3)
   tests/ui.test.mjs       Playwright: full playthrough, keyboard, reduced motion, 360px, storage throwing
   tests/contrast.mjs      Playwright: WCAG walk of every text node in every screen state
+  tests/a11y.test.mjs     Playwright: section 15 checks, narrow layout, decoration, print (session 5)
+  tests/states.mjs        Screen-state catalogue shared by the two above
   tests/export-review.mjs Writes docs/CONTENT-REVIEW.md from the content files
 ```
 
@@ -429,7 +432,7 @@ const CASE = {
 
 ### 14.5 Hosting
 
-GitHub Pages serving `turn-the-page/index.html` from the repository's Pages branch (expected URL `https://mxtdnl.github.io/playground/turn-the-page/`, assuming Pages is enabled for this repository; not yet verified).
+GitHub Pages serving `turn-the-page/index.html` from the repository's `main` branch at `https://mxtdnl.github.io/playground/turn-the-page/`. Checked in session 5: Pages is enabled and the "pages build and deployment" workflow deploys `main` to `https://mxtdnl.github.io/playground/` on every push.
 
 ## 15. Accessibility
 
@@ -449,7 +452,7 @@ Additional profiles and a profile picker; university-student cases; a facilitato
 1. SME validation of the trait multipliers (section 7.5) and the endings thresholds (section 7.7).
 2. SME review of the full script (`docs/CONTENT-REVIEW.md`, produced in session 2).
 3. Title confirmed: Turn the Page (subtitle optional, e.g. "a coaching adventure").
-4. Whether GitHub Pages is enabled for this repository, and from which branch.
+4. ~~Whether GitHub Pages is enabled for this repository, and from which branch.~~ Resolved in session 5: enabled, from `main` (section 14.5).
 
 ## Calibration log
 
@@ -463,6 +466,7 @@ Session 2 (content and calibration). Overrides were tuned first; these `RULES` v
 | Round 2 start after Breakthrough (9.2) | Trust 80%, Ownership 25 | Trust 70%, Ownership 20 | With the lower threshold, a Breakthrough carry-over put Round 2 within a few decisions of another Breakthrough (random play 46–64%) and made Early exit almost unreachable (under 1%). 70% and 20 keep the head start (higher Trust, Confidence +10, readiness `mid`) while leaving Round 2 open in both directions. |
 | Round 2 start after Partial (9.2) | Trust 70% | Trust 60% | Same reason: random play from a Partial start reached Early exit on only 2–3% of paths. |
 | Round 2 start after Early exit (9.2) | Trust 20 | Trust 25 | From Trust 20 a single Challenge (−8) followed by one Observe before trust (−2) ended the round in two decisions, which breaks the "early exit within three decisions needs two Challenges or clumsy wordings" criterion; no override within ±5 on the opening can prevent it on every path. 25 still leaves her the most reluctant of the four openings. |
+| High-ownership Breakthrough (7.7), added after session 5 | none | Ownership ≥ 68 and Trust ≥ 25 | Requested so that a path with exceptionally high ownership but middling trust is not a Polite exit. At 60–65 the path of seven skilful Questions (Ownership 65, Trust 42) became a Breakthrough, breaking the "no single-lever strategy" criterion; 68 is the lowest value that keeps it. The rule rarely fires (well under 1% of random paths). A Polite exit that ends with Breakthrough-level Ownership shows the ending's `ownershipNote` in the debrief instead. |
 
 Overrides: 108 of the 184 options carry one; every value is listed in `docs/CONTENT-REVIEW.md`. In Round 1 most skilful wordings carry a small Trust or Ownership bonus (+1 to +5). That is a deliberate content choice: skilful wording that fits the moment should do better than the base row, and the bonuses vary by node, so they belong in content rather than in `RULES`. Round 2 overrides were set by a constrained search within authored ranges: lines that fit the moment could only gain, lines that misfit it could only lose. They are what make Round 2 a choice of lever rather than of wording.
 

@@ -66,6 +66,7 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - History records both the applied change after clamping (`deltas`) and the unclamped formula result (`raw`).
 - Early exit is checked after every choice and also at round start. Other endings apply once a route returns `null`.
 - Routing: an option's own `next` wins; otherwise the node's `next`, which is a node id, `null` (end of round), an object keyed by lever with a `default`, or a list of `{ to, if: { meter: { min, max } } }` evaluated on the meters after the choice.
+- High-ownership Breakthrough (added after session 5): at the end, Ownership ≥ 68 with Trust ≥ 25 is also a Breakthrough (`RULES.endings.highOwnership`), checked after the normal Breakthrough and before Partial. 68 is the lowest value at which no single-lever strategy reaches Breakthrough. A Polite exit ending with Ownership at Breakthrough level shows the ending's authored `ownershipNote` in the debrief.
 - Carry-over (values as calibrated in session 2; SPEC.md Calibration log): Breakthrough → Trust round(70% of final), Confidence final + 10, Ownership 20. Partial → Trust round(60%), Confidence carries unchanged, Ownership 15. Polite → Trust 30, Early → Trust 25, other meters from the profile. Readiness rises one band after Breakthrough or Partial. Carry values live in `RULES.carry`, not in the case file.
 - Cases are looked up by `caseId` from a registry filled by `createRound` (or `registerCase`), so state stays plain JSON.
 
@@ -74,7 +75,7 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - Flow: Cover → How it works → Referral → scene/consequence pairs → act banner whenever the act changes (and after Act 3) → Ending → minimal Debrief → Interlude → Round 2. Early exit skips the act banner. Round 2 replays go through the Interlude again with the same Round 1 carry-over.
 - Round 1: clicking a lever card opens its two wordings; Back (or Escape) returns to the levers until a wording is chosen. Round 2: choosing a line leads straight to Name that lever (no back); the choice is applied with the guess, then the consequence page reveals the lever.
 - Keyboard: `1`–`4` select (focus and highlight) a lever, line or guess; `Enter` confirms; `Escape` goes back; `Enter` with nothing selected presses the page's primary button. A mouse click selects and confirms at once.
-- Destination numbers: a route that depends on the meters shows every page it can lead to (`→ p. 36 or 40`), so the number never reveals which wording is skilful.
+- Destination numbers (changed after session 5): every option has its own reply page (`page` on the option, unique across the case with the node pages). The option shows `→ p. N`, a lever card lists its wordings' pages in ascending order (`→ p. 23 or 141`), the consequence page carries the option's page, and Continue shows the next node's page. Decorative only: they never reveal the route or the wording quality.
 - Meters: ten segments, `Math.round(value / 10)` filled. A change that does not cross a segment boundary still flashes the edge segment. The aria-live text says "a little" for a change of 1–4, nothing for 5–9 and "a lot" for 10 or more. These are presentation only; scoring numbers stay in `RULES`.
 - Persistence: one JSON object under `turn-the-page:maya:v1` (`v`, `screen`, the engine `state`, the finished Round 1 state `r1`, the half-made choice `lever`/`picked`, `seed`). Only authored text and ids are stored. The cover is never saved, so it always offers Resume. A save that fails validation is ignored. If storage throws (on the probe or any later save) an ochre notice says progress will not be saved.
 - Seeds: a new seed per round start (time and `Math.random` in the UI only); `?seed=N` fixes it for testing.
@@ -90,6 +91,17 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - Trace charts show no numbers: an ink line, lever-glyph markers with an ink outline (ochre fails 3:1 on paper alone), dashed ending thresholds from `RULES.endings`, plum columns at turning points, native tooltips. Debrief 2 draws both rounds on one axis with a break for the two weeks.
 - Meet Maya lists, per trait, the referral hint and the moments where it showed: a trait multiplier or cap in the engine's `trace`, or a reaction written for that trait band.
 - Copy summary: plain text (round, ending, lever counts, order, skilful wording, recognition) via the Clipboard API, falling back to selecting the text. Ending `summary`, `rounds.r2.carryNote` and `reflection` are content, listed in CONTENT-REVIEW.md and checked for the forbidden words.
+
+## Polish decisions (session 5)
+
+- Contrast: `tests/contrast.mjs` measures the colour actually behind each text node (ancestor backgrounds plus any decorative shape showing through, worst case) and fails below 4.5:1, or 3:1 for large text (24px, or 18.66px bold). Graphics that carry meaning without a label beside them (trace markers, the lever-order strip, lever-count blocks, meter segments) need 3:1 at their edge. Fixes: flashing meter segments carry an ink edge (ochre alone was 1.95); lever-count blocks have an ink edge; the session cards' lever order is drawn as ink-outlined marks on a paper tile (cobalt and green on ink were 2.1 and 2.7).
+- Every screen has one h1 (visually hidden on scene and consequence pages; the act banner's tag on act pages). Every target is at least 44 x 44px, including the page links in Meet Maya.
+- Decoration: two or three shapes per screen in at least two different lever colours (no plum), 0.06–0.12 opacity, each bleeding off an edge, none over the meters; the consequence page has its own set.
+- Act banners show the act number, heavy and cut off by the slab's bottom edge, in the act's colour.
+- Typographic quotes are display only: `typo()` in ui.js curls straight quotes in every text it renders, and `quoted()` wraps a spoken line, turning quotes inside it into single ones. Content keeps straight quotes.
+- In Debrief 2's two-session traces the threshold lines are named in a note under the charts, not on the chart (the labels collided with the markers at 390px).
+- Print: only the debriefs print (white paper, no decoration or buttons, three traces in a row, cards kept whole); any other screen prints a one-line note. Each debrief has a Print this debrief button.
+- Hosting: GitHub Pages is enabled for the repository and deploys `main` (checked in session 5 through the public deployments API), so the page is at `https://mxtdnl.github.io/playground/turn-the-page/` once merged.
 
 ## File map
 
@@ -121,11 +133,21 @@ turn-the-page/
                           both debriefs (Breakthrough and Early exit paths), screenshots
   tests/art-gallery.mjs   Renders every posture, sample page and consequence hints, every pose value, tweens;
                           geometry checks (limbs attached); not part of `node --test`
+  tests/states.mjs        Screen-state catalogue shared by contrast.mjs and a11y.test.mjs (59 states reached
+                          by writing a save and pressing Resume), one state per page, browser helpers
+  tests/wcag.mjs          pageAudit(): in-page WCAG contrast measurement (text, graphics, focus indicator)
+  tests/contrast.mjs      WCAG AA walk of every text node in every catalogue state at 1440 and 390; exits 1 on
+                          failure; not part of `node --test`
+  tests/a11y.test.mjs     Playwright: every state at 1440/390/360 (focus order, focus ring 3:1, 44px targets,
+                          one h1, labelled images, decoration, narrow layout, sticky meters), keyboard-only
+                          playthrough, focus kept on page turns, reduced motion, alt text on all 31 pages,
+                          contrast self-check, print stylesheet
+  .gitignore              Ignores tests/screenshots/states/
   tests/screenshots/      Screenshots from ui.test.mjs at 1440x900 and 390x844 (regenerated on every run)
   tests/screenshots/art/  Images and contact sheets from art-gallery.mjs at 540px and 352px wide
+  tests/screenshots/states/ Every catalogue state at 1440x900 and 390x844 and the debrief print PDFs, from
+                          a11y.test.mjs (not committed)
 ```
-
-Planned, not yet created: `tests/contrast.mjs` (session 5).
 
 ## Commands (run from `turn-the-page/`)
 
@@ -135,6 +157,7 @@ node --test               # unit, content and UI tests (finds tests/*.test.mjs; 
 node tests/calibrate.mjs  # calibration report; exits 1 while any criterion fails
 node tests/export-review.mjs  # regenerates docs/CONTENT-REVIEW.md (run after any content or RULES change)
 node tests/art-gallery.mjs    # renders the art gallery; exits 1 if a geometry check fails
+node tests/contrast.mjs   # WCAG AA contrast walk of every screen state; exits 1 on any failure
 ```
 
 `node --test tests/` does not work on Node 22 (it treats the directory as a file); use `node --test` with no arguments. Before committing, also run `scripts/check-boundaries.sh` from the repository root. Playwright and Chromium are preinstalled in cloud sessions; do not install another version.
