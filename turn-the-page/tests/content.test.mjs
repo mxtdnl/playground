@@ -129,7 +129,8 @@ for (const c of CASES) {
     });
 
     test(label + ': all four endings are written' + (round.starts ? ' and each has a Round 2 opening' : ''), () => {
-      for (const e of ENDINGS) assert.ok(round.endings[e] && round.endings[e].text, 'ending ' + e);
+      for (const e of ENDINGS) assert.ok(round.endings[e] && round.endings[e].text && round.endings[e].summary, 'ending ' + e + ' text and summary');
+      if (round.starts) for (const e of ENDINGS) assert.ok(round.carryNote && round.carryNote[e], 'carry-over note for ' + e);
       if (round.starts) for (const e of ENDINGS) assert.ok(round.starts[e], 'opening for ' + e);
     });
   }
@@ -146,7 +147,15 @@ for (const c of CASES) {
       eachOption(round, (o, node, id) => { if (FORBIDDEN.test(o.debrief)) bad.push(rid + '/' + id + '/' + o.id + ': ' + o.debrief); });
     }
     for (const line of strings(c.roadNotTaken || {}, [])) if (FORBIDDEN.test(line)) bad.push('roadNotTaken: ' + line);
+    for (const round of Object.values(c.rounds)) {
+      for (const line of strings([Object.values(round.endings).map((e) => e.summary), round.carryNote || {}], [])) if (FORBIDDEN.test(line)) bad.push('debrief: ' + line);
+    }
+    for (const line of c.reflection || []) if (FORBIDDEN.test(line)) bad.push('reflection: ' + line);
     assert.deepEqual(bad, []);
+  });
+
+  test(c.id + ': three reflection prompts for Debrief 2', () => {
+    assert.equal((c.reflection || []).length, 3);
   });
 
   test(c.id + ': turning points and road-not-taken refer to real nodes and levers', () => {

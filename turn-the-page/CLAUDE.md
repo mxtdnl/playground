@@ -80,6 +80,17 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - Seeds: a new seed per round start (time and `Math.random` in the UI only); `?seed=N` fixes it for testing.
 - The Interlude text lives in content (`rounds.r2.interlude`, keyed by Round 1 ending) and is listed in CONTENT-REVIEW.md.
 
+## Illustration and debrief decisions (session 4)
+
+- Posture: the mean of Trust and Confidence picks a band (closed < 20, guarded 20, neutral 40, open 50, animated 60). The profile's `poseBias` moves the floors by 4 towards the bias: with Maya's `guarded`, neutral needs 44 and closed needs below 16. Each posture has a default for all six pose parameters (`POSTURE_POSES` in art.js). These bands are presentation only and live in art.js, not RULES.
+- Overrides: on a scene page the node's `scene.pose` overrides individual parameters. On a consequence page only its props carry over; Maya's posture follows the meters after the choice, so the picture shows how she took it. `gaze: 'phone'` implies the phone prop.
+- Composition: Maya faces left towards you; your silhouette fills the bottom-left corner; the window (time of day) is top left, the door (her way out) right. Maya and her chair are drawn at 1.45x about a floor point so her face reads at 390px. Round 1 is early afternoon; Round 2 has a low red sun, warm light on the wall, a later clock and the brochure on the desk. The clock advances 5 minutes and the sun sinks a little per decision.
+- Interpolation: art.js turns a pose into a numeric vector (`sceneVector`), blended by `lerpScene`. ui.js redraws for 0.4s between two pictures in the same round, and draws at once under reduced motion or after a reload.
+- Debrief turning points: the authored `turningPoints` the path reached, topped up with the decisions that moved the meters most when the round ended early. Road not taken always shows both authored turning points; an unreached one says so and lists all four levers.
+- Trace charts show no numbers: an ink line, lever-glyph markers with an ink outline (ochre fails 3:1 on paper alone), dashed ending thresholds from `RULES.endings`, plum columns at turning points, native tooltips. Debrief 2 draws both rounds on one axis with a break for the two weeks.
+- Meet Maya lists, per trait, the referral hint and the moments where it showed: a trait multiplier or cap in the engine's `trace`, or a reaction written for that trait band.
+- Copy summary: plain text (round, ending, lever counts, order, skilful wording, recognition) via the Clipboard API, falling back to selecting the text. Ending `summary`, `rounds.r2.carryNote` and `reflection` are content, listed in CONTENT-REVIEW.md and checked for the forbidden words.
+
 ## File map
 
 ```
@@ -97,19 +108,24 @@ turn-the-page/
   src/shell.html          Document skeleton with the five slots
   src/style.css           Styles from SPEC.md 11: tokens, components, layouts, page turn, meters
   src/engine.js           RULES, scoring, routing, endings, carry-over, seeded shuffle
-  src/art.js              renderScene(sceneState): session 3 placeholder silhouette + posture text (session 4 replaces)
-  src/content/maya.js     MAYA: profile, referral, Round 1 (15 nodes), Round 2 (16 nodes), interlude text
-  src/ui.js               Every screen in SPEC.md 13 (minimal debrief until session 4), keyboard, persistence
+  src/art.js              SVG office and Maya (SPEC.md 12): postures, pose parameters, interpolation vectors, alt text
+  src/content/maya.js     MAYA: profile, referral, Round 1 (15 nodes), Round 2 (16 nodes), interlude and
+                          carry-over notes, ending summaries, reflection prompts
+  src/ui.js               Every screen in SPEC.md 13 incl. Debrief 1 and 2, pose tweening, keyboard, persistence
   tests/engine.test.mjs   node:test unit tests for every rule in SPEC.md 7 and 9.2
   tests/content.test.mjs  Content integrity checks (SPEC.md 14.3), PLACEHOLDER count
   tests/calibrate.mjs     Path enumeration and SPEC.md 7.8 report; exits 1 on failure; exports calibrate()
   tests/export-review.mjs Writes docs/CONTENT-REVIEW.md from the content and the calibrator
   docs/CONTENT-REVIEW.md  Generated script and numbers for SME review (do not edit by hand)
-  tests/ui.test.mjs       Playwright: both rounds to every ending, resume, storage throwing, keyboard, screenshots
+  tests/ui.test.mjs       Playwright: both rounds to every ending, resume, storage throwing, keyboard, scene art,
+                          both debriefs (Breakthrough and Early exit paths), screenshots
+  tests/art-gallery.mjs   Renders every posture, sample overrides, every pose value and tween midpoints;
+                          geometry checks (limbs attached); not part of `node --test`
   tests/screenshots/      Screenshots from ui.test.mjs at 1440x900 and 390x844 (regenerated on every run)
+  tests/screenshots/art/  Images and contact sheets from art-gallery.mjs at 540px and 352px wide
 ```
 
-Planned, not yet created: `tests/art-gallery.mjs` (session 4); `tests/contrast.mjs` (session 5).
+Planned, not yet created: `tests/contrast.mjs` (session 5).
 
 ## Commands (run from `turn-the-page/`)
 
@@ -118,6 +134,7 @@ node build.mjs            # writes index.html
 node --test               # unit, content and UI tests (finds tests/*.test.mjs; build first, the UI test loads index.html)
 node tests/calibrate.mjs  # calibration report; exits 1 while any criterion fails
 node tests/export-review.mjs  # regenerates docs/CONTENT-REVIEW.md (run after any content or RULES change)
+node tests/art-gallery.mjs    # renders the art gallery; exits 1 if a geometry check fails
 ```
 
 `node --test tests/` does not work on Node 22 (it treats the directory as a file); use `node --test` with no arguments. Before committing, also run `scripts/check-boundaries.sh` from the repository root. Playwright and Chromium are preinstalled in cloud sessions; do not install another version.

@@ -346,3 +346,101 @@ for (const size of SIZES) {
     await blocked.context().close();
   });
 }
+
+// ---------------------------------------------------------------------------
+// Illustration (SPEC.md 12): alt text on every scene, pose interpolation with
+// motion on, none under reduced motion.
+
+test('scene art: alt text, page overrides, 0.4s interpolation, instant under reduced motion', { skip, timeout: 60000 }, async () => {
+  for (const motion of [true, false]) {
+    const page = await newPage({ motion });
+    await begin(page);
+    await page.waitForTimeout(500);
+    assert.match(await page.getAttribute('.scene-art', 'aria-label'), /^Maya sits on the edge of the chair, holding her bag on her lap/);
+    assert.equal(await page.getAttribute('.scene-frame', 'data-gaze'), 'door', 'r1-01 overrides the gaze');
+    await page.click('[data-lever="support"]');
+    await page.click('[data-option="s-s"]');
+    const tweening = await page.locator('.scene-art[data-tweening]').count();
+    assert.equal(tweening, motion ? 1 : 0, 'tweening with motion ' + motion);
+    await page.waitForTimeout(600);
+    assert.equal(await page.locator('.scene-art[data-tweening]').count(), 0);
+    assert.match(await page.getAttribute('.scene-art', 'aria-label'), /^Maya sits /);
+    assert.equal(await page.locator('.scene-art > svg').count(), 1);
+    assert.deepEqual(page.errors, []);
+    await page.context().close();
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Debriefs (SPEC.md 10): every element, then screenshots for a Breakthrough
+// path and an Early exit path at both sizes.
+
+const D1_SECTIONS = ['traces', 'levers', 'path', 'road', 'maya', 'next'];
+const D2_SECTIONS = ['traces', 'levers', 'recognition', 'path', 'road', 'maya', 'sessions', 'reflect', 'copy', 'next'];
+
+async function checkDebrief(page, state, which) {
+  assert.equal(await screenOf(page), 'debrief');
+  assert.equal(await page.getAttribute('[data-debrief]', 'data-debrief'), which);
+  const sections = await page.$$eval('.db-section', (els) => els.map((e) => e.dataset.section));
+  assert.deepEqual(sections, which === '1' ? D1_SECTIONS : D2_SECTIONS);
+  assert.equal(await page.getAttribute('[data-ending-card]', 'data-ending-card'), state.ending);
+  const n = state.history.length;
+  // Three traces with one lever marker per decision (two rounds side by side in Debrief 2).
+  assert.equal(await page.locator('[data-section="traces"] .trace').count(), 3);
+  assert.equal(await page.locator('[data-section="traces"] .tr-mark').count(), 3 * n);
+  assert.equal(await page.locator('.path li').count(), n);
+  assert.equal(await page.locator('.path li.turning').count(), Math.min(2, n));
+  for (const lever of RULES.levers) {
+    const used = state.history.filter((e) => e.lever === lever).length;
+    assert.equal(await page.locator('[data-lever-count="' + lever + ':' + used + '"]').count(), 1, 'count for ' + lever);
+  }
+  if (which === '1') {
+    const skilful = state.history.filter((e) => e.quality === 'skilful').length;
+    assert.equal(await page.getAttribute('[data-skilful]', 'data-skilful'), skilful + '/' + n);
+  }
+  assert.equal(await page.locator('.road').count(), 2);
+  assert.equal(await page.locator('.trait').count(), 4);
+  assert.equal(await page.locator('.hint-quote').count(), 4);
+}
+
+for (const target of ['breakthrough', 'early']) {
+  for (const size of SIZES) {
+    test('debriefs for a ' + target + ' path at ' + size.width + 'x' + size.height, { skip, timeout: 180000 }, async () => {
+      mkdirSync(SHOTS, { recursive: true });
+      const page = await newPage({ viewport: size });
+      const name = (s) => join(SHOTS, size.width + 'x' + size.height + '-debrief-' + target + '-' + s + '.png');
+      await begin(page);
+      const r1Start = createRound(MAYA, 'r1', null, 1);
+      const r1End = await playRound(page, r1Start, findPath(r1Start, target));
+      await page.click('[data-primary]');
+      await checkDebrief(page, r1End, '1');
+      const noHScroll = () => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
+      assert.ok(await noHScroll(), 'horizontal scroll on Debrief 1');
+      await page.screenshot({ path: name('1'), fullPage: true });
+
+      await page.click('[data-primary]'); // Continue to Round 2
+      await page.click('[data-primary]'); // Interlude: Begin Round 2
+      const r2Start = createRound(MAYA, 'r2', carryOver(r1End), 1);
+      const r2Path = findPath(r2Start, target);
+      const r2End = await playRound(page, r2Start, r2Path);
+      await page.click('[data-primary]');
+      await checkDebrief(page, r2End, '2');
+      const named = r2Path.filter((id, i) => i % 2 === 0).length;
+      assert.equal(await page.getAttribute('[data-recognition]', 'data-recognition'), named + '/' + r2Path.length);
+      assert.equal(await page.locator('.misses li').count(), r2Path.length - named);
+      assert.equal(await page.locator('.session-card').count(), 2);
+      assert.equal(await page.locator('[data-section="sessions"] .tr-mark').count(), 3 * (r1End.history.length + r2End.history.length));
+      assert.equal(await page.textContent('.carry-note'), MAYA.rounds.r2.carryNote[target]);
+      assert.equal(await page.locator('.reflection li').count(), 3);
+      const summary = await page.inputValue('.summary-text');
+      assert.match(summary, new RegExp('Round 1 \\(Just lazy\\): ' + MAYA.rounds.r1.endings[target].title));
+      assert.match(summary, new RegExp('Lever recognition: ' + named + ' of ' + r2Path.length));
+      await page.click('[data-action="copy-summary"]');
+      await page.waitForFunction(() => document.querySelector('.copy-status').textContent.length > 0);
+      assert.ok(await noHScroll(), 'horizontal scroll on Debrief 2');
+      await page.screenshot({ path: name('2'), fullPage: true });
+      assert.deepEqual(page.errors, []);
+      await page.context().close();
+    });
+  }
+}

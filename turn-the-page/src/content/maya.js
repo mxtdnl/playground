@@ -1284,12 +1284,13 @@ export const MAYA = {
           ]
         }
       },
-      // How the round can end (SPEC.md 7.7). Shown on the ending page.
+      // How the round can end (SPEC.md 7.7). `text` is shown on the ending
+      // page; `summary` is the one line on the debrief's ending card.
       endings: {
-        breakthrough: { title: 'Breakthrough', text: 'Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"' },
-        partial: { title: 'Agreement without ownership', text: 'Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.' },
-        polite: { title: 'Polite exit', text: '"Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed.' },
-        early: { title: 'Early exit', text: '"Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began.' }
+        breakthrough: { title: 'Breakthrough', summary: 'Maya proposed a next step of her own, and asked to come back.', text: 'Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"' },
+        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to the step you suggested. The plan stayed yours.', text: 'Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.' },
+        polite: { title: 'Polite exit', summary: 'Maya stayed polite from start to finish and left unmoved.', text: '"Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed.' },
+        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the conversation really began.', text: '"Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began.' }
       }
     },
 
@@ -1310,6 +1311,14 @@ export const MAYA = {
         partial: 'Two weeks have passed. Maya arrives on time, as agreed. Last time she said yes to the step you suggested. A course brochure is lying on your desk.',
         polite: 'Two weeks have passed. Mr Okafor has asked you to see Maya again. Last time she was polite from start to finish, and nothing much changed. A course brochure is lying on your desk.',
         early: 'Two weeks have passed. Mr Okafor has sent Maya back to see you. Last time she left before the conversation really began, and she has not forgotten it. A course brochure is lying on your desk.'
+      },
+      // Debrief 2, "Two sessions side by side": how the Round 1 ending shaped
+      // the Round 2 opening, in words (the numbers are in RULES.carry).
+      carryNote: {
+        breakthrough: 'She left Round 1 with a step of her own, so she came back with most of the trust you had built, more confidence than before, and more readiness to change. Ownership started low again: a new problem needs new ownership.',
+        partial: 'She had agreed to your step rather than chosen one, so she came back with some of the trust, the same confidence, and more readiness to change. Ownership started low again, and the step had not happened.',
+        polite: 'Nothing had changed, so she came back much as she was on the first day: trust a little lower, confidence and ownership where they started.',
+        early: 'The first conversation ended early, so she came back more reluctant than on the first day: trust lower than at the start of Round 1, everything else where it started.'
       },
       // Act titles and the cliffhanger line shown on the act banner at the end of each act.
       acts: {
@@ -2037,15 +2046,24 @@ export const MAYA = {
           ]
         }
       },
-      // How the round can end (SPEC.md 7.7). Shown on the ending page.
+      // How the round can end (SPEC.md 7.7). `text` is shown on the ending
+      // page; `summary` is the one line on the debrief's ending card.
       endings: {
-        breakthrough: { title: 'Breakthrough', text: 'Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."' },
-        partial: { title: 'Agreement without ownership', text: 'Maya agrees to the step you suggest. "OK. I\'ll look at the website." She takes the brochure with her. You are not sure she will open it.' },
-        polite: { title: 'Polite exit', text: '"Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.' },
-        early: { title: 'Early exit', text: '"Can I go now?" She is out of the door before you can answer.' }
+        breakthrough: { title: 'Breakthrough', summary: 'Maya chose her own next step, and how she wants to raise it at home.', text: 'Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."' },
+        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to look at the course you suggested. The step stayed yours.', text: 'Maya agrees to the step you suggest. "OK. I\'ll look at the website." She takes the brochure with her. You are not sure she will open it.' },
+        polite: { title: 'Polite exit', summary: 'A pleasant conversation. The brochure stayed on the desk.', text: '"Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.' },
+        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the real issue came up.', text: '"Can I go now?" She is out of the door before you can answer.' }
       }
     }
   },
+
+  // Debrief 2: three reflection prompts for self-study or the facilitator.
+  // Text only: nothing the counsellor thinks or writes is stored.
+  reflection: [
+    'At which moment did Maya\'s trust matter most to what happened next, and what had built or spent it before then?',
+    'Think of a real student who agreed to a plan without owning it. What might a move that builds ownership have sounded like?',
+    'Which lever do you reach for first when a conversation gets difficult, and what does it give or cost the student when you do?'
+  ],
 
   // The two biggest turning points per round, highlighted in the debrief.
   // Both are shared pages, so every path passes through them.

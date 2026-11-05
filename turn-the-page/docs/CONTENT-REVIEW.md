@@ -383,12 +383,12 @@ flowchart TD
 
 ### Endings
 
-| Ending | Title | Text |
-|---|---|---|
-| breakthrough | Breakthrough | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" |
-| partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. |
-| polite | Polite exit | "Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed. |
-| early | Early exit | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. |
+| Ending | Title | Text | Debrief summary |
+|---|---|---|---|
+| breakthrough | Breakthrough | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | Maya proposed a next step of her own, and asked to come back. |
+| partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. | Maya agreed to the step you suggested. The plan stayed yours. |
+| polite | Polite exit | "Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed. | Maya stayed polite from start to finish and left unmoved. |
+| early | Early exit | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | Trust ran out, and Maya left before the conversation really began. |
 
 ## Round 2: Two weeks later
 
@@ -404,6 +404,15 @@ Interlude ("Two weeks later"), shown before the opening page:
 | partial | Two weeks have passed. Maya arrives on time, as agreed. Last time she said yes to the step you suggested. A course brochure is lying on your desk. |
 | polite | Two weeks have passed. Mr Okafor has asked you to see Maya again. Last time she was polite from start to finish, and nothing much changed. A course brochure is lying on your desk. |
 | early | Two weeks have passed. Mr Okafor has sent Maya back to see you. Last time she left before the conversation really began, and she has not forgotten it. A course brochure is lying on your desk. |
+
+How the Round 1 ending shaped this opening (Debrief 2, "Two sessions side by side"):
+
+| Round 1 ending | Note |
+|---|---|
+| breakthrough | She left Round 1 with a step of her own, so she came back with most of the trust you had built, more confidence than before, and more readiness to change. Ownership started low again: a new problem needs new ownership. |
+| partial | She had agreed to your step rather than chosen one, so she came back with some of the trust, the same confidence, and more readiness to change. Ownership started low again, and the step had not happened. |
+| polite | Nothing had changed, so she came back much as she was on the first day: trust a little lower, confidence and ownership where they started. |
+| early | The first conversation ended early, so she came back more reluctant than on the first day: trust lower than at the start of Round 1, everything else where it started. |
 
 | Act | Title | Cliffhanger (act banner) |
 |---|---|---|
@@ -712,12 +721,12 @@ flowchart TD
 
 ### Endings
 
-| Ending | Title | Text |
-|---|---|---|
-| breakthrough | Breakthrough | Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." |
-| partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll look at the website." She takes the brochure with her. You are not sure she will open it. |
-| polite | Polite exit | "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved. |
-| early | Early exit | "Can I go now?" She is out of the door before you can answer. |
+| Ending | Title | Text | Debrief summary |
+|---|---|---|---|
+| breakthrough | Breakthrough | Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." | Maya chose her own next step, and how she wants to raise it at home. |
+| partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll look at the website." She takes the brochure with her. You are not sure she will open it. | Maya agreed to look at the course you suggested. The step stayed yours. |
+| polite | Polite exit | "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved. | A pleasant conversation. The brochure stayed on the desk. |
+| early | Early exit | "Can I go now?" She is out of the door before you can answer. | Trust ran out, and Maya left before the real issue came up. |
 
 ## Turning points and road not taken
 
@@ -750,6 +759,12 @@ Highlighted in the debrief. The debrief shows the road-not-taken lines for the l
 - Support: Offering to help however she chose tended to leave the step undefined.
 - Observe: Noticing she had already started picturing the conversation tended to give her the confidence to describe it.
 - Challenge: Pointing out that saying nothing was not working tended to move her, if she trusted you enough to hear it as care rather than pressure.
+
+## Reflection prompts (Debrief 2)
+
+1. At which moment did Maya's trust matter most to what happened next, and what had built or spent it before then?
+2. Think of a real student who agreed to a plan without owning it. What might a move that builds ownership have sounded like?
+3. Which lever do you reach for first when a conversation gets difficult, and what does it give or cost the student when you do?
 
 ## Every override
 
