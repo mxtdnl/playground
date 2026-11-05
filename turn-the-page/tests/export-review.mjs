@@ -90,6 +90,14 @@ for (const [rid, round] of Object.entries(C.rounds)) {
   if (round.starts) {
     w('Opening page by Round 1 ending: ' + Object.entries(round.starts).map(([e, n]) => e + ' → ' + n).join(', ') + '.');
     w();
+    if (round.interlude) {
+      w('Interlude ("Two weeks later"), shown before the opening page:');
+      w();
+      w('| Round 1 ending | Interlude text |');
+      w('|---|---|');
+      for (const [e, t] of Object.entries(round.interlude)) w('| ' + e + ' | ' + esc(t) + ' |');
+      w();
+    }
   }
   w('| Act | Title | Cliffhanger (act banner) |');
   w('|---|---|---|');

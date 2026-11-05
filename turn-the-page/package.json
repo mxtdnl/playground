@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node --test tests/engine.test.mjs tests/content.test.mjs",
+    "test": "node --test",
+    "test:ui": "node --test tests/ui.test.mjs",
     "calibrate": "node tests/calibrate.mjs"
   }
 }

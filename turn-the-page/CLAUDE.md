@@ -69,6 +69,17 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - Carry-over (values as calibrated in session 2; SPEC.md Calibration log): Breakthrough → Trust round(70% of final), Confidence final + 10, Ownership 20. Partial → Trust round(60%), Confidence carries unchanged, Ownership 15. Polite → Trust 30, Early → Trust 25, other meters from the profile. Readiness rises one band after Breakthrough or Partial. Carry values live in `RULES.carry`, not in the case file.
 - Cases are looked up by `caseId` from a registry filled by `createRound` (or `registerCase`), so state stays plain JSON.
 
+## Interface decisions (session 3)
+
+- Flow: Cover → How it works → Referral → scene/consequence pairs → act banner whenever the act changes (and after Act 3) → Ending → minimal Debrief → Interlude → Round 2. Early exit skips the act banner. Round 2 replays go through the Interlude again with the same Round 1 carry-over.
+- Round 1: clicking a lever card opens its two wordings; Back (or Escape) returns to the levers until a wording is chosen. Round 2: choosing a line leads straight to Name that lever (no back); the choice is applied with the guess, then the consequence page reveals the lever.
+- Keyboard: `1`–`4` select (focus and highlight) a lever, line or guess; `Enter` confirms; `Escape` goes back; `Enter` with nothing selected presses the page's primary button. A mouse click selects and confirms at once.
+- Destination numbers: a route that depends on the meters shows every page it can lead to (`→ p. 36 or 40`), so the number never reveals which wording is skilful.
+- Meters: ten segments, `Math.round(value / 10)` filled. A change that does not cross a segment boundary still flashes the edge segment. The aria-live text says "a little" for a change of 1–4, nothing for 5–9 and "a lot" for 10 or more. These are presentation only; scoring numbers stay in `RULES`.
+- Persistence: one JSON object under `turn-the-page:maya:v1` (`v`, `screen`, the engine `state`, the finished Round 1 state `r1`, the half-made choice `lever`/`picked`, `seed`). Only authored text and ids are stored. The cover is never saved, so it always offers Resume. A save that fails validation is ignored. If storage throws (on the probe or any later save) an ochre notice says progress will not be saved.
+- Seeds: a new seed per round start (time and `Math.random` in the UI only); `?seed=N` fixes it for testing.
+- The Interlude text lives in content (`rounds.r2.interlude`, keyed by Round 1 ending) and is listed in CONTENT-REVIEW.md.
+
 ## File map
 
 ```
@@ -77,32 +88,34 @@ turn-the-page/
   README.md               What it is, run, test, status
   package.json            "type": "module" and script aliases; no dependencies
   build.mjs               Inlines src/ into index.html
-  index.html              Generated, committed (until session 3: debug page playing the full script)
+  index.html              Generated, committed: the playable interface
   docs/SPEC.md            Specification (source of truth)
   docs/BUILD-PLAN.md      Sessions and prompts
   docs/reference/         The slides repository's CLAUDE.md and SLIDES.md, kept as
                           reference for the shared visual DNA (SPEC.md 11). Not rules
                           for this folder: where they differ, SPEC.md and this file win
   src/shell.html          Document skeleton with the five slots
-  src/style.css           Styles (session 1: tokens + debug styles)
+  src/style.css           Styles from SPEC.md 11: tokens, components, layouts, page turn, meters
   src/engine.js           RULES, scoring, routing, endings, carry-over, seeded shuffle
-  src/art.js              SVG scene and figure (session 4; stub now)
-  src/content/maya.js     MAYA: profile, referral, Round 1 (15 nodes) and Round 2 (16 nodes)
-  src/ui.js               Interface (until session 3: debug page)
+  src/art.js              renderScene(sceneState): session 3 placeholder silhouette + posture text (session 4 replaces)
+  src/content/maya.js     MAYA: profile, referral, Round 1 (15 nodes), Round 2 (16 nodes), interlude text
+  src/ui.js               Every screen in SPEC.md 13 (minimal debrief until session 4), keyboard, persistence
   tests/engine.test.mjs   node:test unit tests for every rule in SPEC.md 7 and 9.2
   tests/content.test.mjs  Content integrity checks (SPEC.md 14.3), PLACEHOLDER count
   tests/calibrate.mjs     Path enumeration and SPEC.md 7.8 report; exits 1 on failure; exports calibrate()
   tests/export-review.mjs Writes docs/CONTENT-REVIEW.md from the content and the calibrator
   docs/CONTENT-REVIEW.md  Generated script and numbers for SME review (do not edit by hand)
+  tests/ui.test.mjs       Playwright: both rounds to every ending, resume, storage throwing, keyboard, screenshots
+  tests/screenshots/      Screenshots from ui.test.mjs at 1440x900 and 390x844 (regenerated on every run)
 ```
 
-Planned, not yet created: `tests/ui.test.mjs` (session 3); `tests/art-gallery.mjs` (session 4); `tests/contrast.mjs` (session 5).
+Planned, not yet created: `tests/art-gallery.mjs` (session 4); `tests/contrast.mjs` (session 5).
 
 ## Commands (run from `turn-the-page/`)
 
 ```bash
 node build.mjs            # writes index.html
-node --test               # unit and content tests (finds tests/*.test.mjs)
+node --test               # unit, content and UI tests (finds tests/*.test.mjs; build first, the UI test loads index.html)
 node tests/calibrate.mjs  # calibration report; exits 1 while any criterion fails
 node tests/export-review.mjs  # regenerates docs/CONTENT-REVIEW.md (run after any content or RULES change)
 ```
