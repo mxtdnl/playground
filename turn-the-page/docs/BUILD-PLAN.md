@@ -26,7 +26,7 @@ Rules for every session:
 
 **Goal:** a tested, data-driven engine with no UI to speak of.
 
-**Done when:** `node turn-the-page/build.mjs` writes `index.html`; `node --test turn-the-page/tests/` passes; `node turn-the-page/tests/calibrate.mjs` runs against the stub case and prints a report.
+**Done when:** from `turn-the-page/`, `node build.mjs` writes `index.html`; `node --test` passes; `node tests/calibrate.mjs` runs against the stub case and prints a report. (Use `node --test` with no arguments: on Node 22, `node --test tests/` treats the directory as a file and fails.)
 
 ```text
 Read turn-the-page/docs/SPEC.md in full, and the repository root CLAUDE.md (project isolation rules: work only inside turn-the-page/).

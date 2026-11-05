@@ -1,0 +1,11 @@
+{
+  "name": "turn-the-page",
+  "private": true,
+  "description": "Turn the Page: choose-your-own-adventure coaching simulation. No dependencies.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test tests/engine.test.mjs tests/content.test.mjs",
+    "calibrate": "node tests/calibrate.mjs"
+  }
+}
