@@ -173,7 +173,8 @@ for (const [rid, round] of Object.entries(C.rounds)) {
     for (const o of n.options) {
       const lever = LEVER_NAME[o.lever] + (o.quality ? ' (' + o.quality + ')' : '');
       const r = typeof o.reaction === 'string' ? { default: o.reaction } : o.reaction;
-      const reaction = Object.entries(r).map(([k, v]) => (k === 'default' ? '' : '*[' + k + ']* ') + v).join('<br>');
+      const pose = o.pose ? '<br>*(pose: ' + Object.entries(o.pose).map(([k, v]) => k + ' ' + (Array.isArray(v) ? (v.length ? v.join(', ') : 'none') : v)).join(', ') + ')*' : '';
+      const reaction = Object.entries(r).map(([k, v]) => (k === 'default' ? '' : '*[' + k + ']* ') + v).join('<br>') + pose;
       const ov = o.override ? Object.entries(o.override).map(([m, v]) => m[0].toUpperCase() + ' ' + signed(v)).join(', ') : '—';
       if (o.override) overrides.push({ where: rid + ' / ' + nid + ' / ' + o.id, lever, text: o.text, ov });
       const own = Object.prototype.hasOwnProperty.call(o, 'next') ? ' → ' + describeRoute(o.next) : '';

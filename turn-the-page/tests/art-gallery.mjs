@@ -47,6 +47,14 @@ for (const [round, id, posture, step] of sample) {
   if (!node) { fails.push('no node ' + id); continue; }
   add('override-' + id, { meters: METERS[posture], pose: (node.scene || {}).pose, round, step }, 'overrides');
 }
+// Consequence pictures: an option's pose hints over the posture from the meters after the choice.
+const consequences = [['r1', 'r1-01', 'c-c', 'closed'], ['r1', 'r1-04a', 'c-c', 'guarded'], ['r2', 'r2-04a', 'q', 'animated']];
+for (const [round, id, oid, posture] of consequences) {
+  const node = MAYA.rounds[round].nodes[id];
+  const o = node && node.options.find((x) => x.id === oid);
+  if (!o || !o.pose) { fails.push('no pose hint on ' + id + '/' + oid); continue; }
+  add('consequence-' + id + '-' + oid, { meters: METERS[posture], pose: o.pose, props: o.pose.props || (node.scene.pose || {}).props || [], round, step: 3 }, 'consequences');
+}
 // Every value of every parameter, over the neutral posture.
 for (const [param, values] of Object.entries(POSE_PARAMS)) {
   for (const v of values) add('param-' + param + '-' + v, { meters: METERS.neutral, pose: { [param]: v } }, 'params-' + param);

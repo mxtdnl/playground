@@ -366,6 +366,9 @@ test('scene art: alt text, page overrides, 0.4s interpolation, instant under red
     assert.equal(await page.locator('.scene-art[data-tweening]').count(), 0);
     assert.match(await page.getAttribute('.scene-art', 'aria-label'), /^Maya sits /);
     assert.equal(await page.locator('.scene-art > svg').count(), 1);
+    // The consequence uses the option's pose hints: "Her shoulders come down a little. She looks at you properly".
+    assert.equal(await page.getAttribute('.scene-frame', 'data-shoulders'), 'relaxed');
+    assert.equal(await page.getAttribute('.scene-frame', 'data-gaze'), 'counsellor');
     assert.deepEqual(page.errors, []);
     await page.context().close();
   }

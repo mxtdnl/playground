@@ -83,7 +83,7 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 ## Illustration and debrief decisions (session 4)
 
 - Posture: the mean of Trust and Confidence picks a band (closed < 20, guarded 20, neutral 40, open 50, animated 60). The profile's `poseBias` moves the floors by 4 towards the bias: with Maya's `guarded`, neutral needs 44 and closed needs below 16. Each posture has a default for all six pose parameters (`POSTURE_POSES` in art.js). These bands are presentation only and live in art.js, not RULES.
-- Overrides: on a scene page the node's `scene.pose` overrides individual parameters. On a consequence page only its props carry over; Maya's posture follows the meters after the choice, so the picture shows how she took it. `gaze: 'phone'` implies the phone prop.
+- Overrides: on a scene page the node's `scene.pose` overrides individual parameters. On a consequence page the chosen option's `pose` (authored where the reaction describes something visible: 101 of 184 options) overrides the posture from the meters after the choice; parameters it does not set follow the meters. The page's props carry over unless the option sets `props` (`[]` puts the phone away). `gaze: 'phone'` implies the phone prop. The content test checks every hint against `POSE_PARAMS`.
 - Composition: Maya faces left towards you; your silhouette fills the bottom-left corner; the window (time of day) is top left, the door (her way out) right. Maya and her chair are drawn at 1.45x about a floor point so her face reads at 390px. Round 1 is early afternoon; Round 2 has a low red sun, warm light on the wall, a later clock and the brochure on the desk. The clock advances 5 minutes and the sun sinks a little per decision.
 - Interpolation: art.js turns a pose into a numeric vector (`sceneVector`), blended by `lerpScene`. ui.js redraws for 0.4s between two pictures in the same round, and draws at once under reduced motion or after a reload.
 - Debrief turning points: the authored `turningPoints` the path reached, topped up with the decisions that moved the meters most when the round ended early. Road not taken always shows both authored turning points; an unreached one says so and lists all four levers.
@@ -119,7 +119,7 @@ turn-the-page/
   docs/CONTENT-REVIEW.md  Generated script and numbers for SME review (do not edit by hand)
   tests/ui.test.mjs       Playwright: both rounds to every ending, resume, storage throwing, keyboard, scene art,
                           both debriefs (Breakthrough and Early exit paths), screenshots
-  tests/art-gallery.mjs   Renders every posture, sample overrides, every pose value and tween midpoints;
+  tests/art-gallery.mjs   Renders every posture, sample page and consequence hints, every pose value, tweens;
                           geometry checks (limbs attached); not part of `node --test`
   tests/screenshots/      Screenshots from ui.test.mjs at 1440x900 and 390x844 (regenerated on every run)
   tests/screenshots/art/  Images and contact sheets from art-gallery.mjs at 540px and 352px wide

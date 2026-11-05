@@ -351,21 +351,23 @@ function announce(text) {
 
 // ---------------------------------------------------------------------------
 // Scene (SPEC.md 12). art.js draws the office and Maya. On a scene page the
-// page's pose hints override the posture; on a consequence page Maya's
-// posture follows the meters after the choice (only the props stay), so the
-// picture shows how she took it. Between two pictures in the same round the
+// page's pose hints override the posture. On a consequence page the chosen
+// option's pose hints (what her reaction describes) override the posture
+// from the meters after the choice; the page's props stay unless the option
+// sets its own. Between two pictures in the same round the
 // pose interpolates over 0.4s, or changes at once under reduced motion.
 
 const POSE_TWEEN_MS = 400;
 let lastArt = null; // { round, vec } of the last picture drawn
 
 function sceneView(st, node, consequence) {
-  const pose = (node.scene || {}).pose || {};
+  const pagePose = (node.scene || {}).pose || {};
+  const pose = consequence ? (consequence.pose || {}) : pagePose;
   const art = renderScene({
     meters: st.meters,
     poseBias: MAYA.profile.poseBias,
-    pose: consequence ? null : pose,
-    props: pose.props || [],
+    pose: pose,
+    props: pose.props || pagePose.props || [],
     round: st.round,
     step: st.history.length
   });
@@ -633,7 +635,7 @@ function screenConsequence(opts) {
     runhead(roundLabel(st) + ' · Act ' + node.act + ': ' + round.acts[node.act].title, node.page),
     h('div', { class: 'spread', 'data-node': entry.nodeId }, [
       metersView(st.meters, { before: before, lever: entry.lever, animate: !!opts.animate && !reducedMotion() }),
-      sceneView(st, node, true),
+      sceneView(st, node, option),
       h('div', { class: 'story-col' }, [
         h('p', { class: 'eyebrow', text: 'You said' }, []),
         h('p', { class: 'you-said', text: '“' + option.text + '”' }),

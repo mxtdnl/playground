@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { RULES, routeFor } from '../src/engine.js';
 import { MAYA } from '../src/content/maya.js';
+import { POSE_PARAMS } from '../src/art.js';
 
 const CASES = [MAYA];
 const ENDINGS = ['breakthrough', 'partial', 'polite', 'early'];
@@ -151,6 +152,23 @@ for (const c of CASES) {
       for (const line of strings([Object.values(round.endings).map((e) => e.summary), round.carryNote || {}], [])) if (FORBIDDEN.test(line)) bad.push('debrief: ' + line);
     }
     for (const line of c.reflection || []) if (FORBIDDEN.test(line)) bad.push('reflection: ' + line);
+    assert.deepEqual(bad, []);
+  });
+
+  test(c.id + ': pose hints on pages and options use known parameters and values', () => {
+    const bad = [];
+    const check = (pose, where) => {
+      for (const [k, v] of Object.entries(pose || {})) {
+        if (k === 'props') { if (!Array.isArray(v) || v.some((p) => !['phone', 'brochure'].includes(p))) bad.push(where + ' props'); continue; }
+        if (!POSE_PARAMS[k] || !POSE_PARAMS[k].includes(v)) bad.push(where + ' ' + k + ': ' + v);
+      }
+    };
+    for (const [rid, round] of Object.entries(c.rounds)) {
+      for (const [id, n] of Object.entries(round.nodes)) {
+        check((n.scene || {}).pose, rid + '/' + id);
+        for (const o of n.options) check(o.pose, rid + '/' + id + '/' + o.id);
+      }
+    }
     assert.deepEqual(bad, []);
   });
 
