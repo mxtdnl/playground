@@ -98,6 +98,14 @@ for (const [rid, round] of Object.entries(C.rounds)) {
       for (const [e, t] of Object.entries(round.interlude)) w('| ' + e + ' | ' + esc(t) + ' |');
       w();
     }
+    if (round.carryNote) {
+      w('How the Round 1 ending shaped this opening (Debrief 2, "Two sessions side by side"):');
+      w();
+      w('| Round 1 ending | Note |');
+      w('|---|---|');
+      for (const [e, t] of Object.entries(round.carryNote)) w('| ' + e + ' | ' + esc(t) + ' |');
+      w();
+    }
   }
   w('| Act | Title | Cliffhanger (act banner) |');
   w('|---|---|---|');
@@ -165,7 +173,8 @@ for (const [rid, round] of Object.entries(C.rounds)) {
     for (const o of n.options) {
       const lever = LEVER_NAME[o.lever] + (o.quality ? ' (' + o.quality + ')' : '');
       const r = typeof o.reaction === 'string' ? { default: o.reaction } : o.reaction;
-      const reaction = Object.entries(r).map(([k, v]) => (k === 'default' ? '' : '*[' + k + ']* ') + v).join('<br>');
+      const pose = o.pose ? '<br>*(pose: ' + Object.entries(o.pose).map(([k, v]) => k + ' ' + (Array.isArray(v) ? (v.length ? v.join(', ') : 'none') : v)).join(', ') + ')*' : '';
+      const reaction = Object.entries(r).map(([k, v]) => (k === 'default' ? '' : '*[' + k + ']* ') + v).join('<br>') + pose;
       const ov = o.override ? Object.entries(o.override).map(([m, v]) => m[0].toUpperCase() + ' ' + signed(v)).join(', ') : '—';
       if (o.override) overrides.push({ where: rid + ' / ' + nid + ' / ' + o.id, lever, text: o.text, ov });
       const own = Object.prototype.hasOwnProperty.call(o, 'next') ? ' → ' + describeRoute(o.next) : '';
@@ -175,9 +184,9 @@ for (const [rid, round] of Object.entries(C.rounds)) {
   }
   w('### Endings');
   w();
-  w('| Ending | Title | Text |');
-  w('|---|---|---|');
-  for (const [e, x] of Object.entries(round.endings)) w('| ' + e + ' | ' + x.title + ' | ' + esc(x.text) + ' |');
+  w('| Ending | Title | Text | Debrief summary |');
+  w('|---|---|---|---|');
+  for (const [e, x] of Object.entries(round.endings)) w('| ' + e + ' | ' + x.title + ' | ' + esc(x.text) + ' | ' + esc(x.summary) + ' |');
   w();
 }
 
@@ -194,6 +203,12 @@ for (const [rid, ids] of Object.entries(C.turningPoints)) {
     w();
   }
 }
+
+// --- Reflection prompts ------------------------------------------------------
+w('## Reflection prompts (Debrief 2)');
+w();
+(C.reflection || []).forEach((t, i) => w((i + 1) + '. ' + t));
+w();
 
 // --- Overrides ---------------------------------------------------------------
 w('## Every override');

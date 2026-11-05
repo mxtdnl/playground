@@ -1,6 +1,6 @@
 # Turn the Page
 
-**Status:** active (session 3 of 5 done: the real interface is playable end to end for both rounds, with a placeholder figure and a minimal debrief; session 4 adds the illustration and the full debriefs)
+**Status:** active (session 4 of 5 done: playable end to end with the geometric office and Maya, posture changes and both full debriefs; session 5 polishes accessibility and ships)
 
 An illustrated, choose-your-own-adventure coaching simulation for high school guidance, career and university counsellors. Counsellors practise four levers (Question, Support, Observe, Challenge) across two sessions with a fictional student, Maya, 16, and watch her trust, confidence and ownership respond.
 
@@ -21,6 +21,7 @@ Progress autosaves in the browser (`localStorage`); reopening the page offers Re
 node --test               # engine, content and interface tests (run node build.mjs first)
 node tests/calibrate.mjs  # calibration report (SPEC.md 7.8); exits 1 while any criterion fails
 node tests/export-review.mjs  # regenerates docs/CONTENT-REVIEW.md
+node tests/art-gallery.mjs    # art gallery images in tests/screenshots/art/; exits 1 if a geometry check fails
 ```
 
 The interface test (`tests/ui.test.mjs`) uses the Playwright and Chromium preinstalled in cloud sessions and is skipped where Playwright is not available; it writes screenshots to `tests/screenshots/`. All calibration criteria pass. After editing dialogue or numbers in `src/content/maya.js`, rebuild, re-run the tests and the calibrator, and regenerate the review document.

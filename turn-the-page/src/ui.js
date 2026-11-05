@@ -2,8 +2,8 @@
 //
 // Screens: Cover, How it works, Referral note, Scene (Round 1 two-step choice
 // or Round 2 choice plus Name that lever), Consequence (with the Round 2
-// reveal), Act banner, Ending, Interlude and a minimal Debrief (session 4
-// replaces the debrief). Uses the engine, art and content names from the same
+// reveal), Act banner, Ending, Interlude, Debrief 1 and Debrief 2 (SPEC.md
+// 10). Uses the engine, art and content names from the same
 // inlined script scope (CLAUDE.md, technical conventions).
 //
 // No scoring happens here: every meter change comes from applyChoice.
@@ -350,17 +350,50 @@ function announce(text) {
 }
 
 // ---------------------------------------------------------------------------
-// Scene placeholder (session 3): art.js draws a silhouette and names the posture.
+// Scene (SPEC.md 12). art.js draws the office and Maya. On a scene page the
+// page's pose hints override the posture. On a consequence page the chosen
+// option's pose hints (what her reaction describes) override the posture
+// from the meters after the choice; the page's props stay unless the option
+// sets its own. Between two pictures in the same round the
+// pose interpolates over 0.4s, or changes at once under reduced motion.
 
-function sceneView(meters, node, roundId) {
-  const art = renderScene({ meters: meters, poseBias: MAYA.profile.poseBias, pose: (node.scene || {}).pose, round: roundId });
-  return h('figure', { class: 'scene-area scene-frame', style: 'margin:0', 'data-posture': art.posture }, [
-    h('div', { role: 'img', 'aria-label': art.alt, html: art.svg }),
-    h('figcaption', { class: 'scene-caption' }, [
-      h('span', { class: 'posture', text: 'Posture: ' + art.posture }),
-      h('span', { text: art.caption || 'Placeholder figure' })
-    ])
-  ]);
+const POSE_TWEEN_MS = 400;
+let lastArt = null; // { round, vec } of the last picture drawn
+
+function sceneView(st, node, consequence) {
+  const pagePose = (node.scene || {}).pose || {};
+  const pose = consequence ? (consequence.pose || {}) : pagePose;
+  const art = renderScene({
+    meters: st.meters,
+    poseBias: MAYA.profile.poseBias,
+    pose: pose,
+    props: pose.props || pagePose.props || [],
+    round: st.round,
+    step: st.history.length
+  });
+  const holder = h('div', { class: 'scene-art', role: 'img', 'aria-label': art.alt, html: art.svg });
+  const fig = h('figure', { class: 'scene-area scene-frame', 'data-posture': art.posture }, [holder]);
+  Object.keys(art.pose).forEach(function (k) { fig.setAttribute('data-' + k, art.pose[k]); });
+  const from = lastArt && lastArt.round === st.round ? lastArt.vec : null;
+  lastArt = { round: st.round, vec: art.vec };
+  if (from && !reducedMotion()) tweenScene(holder, from, art.vec);
+  return fig;
+}
+
+function tweenScene(holder, from, to) {
+  let start = null;
+  holder.setAttribute('data-tweening', '');
+  holder.innerHTML = drawScene(from);
+  function frame(now) {
+    if (!holder.isConnected && start !== null) return;
+    if (start === null) start = now;
+    const t = Math.min(1, (now - start) / POSE_TWEEN_MS);
+    const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // ease in and out
+    holder.innerHTML = drawScene(lerpScene(from, to, e));
+    if (t < 1) window.requestAnimationFrame(frame);
+    else holder.removeAttribute('data-tweening');
+  }
+  window.requestAnimationFrame(frame);
 }
 
 function storyHead(node) {
@@ -566,7 +599,7 @@ function screenScene() {
     runhead(roundLabel(st) + ' · Act ' + node.act + ': ' + currentRound().acts[node.act].title, node.page),
     h('div', { class: 'spread', 'data-node': st.nodeId }, [
       metersView(st.meters, null),
-      sceneView(st.meters, node, st.round),
+      sceneView(st, node, false),
       h('div', { class: 'story-col' }, storyHead(node).concat([choicePanel(st, node)]))
     ])
   ]);
@@ -602,7 +635,7 @@ function screenConsequence(opts) {
     runhead(roundLabel(st) + ' · Act ' + node.act + ': ' + round.acts[node.act].title, node.page),
     h('div', { class: 'spread', 'data-node': entry.nodeId }, [
       metersView(st.meters, { before: before, lever: entry.lever, animate: !!opts.animate && !reducedMotion() }),
-      sceneView(st.meters, node, st.round),
+      sceneView(st, node, option),
       h('div', { class: 'story-col' }, [
         h('p', { class: 'eyebrow', text: 'You said' }, []),
         h('p', { class: 'you-said', text: '“' + option.text + '”' }),
@@ -669,29 +702,386 @@ function screenEnding() {
   ]);
 }
 
-// Minimal debrief: the path, decision by decision. Session 4 replaces this
-// with the full debriefs in SPEC.md section 10.
+// ---------------------------------------------------------------------------
+// Debriefs (SPEC.md 10). Debrief 1 follows Round 1; Debrief 2 follows Round 2
+// and adds lever recognition, both sessions side by side, reflection prompts
+// and Copy summary. Everything is derived from the engine history and the
+// authored content: no scoring happens here.
+
+const TRAIT_INFO = {
+  confidence: { name: 'Self-confidence', changes: 'How much Support is needed before Challenge lands' },
+  extraversion: { name: 'Extraversion', changes: 'How much an open Question yields; how visible cues are for Observe' },
+  defensiveness: { name: 'Defensiveness', changes: 'How strongly Challenge and Observe cost Trust' },
+  readiness: { name: 'Readiness for change', changes: 'How fast Ownership can rise' }
+};
+const BAND_WORDS = { low: 'Low', mid: 'Mid', high: 'High' };
+
+// Reference lines on the meter traces: the ending thresholds from RULES.
+function traceLines(meter) {
+  const E = RULES.endings;
+  if (meter === 'trust') return [{ y: E.breakthrough.trustAtLeast, label: 'Breakthrough or agreement' }, { y: E.early.trustAtMost, label: 'Early exit' }];
+  if (meter === 'ownership') return [{ y: E.breakthrough.ownershipAtLeast, label: 'Breakthrough' }, { y: E.partial.ownershipAtLeast, label: 'Agreement' }];
+  return [];
+}
+
+// A lever glyph drawn in SVG at (x, y): lever colour with an ink outline, so
+// it reads on paper even where the colour alone would not (ochre).
+function glyphMark(lever, x, y, r) {
+  const o = ' class="mk mk-' + lever + '"';
+  if (lever === 'question') return '<circle' + o + ' cx="' + x + '" cy="' + y + '" r="' + r + '"/>';
+  if (lever === 'support') return '<rect' + o + ' x="' + (x - r * 0.9) + '" y="' + (y - r * 0.9) + '" width="' + (r * 1.8) + '" height="' + (r * 1.8) + '"/>';
+  if (lever === 'observe') return '<circle' + o + ' cx="' + x + '" cy="' + y + '" r="' + r + '"/><circle class="mk-hole" cx="' + x + '" cy="' + y + '" r="' + (r * 0.55) + '"/><circle class="mk-dot" cx="' + x + '" cy="' + y + '" r="' + (r * 0.28) + '"/>';
+  return '<polygon' + o + ' points="' + x + ',' + (y - r * 1.15) + ' ' + (x + r * 1.1) + ',' + (y + r * 0.85) + ' ' + (x - r * 1.1) + ',' + (y + r * 0.85) + '"/>';
+}
+
+function esc(t) {
+  return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function changeWords(m, d) {
+  if (!d) return METER_INFO[m].name + ' held';
+  const size = Math.abs(d) <= CHANGE_WORDS.little ? ' a little' : Math.abs(d) >= CHANGE_WORDS.lot ? ' a lot' : '';
+  return METER_INFO[m].name + (d > 0 ? ' rose' : ' fell') + size;
+}
+
+function startMeters(st) {
+  const e = st.history[0];
+  const out = {};
+  RULES.meters.forEach(function (m) { out[m] = e ? e.meters[m] - e.deltas[m] : st.meters[m]; });
+  return out;
+}
+
+// Turning points: the authored ones this path reached (SPEC.md 14.2), topped
+// up with the decisions that moved the meters most when the round ended
+// before reaching them.
+function turningIndexes(st) {
+  const authored = (MAYA.turningPoints[st.round] || []);
+  const idx = [];
+  st.history.forEach(function (e, i) { if (authored.indexOf(e.nodeId) >= 0) idx.push(i); });
+  const swing = function (e) { return RULES.meters.reduce(function (a, m) { return a + Math.abs(e.deltas[m]); }, 0); };
+  const rest = st.history.map(function (e, i) { return i; }).filter(function (i) { return idx.indexOf(i) < 0; })
+    .sort(function (a, b) { return swing(st.history[b]) - swing(st.history[a]) || a - b; });
+  while (idx.length < Math.min(2, st.history.length)) idx.push(rest.shift());
+  return idx.sort(function (a, b) { return a - b; });
+}
+
+// One meter trace: an SVG line chart across the decisions, with a marker in
+// each choice's lever colour and glyph. `series` is a list of segments
+// [{ label, start, history, turning }]; two segments (Debrief 2) are drawn
+// side by side with a break for the two weeks between them.
+function traceChart(meter, series, opts) {
+  opts = opts || {};
+  const W = 320, H = 150, padL = 8, padR = 8, padT = 12, padB = 22, gapW = series.length > 1 ? 26 : 0;
+  const steps = series.reduce(function (a, s) { return a + s.history.length; }, 0);
+  const unit = (W - padL - padR - gapW * (series.length - 1)) / Math.max(1, steps + series.length - 1);
+  const yOf = function (v) { return padT + (H - padT - padB) * (1 - v / 100); };
+  let out = '';
+  const labels = []; // drawn over the line, under the markers
+  // Plot area, reference lines and labels.
+  out += '<rect class="tr-bg" x="' + padL + '" y="' + padT + '" width="' + (W - padL - padR) + '" height="' + (H - padT - padB) + '"/>';
+  traceLines(meter).forEach(function (l) {
+    out += '<line class="tr-ref" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + yOf(l.y) + '" y2="' + yOf(l.y) + '"/>';
+    labels.push('<text class="tr-ref-label" x="' + (padL + 4) + '" y="' + (yOf(l.y) - 3) + '">' + esc(l.label) + '</text>');
+  });
+  let x0 = padL;
+  const marks = [];
+  series.forEach(function (s, si) {
+    const pts = [[x0, yOf(s.start[meter])]];
+    s.history.forEach(function (e, i) { pts.push([x0 + unit * (i + 1), yOf(e.meters[meter])]); });
+    (s.turning || []).forEach(function (i) {
+      const bw = Math.min(unit * 0.8, 22);
+      const bx = Math.max(padL, x0 + unit * (i + 1) - bw / 2);
+      const bx2 = Math.min(W - padR, x0 + unit * (i + 1) + bw / 2);
+      out += '<rect class="tr-turn" x="' + bx.toFixed(1) + '" y="' + padT + '" width="' + (bx2 - bx).toFixed(1) + '" height="' + (H - padT - padB) + '"/>';
+    });
+    out += '<polyline class="tr-line" points="' + pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ') + '"/>';
+    out += '<rect class="tr-start" x="' + (pts[0][0] - 3) + '" y="' + (pts[0][1] - 3) + '" width="6" height="6"><title>' + esc(s.label + ': start') + '</title></rect>';
+    s.history.forEach(function (e, i) {
+      const node = MAYA.rounds[s.round].nodes[e.nodeId];
+      marks.push('<g class="tr-mark">' + glyphMark(e.lever, +pts[i + 1][0].toFixed(1), +pts[i + 1][1].toFixed(1), 5.5) +
+        '<title>' + esc(s.label + ', p. ' + node.page + ': ' + LEVER_INFO[e.lever].name + '. ' + changeWords(meter, e.deltas[meter]) + '.') + '</title></g>');
+    });
+    out += '<text class="tr-axis" x="' + x0 + '" y="' + (H - 6) + '">' + esc(s.label) + '</text>';
+    x0 += unit * s.history.length;
+    if (si < series.length - 1) {
+      out += '<line class="tr-break" x1="' + (x0 + gapW / 2 + unit / 2) + '" x2="' + (x0 + gapW / 2 + unit / 2) + '" y1="' + padT + '" y2="' + (H - padB) + '"/>';
+      x0 += gapW + unit;
+    }
+  });
+  out += labels.join('') + marks.join('');
+  const first = series[0].start[meter];
+  const lastS = series[series.length - 1];
+  const last = lastS.history.length ? lastS.history[lastS.history.length - 1].meters[meter] : lastS.start[meter];
+  const label = METER_INFO[meter].name + ': started ' + LEVEL_WORDS[segCount(first)] + ', ended ' + LEVEL_WORDS[segCount(last)] + '.';
+  return h('figure', { class: 'trace', 'data-trace': meter }, [
+    h('figcaption', {}, [h('span', { class: 'trace-name', text: METER_INFO[meter].name }), h('span', { class: 'trace-end', text: 'ends ' + LEVEL_WORDS[segCount(last)] })]),
+    h('div', { role: 'img', 'aria-label': label, html: '<svg viewBox="0 0 ' + W + ' ' + H + '" focusable="false">' + out + '</svg>' })
+  ]);
+}
+
+function tracesView(series) {
+  return h('div', { class: 'traces' }, RULES.meters.map(function (m) { return traceChart(m, series); }));
+}
+
+function traceKey() {
+  return h('p', { class: 'trace-key' }, RULES.levers.map(function (l) { return leverTag(l); }).concat([
+    h('span', { class: 'key-item' }, [h('span', { class: 'key-swatch key-turn', 'aria-hidden': 'true' }), 'Turning point']),
+    h('span', { class: 'key-item' }, [h('span', { class: 'key-swatch key-ref', 'aria-hidden': 'true' }), 'Ending threshold'])
+  ]));
+}
+
+function section(id, title, kids, intro) {
+  return h('section', { class: 'db-section', 'data-section': id, 'aria-labelledby': 'db-' + id }, [
+    h('h2', { id: 'db-' + id, text: title }),
+    intro ? h('p', { class: 'db-intro', text: intro }) : null
+  ].concat(kids));
+}
+
+function leverStats(st) {
+  const out = {};
+  RULES.levers.forEach(function (l) { out[l] = { n: 0, skilful: 0, clumsy: 0 }; });
+  st.history.forEach(function (e) {
+    out[e.lever].n += 1;
+    if (e.quality) out[e.lever][e.quality] += 1;
+  });
+  return out;
+}
+
+function leverCountsView(st) {
+  const stats = leverStats(st);
+  const isB = MAYA.rounds[st.round].format === 'B';
+  const skilful = st.history.filter(function (e) { return e.quality === 'skilful'; }).length;
+  const rows = RULES.levers.map(function (l) {
+    const s = stats[l];
+    const blocks = h('span', { class: 'count-blocks', 'aria-hidden': 'true' }, st.history.filter(function (e) { return e.lever === l; }).map(function (e) {
+      return h('span', { class: 'cb lv-' + l + (e.quality === 'clumsy' ? ' cb-clumsy' : '') });
+    }));
+    return h('li', { class: 'count-row', 'data-lever-count': l + ':' + s.n }, [
+      leverTag(l),
+      blocks,
+      h('span', { class: 'count-n', text: s.n === 1 ? 'once' : s.n === 0 ? 'not used' : s.n + ' times' }),
+      isB && s.n ? h('span', { class: 'count-q', text: s.skilful + ' skilful · ' + s.clumsy + ' clumsy' }) : null
+    ]);
+  });
+  return [
+    h('ul', { class: 'counts' }, rows),
+    isB ? h('p', { class: 'count-total', 'data-skilful': skilful + '/' + st.history.length }, [
+      h('strong', { text: 'Skilful wording ' + skilful + ' of ' + st.history.length + '. ' }),
+      'Clumsy wordings (hollow blocks above) were leading, closed, judgemental, premature or rescuing. They kept less of the lever\'s gain and cost some trust.'
+    ]) : null
+  ];
+}
+
+function meterChips(e) {
+  return h('span', { class: 'chips' }, RULES.meters.map(function (m) {
+    const d = e.deltas[m];
+    return h('span', { class: 'chip' + (d > 0 ? ' up' : d < 0 ? ' down' : '') }, [h('span', { 'aria-hidden': 'true', text: d > 0 ? '▲ ' : d < 0 ? '▼ ' : '– ' }), changeWords(m, d)]);
+  }));
+}
+
+function pathReplay(st, turning) {
+  const round = MAYA.rounds[st.round];
+  const isC = round.format === 'C';
+  return h('ol', { class: 'path' }, st.history.map(function (e, i) {
+    const node = round.nodes[e.nodeId];
+    const option = node.options.find(function (o) { return o.id === e.optionId; });
+    const isTurn = turning.indexOf(i) >= 0;
+    return h('li', { class: 'lv-' + e.lever + (isTurn ? ' turning' : ''), 'data-turning': isTurn ? 'yes' : null, id: 'replay-' + st.round + '-' + i }, [
+      isTurn ? h('p', { class: 'turn-flag', text: 'Turning point' }) : null,
+      h('div', { class: 'path-head' }, [
+        h('span', { class: 'pageno', text: 'p. ' + node.page }),
+        leverTag(e.lever),
+        e.quality ? h('span', { class: 'quality q-' + e.quality, text: e.quality === 'skilful' ? 'Skilful wording' : 'Clumsy wording' }) : null,
+        isC ? h('span', { class: 'muted' }, e.guessCorrect ? ['✓ You named it'] : ['✗ You named ', leverTag(e.guess)]) : null
+      ]),
+      h('p', { class: 'said', text: '“' + option.text + '”' }),
+      h('p', { class: 'reacted', text: e.reaction }),
+      meterChips(e),
+      h('p', { class: 'note', text: option.debrief })
+    ]);
+  }));
+}
+
+function roadNotTakenView(st) {
+  const ids = MAYA.turningPoints[st.round] || [];
+  const round = MAYA.rounds[st.round];
+  return h('div', { class: 'roads' }, ids.map(function (id) {
+    const node = round.nodes[id];
+    const lines = MAYA.roadNotTaken[id] || {};
+    const entry = st.history.find(function (e) { return e.nodeId === id; });
+    const others = RULES.levers.filter(function (l) { return lines[l] && (!entry || entry.lever !== l); });
+    return h('article', { class: 'road', 'data-road': id }, [
+      h('p', { class: 'road-head' }, [h('span', { class: 'pageno', text: 'p. ' + node.page }), h('span', { text: entry ? 'You used ' : 'You did not reach this page.' }), entry ? leverTag(entry.lever) : null]),
+      h('p', { class: 'road-line', text: '“' + node.line + '”' }),
+      h('ul', {}, others.map(function (l) { return h('li', {}, [leverTag(l), h('span', { text: lines[l] })]); }))
+    ]);
+  }));
+}
+
+// Where each trait showed on this path: a trait multiplier or cap in the
+// engine's trace, or a reaction written for that trait band.
+function traitMoments(st, trait) {
+  const round = MAYA.rounds[st.round];
+  const out = [];
+  st.history.forEach(function (e) {
+    const node = round.nodes[e.nodeId];
+    const option = node.options.find(function (o) { return o.id === e.optionId; });
+    const why = [];
+    (e.trace || []).forEach(function (t) {
+      const p = t.split(':');
+      if (p[0] === 'trait' && p[1] === trait) {
+        const rule = RULES.traitMultipliers.find(function (r) { return r.trait === p[1] && r.band === p[2] && r.meter === p[3] && r.lever === e.lever; });
+        if (!rule) return;
+        const more = rule.factor > 1;
+        why.push(rule.sign === 'gain'
+          ? LEVER_INFO[e.lever].name + ' raised ' + METER_INFO[rule.meter].name.toLowerCase() + (more ? ' more' : ' less') + ' than usual'
+          : LEVER_INFO[e.lever].name + ' cost ' + (more ? 'more ' : 'less ') + METER_INFO[rule.meter].name.toLowerCase() + ' than usual');
+      }
+      if (p[0] === 'cap' && p[1] === trait) why.push(METER_INFO[p[2]].name + ' could not rise further this early in the conversation');
+    });
+    const r = option.reaction;
+    if (r && typeof r === 'object' && r[trait + ':' + st.traits[trait]]) why.push('her reaction showed it');
+    if (why.length) out.push({ e: e, node: node, why: why });
+  });
+  return out;
+}
+
+function meetMayaView(st) {
+  const r1Traits = MAYA.profile.traits;
+  return h('div', { class: 'traits' }, Object.keys(TRAIT_INFO).map(function (t) {
+    const band = st.traits[t];
+    const rose = r1Traits[t] !== band;
+    const hint = (MAYA.referral.hints || []).find(function (x) { return x.trait === t; });
+    const moments = traitMoments(st, t);
+    return h('article', { class: 'trait', 'data-trait': t + ':' + band }, [
+      h('div', { class: 'trait-head' }, [
+        h('h3', { text: TRAIT_INFO[t].name }),
+        h('span', { class: 'band band-' + band, text: BAND_WORDS[band] + (rose ? ' (rose from ' + BAND_WORDS[r1Traits[t]].toLowerCase() + ' after Round 1)' : '') })
+      ]),
+      h('p', { class: 'trait-changes', text: TRAIT_INFO[t].changes + '.' }),
+      hint ? h('div', { class: 'hint' }, [
+        h('p', { class: 'hint-label', text: 'In the referral note' }),
+        h('blockquote', { class: 'hint-quote', text: hint.text }),
+        h('p', { class: 'hint-note', text: hint.note })
+      ]) : null,
+      h('p', { class: 'hint-label', text: 'Where it showed on your path' }),
+      moments.length
+        ? h('ul', { class: 'moments' }, moments.map(function (m) {
+            return h('li', {}, [h('a', { href: '#replay-' + st.round + '-' + st.history.indexOf(m.e), class: 'pageno', text: 'p. ' + m.node.page }), leverTag(m.e.lever), h('span', { text: m.why.join('; ') + '.' })]);
+          }))
+        : h('p', { class: 'muted moments-none', text: band === 'mid' ? 'A mid band does not change the numbers, and no reaction on this path was written for it.' : 'It did not change the numbers or her reactions on this path.' })
+    ]);
+  }));
+}
+
+function recognitionView(st) {
+  const round = MAYA.rounds[st.round];
+  const named = st.history.filter(function (e) { return e.guessCorrect; }).length;
+  const misses = st.history.filter(function (e) { return !e.guessCorrect; });
+  return [
+    h('p', { class: 'recognition', 'data-recognition': named + '/' + st.history.length, text: 'You named the lever correctly ' + named + ' of ' + st.history.length + ' times.' }),
+    misses.length ? h('ul', { class: 'misses' }, misses.map(function (e) {
+      const node = round.nodes[e.nodeId];
+      const option = node.options.find(function (o) { return o.id === e.optionId; });
+      return h('li', {}, [
+        h('p', { class: 'said', text: '“' + option.text + '”' }),
+        h('p', { class: 'miss-line' }, [h('span', { class: 'pageno', text: 'p. ' + node.page }), 'You named ', leverTag(e.guess), '. It used ', leverTag(e.lever), '.'])
+      ]);
+    })) : h('p', { class: 'muted', text: 'No misses.' })
+  ];
+}
+
+function sessionCard(st) {
+  const round = MAYA.rounds[st.round];
+  const ending = round.endings[st.ending];
+  return h('article', { class: 'session-card', 'data-session': st.round }, [
+    h('p', { class: 'eyebrow', text: ROUND_LABELS[st.round] + ' · ' + round.title }),
+    h('h3', { text: ending.title }),
+    h('p', { class: 'session-summary', text: ending.summary }),
+    h('p', { class: 'glyph-strip', 'aria-label': 'Levers in order: ' + st.history.map(function (e) { return LEVER_INFO[e.lever].name; }).join(', ') }, st.history.map(function (e) {
+      return h('span', { class: 'lv-' + e.lever, 'aria-hidden': 'true' }, [glyph(e.lever)]);
+    }))
+  ]);
+}
+
+function summaryText(r1, r2) {
+  const lines = ['Turn the Page — summary', ''];
+  [r1, r2].forEach(function (st) {
+    if (!st) return;
+    const round = MAYA.rounds[st.round];
+    const stats = leverStats(st);
+    lines.push(ROUND_LABELS[st.round] + ' (' + round.title + '): ' + round.endings[st.ending].title);
+    lines.push('  Levers: ' + RULES.levers.map(function (l) { return LEVER_INFO[l].name + ' ' + stats[l].n; }).join(', '));
+    lines.push('  Order: ' + st.history.map(function (e) { return LEVER_INFO[e.lever].name; }).join(' → '));
+    if (round.format === 'B') lines.push('  Skilful wording: ' + st.history.filter(function (e) { return e.quality === 'skilful'; }).length + ' of ' + st.history.length);
+    if (round.format === 'C') lines.push('  Lever recognition: ' + st.history.filter(function (e) { return e.guessCorrect; }).length + ' of ' + st.history.length);
+  });
+  return lines.join('\n');
+}
+
+function copySummaryView(text) {
+  const status = h('span', { class: 'copy-status', role: 'status', 'aria-live': 'polite' });
+  const area = h('textarea', { class: 'summary-text', readonly: true, rows: String(text.split('\n').length + 1), 'aria-label': 'Summary text', spellcheck: 'false' });
+  area.value = text;
+  function fallback() {
+    area.focus();
+    area.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    status.textContent = ok ? 'Copied.' : 'Selected: press Ctrl+C or Cmd+C to copy.';
+  }
+  const btn = button('Copy summary', function () {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { status.textContent = 'Copied.'; }, fallback);
+    } else {
+      fallback();
+    }
+  }, { ghost: true, action: 'copy-summary' });
+  return [area, h('div', { class: 'actions copy-row' }, [btn, status])];
+}
+
 function screenDebrief() {
   const st = view.state;
   const round = currentRound();
   const ending = round.endings[st.ending];
   const isR2 = st.round === 'r2';
-  const named = st.history.filter(function (e) { return e.guessCorrect; }).length;
-  const items = st.history.map(function (e) {
-    const node = round.nodes[e.nodeId];
-    const option = node.options.find(function (o) { return o.id === e.optionId; });
-    return h('li', { class: 'lv-' + e.lever }, [
-      h('div', { class: 'path-head' }, [
-        h('span', { class: 'pageno', text: 'p. ' + node.page }),
-        leverTag(e.lever),
-        e.quality ? h('span', { class: 'muted', text: e.quality === 'skilful' ? 'Skilful wording' : 'Clumsy wording' }) : null,
-        isR2 ? h('span', { class: 'muted' }, e.guessCorrect ? ['✓ You named it'] : ['✗ You named ', leverTag(e.guess)]) : null
+  const r1 = isR2 && view.r1 && view.r1.ending ? view.r1 : null;
+  const turning = turningIndexes(st);
+  const series = [{ round: st.round, label: ROUND_LABELS[st.round], start: startMeters(st), history: st.history, turning: turning }];
+
+  const kids = [
+    h('p', { class: 'eyebrow', text: (isR2 ? 'Debrief 2' : 'Debrief 1') + ' · ' + roundLabel(st) }),
+    h('h1', { class: 'db-title', text: 'Your path through ' + ROUND_LABELS[st.round] }),
+    h('div', { class: 'ending-card', 'data-ending-card': st.ending }, [
+      h('p', { class: 'eyebrow', text: 'Ending' }),
+      h('h2', { text: ending.title }),
+      h('p', { text: ending.summary })
+    ]),
+    section('traces', 'Meter traces', [traceKey(), tracesView(series)], 'How each meter moved, decision by decision. Each marker is the lever you used; shaded columns are the turning points.'),
+    section('levers', 'Your levers', leverCountsView(st))
+  ];
+  if (isR2) kids.push(section('recognition', 'Lever recognition', recognitionView(st)));
+  kids.push(
+    section('path', 'Path replay', [pathReplay(st, turning)], 'Each decision: what you said, how Maya reacted, how the meters moved, and the trade-off it carried. The two turning points are marked.'),
+    section('road', 'Road not taken', [roadNotTakenView(st)], 'At the two turning points, what the other levers tended to do there. These lines are written in advance, not simulated.'),
+    section('maya', 'Meet Maya', [meetMayaView(st)], 'Her trait profile, hidden during play: what each trait changes, the hint in Mr Okafor\'s referral note, and where it showed on your path.')
+  );
+  if (r1) {
+    const r1Series = { round: 'r1', label: 'Round 1', start: startMeters(r1), history: r1.history, turning: turningIndexes(r1) };
+    kids.push(
+      section('sessions', 'Two sessions side by side', [
+        h('div', { class: 'session-cards' }, [sessionCard(r1), sessionCard(st)]),
+        h('div', { class: 'carry' }, [
+          h('p', { class: 'hint-label', text: 'How Round 1 shaped Round 2' }),
+          h('p', { class: 'carry-note', text: MAYA.rounds.r2.carryNote[r1.ending] })
+        ]),
+        traceKey(),
+        tracesView([r1Series, series[0]])
       ]),
-      h('p', { class: 'said', text: '“' + option.text + '”' }),
-      h('p', { class: 'reacted', text: e.reaction }),
-      h('p', { class: 'note', text: option.debrief })
-    ]);
-  });
+      section('reflect', 'Reflection prompts', [h('ol', { class: 'reflection' }, MAYA.reflection.map(function (q) { return h('li', { text: q }); }))], 'For self-study or with your facilitator. Nothing you think or write here is stored.'),
+      section('copy', 'Copy summary', copySummaryView(summaryText(r1, st)), 'Plain text of the endings, lever counts and recognition score, for pasting into a shared document. No names or free text.')
+    );
+  }
   const actions = isR2
     ? [
         button('Replay Round 2', function () { go('interlude'); }, { primary: true }),
@@ -701,16 +1091,10 @@ function screenDebrief() {
         button('Continue to Round 2', function () { view.r1 = st; go('interlude'); }, { primary: true }),
         button('Try a different route', startRound1, { ghost: true })
       ];
+  kids.push(section('next', isR2 ? 'What next' : 'Try again', [h('div', { class: 'actions' }, actions)]));
   return pageEl('debrief', null, [
     runhead('Debrief · ' + roundLabel(st), null),
-    h('div', { class: 'narrow' }, [
-      h('h1', { text: 'Your path through ' + ROUND_LABELS[st.round] }),
-      h('div', { class: 'ending-card' }, [h('h2', { text: ending.title }), h('p', { text: ending.text })]),
-      isR2 ? h('p', { style: 'margin-top:16px;font-weight:700', 'data-recognition': named + '/' + st.history.length, text: 'You named the lever correctly ' + named + ' of ' + st.history.length + ' times.' }) : null,
-      h('p', { class: 'muted', style: 'margin-top:16px', text: 'This is a short version of the debrief: each decision, what Maya said, and the trade-off it carried.' }),
-      h('ol', { class: 'path' }, items),
-      h('div', { class: 'actions' }, actions)
-    ])
+    h('div', { class: 'debrief', 'data-debrief': isR2 ? '2' : '1' }, kids)
   ]);
 }
 

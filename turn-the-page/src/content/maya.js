@@ -33,6 +33,9 @@
 //             'trait:band' (for example 'readiness:mid') replace it when the
 //             student's trait has that band. Maya's own bands are in the profile;
 //             variants for other bands are written for future profiles.
+//   pose      optional pose hints for the consequence picture, when the reaction
+//             describes something visible (same values as a page's scene.pose;
+//             props: [] puts the phone away). Unset parameters follow the meters.
 //   override  optional hand-tuned adjustment, -5 to +5 per meter, used when the
 //             specific words fit (or misfit) the moment. Every override is
 //             listed in docs/CONTENT-REVIEW.md for review.
@@ -106,6 +109,7 @@ export const MAYA = {
           options: [
             {
               id: 'q-s', lever: 'question', quality: 'skilful',
+              pose: { chair: 'back' },
               text: 'Thanks for coming. Before we get to grades, how has this term been for you?',
               reaction: {
                 default: 'She shrugs. "Fine. Busy. I don\'t know." But she sits back a little.',
@@ -116,6 +120,7 @@ export const MAYA = {
             },
             {
               id: 'q-c', lever: 'question', quality: 'clumsy',
+              pose: { gaze: 'floor' },
               text: 'Why do you think you\'ve been lazy?',
               reaction: {
                 default: '"I just am. I don\'t know." She looks at the floor.'
@@ -124,6 +129,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { shoulders: 'relaxed', gaze: 'counsellor' },
               text: 'Thanks for coming in. You\'re not in trouble. I\'d just like to hear how things are from your side.',
               reaction: {
                 default: '"OK." Her shoulders come down a little. She looks at you properly for the first time.',
@@ -134,6 +140,7 @@ export const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { mouth: 'slightSmile' },
               text: 'Oh, I\'m sure you\'re not lazy at all!',
               reaction: {
                 default: '"You don\'t know that." A half-smile, as if you have missed the point.'
@@ -142,6 +149,7 @@ export const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { arms: 'lap' },
               text: 'You said that very quickly, before I\'d asked anything. It sounds like you\'ve had that conversation a few times already.',
               reaction: {
                 default: 'She blinks. "I mean... yeah. Everyone keeps saying it." She lets go of the bag strap.',
@@ -152,6 +160,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { arms: 'bag' },
               text: 'You look like you really don\'t want to be here.',
               reaction: {
                 default: '"Well, I didn\'t ask to come." She pulls the bag closer.'
@@ -160,6 +169,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { arms: 'crossed', mouth: 'tight' },
               text: '"Lazy" is one explanation. I\'m not sure it\'s the whole one.',
               reaction: {
                 default: 'She frowns. "What else would it be?" Her arms fold.',
@@ -170,6 +180,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { arms: 'crossed', mouth: 'tight' },
               text: 'Are you, though?',
               reaction: {
                 default: 'She folds her arms. "Yes." The room goes quiet.'
@@ -206,6 +217,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { arms: 'lap' },
               text: 'It\'s not a warning. It\'s just a chance to talk about how things are going, at whatever pace suits you.',
               reaction: {
                 default: '"OK." She puts the bag down on the floor.'
@@ -215,6 +227,7 @@ export const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { mouth: 'flat' },
               text: 'Don\'t worry, we\'ll have you back on track in no time.',
               reaction: {
                 default: '"Right." She does not look convinced.'
@@ -234,6 +247,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { arms: 'bag', mouth: 'tight' },
               text: 'You seem very defensive.',
               reaction: {
                 default: '"I\'m not defensive." Her hands tighten on the bag.'
@@ -242,6 +256,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { head: 'up', gaze: 'counsellor' },
               text: 'I don\'t think Mr Okafor sees this as a warning. He told me he doesn\'t think "lazy" is the full story.',
               reaction: {
                 default: 'She looks up. "He said that?" She does not seem to know what to do with it.'
@@ -251,6 +266,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'door' },
               text: 'Well, two missed deadlines is a pretty serious warning sign.',
               reaction: {
                 default: '"So it is a warning." She looks at the door.'
@@ -280,6 +296,7 @@ export const MAYA = {
             },
             {
               id: 'q-c', lever: 'question', quality: 'clumsy',
+              pose: { arms: 'lap' },
               text: 'Have you tried going to bed earlier?',
               reaction: {
                 default: '"Yeah. Obviously." She stops picking at the strap.'
@@ -288,6 +305,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { shoulders: 'relaxed' },
               text: 'That sounds exhausting. Tired, and then annoyed with yourself for being tired.',
               reaction: {
                 default: '"Yeah. Exactly that." She sighs.'
@@ -314,6 +332,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { arms: 'lap', shoulders: 'raised' },
               text: 'You obviously aren\'t sleeping enough. You look very tired.',
               reaction: {
                 default: '"Thanks." She pulls her sleeves down over her hands.'
@@ -331,6 +350,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'window', mouth: 'flat' },
               text: 'Well, that\'s a choice you\'re making every night.',
               reaction: {
                 default: '"I know." Flat. She looks away.'
@@ -366,6 +386,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { head: 'down' },
               text: 'That\'s a horrible feeling, wanting to start and not being able to.',
               reaction: {
                 default: '"Yeah." Quietly. "It is."'
@@ -383,6 +404,7 @@ export const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { head: 'up' },
               text: 'You said "it\'s not like I don\'t try". It sounds like trying matters to you.',
               reaction: {
                 default: '"Well, yeah. I\'m not just sitting there doing nothing." She sits up a little.'
@@ -392,6 +414,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { mouth: 'tight' },
               text: 'You look like you\'ve given up on it.',
               reaction: {
                 default: '"I haven\'t given up." Sharper than she meant.'
@@ -400,6 +423,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'You keep sitting down to do it. That doesn\'t sound like someone who\'s lazy.',
               reaction: {
                 default: 'She looks at you. "I suppose not." She does not sound sure.'
@@ -409,6 +433,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { arms: 'crossed' },
               text: 'But sitting there isn\'t enough, is it? You have to actually do it.',
               reaction: {
                 default: '"I know that." She folds her arms.'
@@ -444,6 +469,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { mouth: 'slightSmile' },
               text: 'That sounds tiring. I\'ll try not to be one more person asking the same thing.',
               reaction: {
                 default: 'A small laugh. "Thanks."'
@@ -470,6 +496,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { arms: 'crossed' },
               text: 'You\'re very guarded, aren\'t you?',
               reaction: {
                 default: '"Not really." Her arms tighten.'
@@ -478,6 +505,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'I don\'t think Mr Okafor asked what was wrong to nag you. He noticed you\'d gone quiet, and that\'s not like you.',
               reaction: {
                 default: '"He noticed?" Surprised, then wary.'
@@ -487,6 +515,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'window' },
               text: 'People ask because your grades have dropped. That\'s fair, isn\'t it?',
               reaction: {
                 default: '"I didn\'t say it wasn\'t fair." She looks away.'
@@ -522,6 +551,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { gaze: 'counsellor', arms: 'lap' },
               text: 'I pushed a bit fast just then. Sorry. We can slow down.',
               reaction: {
                 default: 'She glances at you, surprised. Her arms loosen slightly.'
@@ -539,6 +569,7 @@ export const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { gaze: 'counsellor', head: 'up' },
               text: 'You said "any more". So there was a time when you were bothered.',
               reaction: {
                 default: '"...Yeah. Last year I actually liked school." She looks surprised that she said it.'
@@ -565,6 +596,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'door' },
               text: 'That\'s a bit of an excuse, isn\'t it?',
               reaction: {
                 default: '"Can you just... not." She looks at the door.'
@@ -592,6 +624,7 @@ export const MAYA = {
             },
             {
               id: 'q-c', lever: 'question', quality: 'clumsy',
+              pose: { props: [], gaze: 'floor' },
               text: 'So the phone is the problem, really?',
               reaction: {
                 default: '"I guess." She puts it away, as if caught.'
@@ -617,6 +650,7 @@ export const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { props: [], head: 'down' },
               text: 'I noticed you picked up your phone just as you mentioned next year.',
               reaction: {
                 default: 'She looks at it in her hand, then puts it face down on her knee. "I didn\'t even notice."',
@@ -627,6 +661,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { props: [], mouth: 'tight' },
               text: 'You\'re on your phone again. Is this boring you?',
               reaction: {
                 default: '"No. Sorry." She pushes it into her pocket. Her face closes a little.'
@@ -636,6 +671,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { shoulders: 'raised' },
               text: 'You\'re calling that lazy. It sounds more like you\'re avoiding something.',
               reaction: {
                 default: 'She goes still. "Avoiding what?" She does not wait for an answer.'
@@ -645,6 +681,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { props: [], gaze: 'door' },
               text: 'Two hours on your phone? Well, that\'s where your grades went, then.',
               reaction: {
                 default: '"Wow. OK." She puts the phone away and looks at the door.'
@@ -663,6 +700,7 @@ export const MAYA = {
           options: [
             {
               id: 'q-s', lever: 'question', quality: 'skilful',
+              pose: { gaze: 'phone' },
               text: 'What\'s it like when you try to think about next year?',
               reaction: {
                 default: 'She shrugs, eyes on the screen. "I don\'t really."'
@@ -672,6 +710,7 @@ export const MAYA = {
             },
             {
               id: 'q-c', lever: 'question', quality: 'clumsy',
+              pose: { gaze: 'phone' },
               text: 'Are you worried about the exams?',
               reaction: {
                 default: '"Not really." She scrolls.'
@@ -680,6 +719,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'It\'s OK if this is hard to talk about. We don\'t have to rush.',
               reaction: {
                 default: 'She looks up from the phone. "OK."'
@@ -689,6 +729,7 @@ export const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { gaze: 'phone' },
               text: 'Don\'t worry, the exams are ages away.',
               reaction: {
                 default: '"Right." She keeps scrolling.'
@@ -697,6 +738,7 @@ export const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { arms: 'lap' },
               text: 'Every time next year comes up, you look at your phone. I\'m not telling you off. I just noticed it.',
               reaction: {
                 default: 'She stops scrolling. A pause. "It\'s easier than thinking about it."',
@@ -707,6 +749,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { gaze: 'phone' },
               text: 'You\'re more interested in your phone than in this conversation.',
               reaction: {
                 default: '"I\'m listening." She does not look up.'
@@ -716,6 +759,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'window' },
               text: 'I don\'t think you can\'t be bothered. I think something about next year is getting to you.',
               reaction: {
                 default: 'She looks up, then away. "Maybe."'
@@ -725,6 +769,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { chair: 'edge' },
               text: 'If you can\'t be bothered, there\'s not much I can do for you.',
               reaction: {
                 default: '"Fine." She half stands up, then sits back down.'
@@ -743,6 +788,7 @@ export const MAYA = {
           options: [
             {
               id: 'q-s', lever: 'question', quality: 'skilful',
+              pose: { head: 'down' },
               text: 'What\'s it like, having that already decided?',
               reaction: {
                 default: '"It\'s fine. It\'s just... how it is." Her voice is smaller.'
@@ -769,6 +815,7 @@ export const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { gaze: 'floor' },
               text: 'Don\'t worry about after school yet. That\'s years away.',
               reaction: {
                 default: '"It isn\'t, though." She looks at the floor.'
@@ -787,6 +834,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { mouth: 'tight' },
               text: 'You\'ve gone quiet. That clearly upsets you.',
               reaction: {
                 default: '"It doesn\'t upset me." It clearly does.'
@@ -795,6 +843,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'Maybe. But you\'d be the one living it, so I\'d be interested in what you think too.',
               reaction: {
                 default: '"What I think doesn\'t really change anything." But she is looking at you now.'
@@ -804,6 +853,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'window' },
               text: 'Well, nobody can decide your future for you.',
               reaction: {
                 default: '"You don\'t know that." She looks away.'
@@ -840,6 +890,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { shoulders: 'relaxed' },
               text: 'That makes sense. Feeling stuck every evening sounds really draining.',
               reaction: {
                 default: '"It is." She breathes out.'
@@ -927,6 +978,7 @@ export const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { shoulders: 'relaxed' },
               text: 'You can always come to me with anything. I\'ll sort it out.',
               reaction: {
                 default: '"OK." She looks relieved, and a little let off.'
@@ -935,6 +987,7 @@ export const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { mouth: 'slightSmile' },
               text: 'You said you don\'t really talk about it. You\'re talking about it now.',
               reaction: {
                 default: '"Yeah. Weird." A small smile.'
@@ -944,6 +997,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { head: 'up' },
               text: 'You look really down about it all.',
               reaction: {
                 default: '"I\'m fine." She sits up straighter, as if to prove it.'
@@ -1013,6 +1067,7 @@ export const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'You laughed, but it didn\'t sound like you found it funny.',
               reaction: {
                 default: '"No. It isn\'t." She looks at you properly.'
@@ -1030,6 +1085,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'I think you might have more of an idea than you\'re letting yourself say.',
               reaction: {
                 default: 'She looks at you for a long moment. "Maybe."'
@@ -1074,6 +1130,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { mouth: 'smile' },
               text: 'Not knowing yet is fine. You\'ve thought about a lot today.',
               reaction: {
                 default: '"Yeah. My head hurts a bit." A smile.'
@@ -1083,6 +1140,7 @@ export const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { gaze: 'counsellor' },
               text: 'Don\'t worry, I\'ll help you work out what to change.',
               reaction: {
                 default: '"OK." She waits for you to tell her.'
@@ -1108,6 +1166,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { mouth: 'tight' },
               text: 'I think you already have one idea. You just don\'t trust it yet.',
               reaction: {
                 default: '"...Maybe the phone thing." She pulls a face.'
@@ -1152,6 +1211,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { arms: 'lap' },
               text: 'That\'s fair. I pushed. I\'d still like to understand, if you\'ll let me.',
               reaction: {
                 default: 'She hesitates, then puts the bag down.'
@@ -1169,6 +1229,7 @@ export const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { arms: 'bag', chair: 'edge' },
               text: 'You\'ve picked up your bag. I think I pushed too hard just now.',
               reaction: {
                 default: '"A bit." The bag stays on her lap, but she does not stand.'
@@ -1178,6 +1239,7 @@ export const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { mouth: 'tight', shoulders: 'raised' },
               text: 'You\'re getting really worked up about this.',
               reaction: {
                 default: '"I\'m not worked up." Her voice is louder.'
@@ -1195,6 +1257,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { chair: 'edge' },
               text: 'I think you just don\'t want to hear it.',
               reaction: {
                 default: 'She stands up. Then, slowly, she sits down again.'
@@ -1213,6 +1276,7 @@ export const MAYA = {
           options: [
             {
               id: 'q-s', lever: 'question', quality: 'skilful',
+              pose: { gaze: 'window' },
               text: 'What\'s one small thing you\'d want to try before we meet again?',
               reaction: {
                 default: 'She thinks for a while. "Maybe... do the chemistry first. Before my phone. Just to see."'
@@ -1231,6 +1295,7 @@ export const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { shoulders: 'relaxed' },
               text: 'You don\'t have to fix everything this week. We can meet again in two weeks and see how things are.',
               reaction: {
                 default: '"OK. Yeah." She seems lighter.'
@@ -1240,6 +1305,7 @@ export const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { chair: 'back', shoulders: 'relaxed' },
               text: 'Don\'t worry, I\'ll talk to your teachers and sort out some extensions for you.',
               reaction: {
                 default: '"Really? OK. Thanks." She relaxes. The problem is yours now.'
@@ -1249,6 +1315,7 @@ export const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { gaze: 'window' },
               text: 'You\'ve talked about the moment you sit down and then stop. That moment seems to matter.',
               reaction: {
                 default: '"Yeah. If I could just get past the first bit..." She trails off, thinking.'
@@ -1266,6 +1333,7 @@ export const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { head: 'up' },
               text: 'I could give you a plan, but it would be my plan. I\'d rather hear yours, even if it\'s small.',
               reaction: {
                 default: 'She looks surprised. Then: "OK. Let me think."'
@@ -1275,6 +1343,7 @@ export const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { arms: 'bag', chair: 'edge', gaze: 'door' },
               text: 'Saying "I don\'t know" isn\'t going to get your grades back up.',
               reaction: {
                 default: '"I didn\'t say I don\'t know." She picks up her bag.'
@@ -1284,12 +1353,13 @@ export const MAYA = {
           ]
         }
       },
-      // How the round can end (SPEC.md 7.7). Shown on the ending page.
+      // How the round can end (SPEC.md 7.7). `text` is shown on the ending
+      // page; `summary` is the one line on the debrief's ending card.
       endings: {
-        breakthrough: { title: 'Breakthrough', text: 'Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"' },
-        partial: { title: 'Agreement without ownership', text: 'Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.' },
-        polite: { title: 'Polite exit', text: '"Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed.' },
-        early: { title: 'Early exit', text: '"Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began.' }
+        breakthrough: { title: 'Breakthrough', summary: 'Maya proposed a next step of her own, and asked to come back.', text: 'Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"' },
+        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to the step you suggested. The plan stayed yours.', text: 'Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.' },
+        polite: { title: 'Polite exit', summary: 'Maya stayed polite from start to finish and left unmoved.', text: '"Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed.' },
+        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the conversation really began.', text: '"Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began.' }
       }
     },
 
@@ -1310,6 +1380,14 @@ export const MAYA = {
         partial: 'Two weeks have passed. Maya arrives on time, as agreed. Last time she said yes to the step you suggested. A course brochure is lying on your desk.',
         polite: 'Two weeks have passed. Mr Okafor has asked you to see Maya again. Last time she was polite from start to finish, and nothing much changed. A course brochure is lying on your desk.',
         early: 'Two weeks have passed. Mr Okafor has sent Maya back to see you. Last time she left before the conversation really began, and she has not forgotten it. A course brochure is lying on your desk.'
+      },
+      // Debrief 2, "Two sessions side by side": how the Round 1 ending shaped
+      // the Round 2 opening, in words (the numbers are in RULES.carry).
+      carryNote: {
+        breakthrough: 'She left Round 1 with a step of her own, so she came back with most of the trust you had built, more confidence than before, and more readiness to change. Ownership started low again: a new problem needs new ownership.',
+        partial: 'She had agreed to your step rather than chosen one, so she came back with some of the trust, the same confidence, and more readiness to change. Ownership started low again, and the step had not happened.',
+        polite: 'Nothing had changed, so she came back much as she was on the first day: trust a little lower, confidence and ownership where they started.',
+        early: 'The first conversation ended early, so she came back more reluctant than on the first day: trust lower than at the start of Round 1, everything else where it started.'
       },
       // Act titles and the cliffhanger line shown on the act banner at the end of each act.
       acts: {
@@ -1337,6 +1415,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { mouth: 'slightSmile' },
               text: 'Well done for trying it. I\'m really proud of you.',
               reaction: {
                 default: '"Thanks." A small smile that does not quite reach her eyes. "It didn\'t last, though."'
@@ -1346,6 +1425,7 @@ export const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { head: 'up' },
               text: 'You look quite pleased about that week, even though it stopped.',
               reaction: {
                 default: '"I am, a bit." She sits up. "I didn\'t think I\'d manage any of it."'
@@ -1354,6 +1434,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { mouth: 'flat' },
               text: 'You say it didn\'t work. I think you might have given up on it a bit early.',
               reaction: {
                 default: '"Maybe." Her smile fades. "I knew you\'d say that."'
@@ -1374,6 +1455,7 @@ export const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { gaze: 'counsellor', head: 'up' },
               text: 'What got in the way, do you think?',
               reaction: {
                 default: '"I don\'t know." She sits. "I think I said yes because you wanted me to." She looks up, checking.'
@@ -1382,6 +1464,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { shoulders: 'relaxed' },
               text: 'That\'s OK. Two weeks goes quickly. I\'m glad you came back.',
               reaction: {
                 default: '"Yeah." Relief, and then nothing more.'
@@ -1398,6 +1481,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { gaze: 'counsellor', shoulders: 'relaxed' },
               text: 'I wonder if it was ever really your plan. It might have been mine.',
               reaction: {
                 default: 'She looks up. "It was kind of yours." She seems relieved that someone said it.'
@@ -1427,6 +1511,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { mouth: 'slightSmile' },
               text: 'Thanks for coming back. That counts for something.',
               reaction: {
                 default: '"Mr Okafor made me." But she smiles slightly.'
@@ -1445,6 +1530,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { arms: 'crossed' },
               text: 'Nothing at all? I find that hard to believe.',
               reaction: {
                 default: '"Well, it\'s true." She folds her arms.'
@@ -1473,6 +1559,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { arms: 'lap', gaze: 'counsellor' },
               text: 'Last time didn\'t go well, and I think I pushed too hard. I\'m sorry. You can set the pace today.',
               reaction: {
                 default: 'She looks surprised. "OK." She lets the bag slide off her shoulder.'
@@ -1491,6 +1578,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { mouth: 'tight' },
               text: 'You\'re here, though. Part of you must want something from this.',
               reaction: {
                 default: '"I\'m here because I have to be." Her jaw tightens.'
@@ -1562,6 +1650,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { head: 'down' },
               text: 'It sounds like your family really cares about how things turn out for you.',
               reaction: {
                 default: '"They do. They really do." She sounds almost guilty.'
@@ -1579,6 +1668,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { mouth: 'flat' },
               text: 'Is it the plan, though? You\'re the one who\'d be studying it.',
               reaction: {
                 default: '"It\'s not that simple." She puts the brochure down.'
@@ -1607,6 +1697,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { head: 'up' },
               text: 'That\'s a big expectation to grow up with. It makes sense that it weighs on you.',
               reaction: {
                 default: '"Yeah." She looks up. "I don\'t want to let them down."'
@@ -1616,6 +1707,7 @@ export const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { head: 'down' },
               text: 'You said "my parents want". You didn\'t say what you want.',
               reaction: {
                 default: '"Because it doesn\'t matter." Quietly.'
@@ -1625,6 +1717,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { arms: 'crossed' },
               text: 'I\'m not hearing much of you in that plan.',
               reaction: {
                 default: '"Well, it\'s not really up to me." Her arms fold.'
@@ -1653,6 +1746,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { arms: 'lap' },
               text: 'You don\'t have to talk about home if you don\'t want to. I\'m listening either way.',
               reaction: {
                 default: 'Her arms loosen a little. "It\'s fine. It\'s just medicine. They want me to be a doctor." She says it as if deciding to.'
@@ -1662,6 +1756,7 @@ export const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { gaze: 'counsellor' },
               text: 'You looked at the door as soon as your family came up.',
               reaction: {
                 default: '"I didn\'t." She looks back at you, a bit too quickly.'
@@ -1671,6 +1766,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { gaze: 'door' },
               text: 'I\'m not sure it\'s as worked out as you\'re making it sound.',
               reaction: {
                 default: '"You don\'t know my family." She turns towards the door.'
@@ -1689,6 +1785,7 @@ export const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { arms: 'gesturing', mouth: 'smile' },
               text: 'What is it about design that you like?',
               reaction: {
                 default: 'She talks for longer than she has all term: colours, layouts, the poster she made for the school play. Then she stops. "Anyway."',
@@ -1707,6 +1804,7 @@ export const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { mouth: 'slightSmile' },
               text: 'You smiled when you said "design". Then you stopped.',
               reaction: {
                 default: '"Did I?" She smiles again, then catches herself. "It\'s silly."'
@@ -1715,6 +1813,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { chair: 'back' },
               text: 'Is there no point, or is there no permission?',
               reaction: {
                 default: '"Wow." She sits back. "It\'s not... it\'s not like that."'
@@ -1734,6 +1833,7 @@ export const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { arms: 'lap' },
               text: 'What did you use to draw?',
               reaction: {
                 default: '"Rooms, mostly. How I\'d change them. Posters." Her hands stop moving.'
@@ -1752,6 +1852,7 @@ export const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { arms: 'lap' },
               text: 'You\'re turning the brochure over and over while you talk about it.',
               reaction: {
                 default: 'She stops. Puts it down. "Habit."'
@@ -1779,6 +1880,7 @@ export const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { shoulders: 'relaxed' },
               text: 'What would you want them to hear, if they did listen?',
               reaction: {
                 default: '"That I\'m not ungrateful. That I just... might want something else." A long breath.'
@@ -1796,6 +1898,7 @@ export const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { mouth: 'slightSmile' },
               text: 'You said they\'d never listen, and then straight away that they work so hard for you. Both seem true for you.',
               reaction: {
                 default: '"Yeah. That\'s the problem." She almost laughs.'
@@ -1805,6 +1908,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { shoulders: 'raised' },
               text: 'You\'re sure they\'d never listen. Have you ever actually told them?',
               reaction: {
                 default: 'She goes very still. For a moment she says nothing at all.'
@@ -1824,6 +1928,7 @@ export const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { arms: 'gesturing' },
               text: 'What would you want to find out?',
               reaction: {
                 default: '"What you actually do. Where you can study it. If it\'s a real job." She counts on her fingers.'
@@ -1840,6 +1945,7 @@ export const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { chair: 'leaningIn' },
               text: 'You leaned forward when you said that.',
               reaction: {
                 default: '"Did I?" She does not lean back.'
@@ -1849,6 +1955,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { gaze: 'window' },
               text: 'Finding out is a good start. I wonder if it might also be a way of putting off the conversation at home.',
               reaction: {
                 default: '"...Maybe both." She thinks about it.'
@@ -1877,6 +1984,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { chair: 'back' },
               text: 'It is a lot. Go easy on yourself.',
               reaction: {
                 default: '"Yeah." She puts the brochure down. The conversation drifts.'
@@ -1922,6 +2030,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { mouth: 'slightSmile' },
               text: 'That took courage to say.',
               reaction: {
                 default: '"It doesn\'t feel brave." But she smiles.'
@@ -1957,6 +2066,7 @@ export const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { shoulders: 'relaxed' },
               text: 'You\'re right, I don\'t. What are they like?',
               reaction: {
                 default: '"They\'re... nice. Strict. They worry a lot." She softens slightly.'
@@ -2009,6 +2119,7 @@ export const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { gaze: 'counsellor' },
               text: 'Whatever you decide, I\'m here to help you think it through.',
               reaction: {
                 default: '"Thanks." She nods, and waits.'
@@ -2018,6 +2129,7 @@ export const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { mouth: 'slightSmile' },
               text: 'You said "I can\'t just walk in". It sounds like you\'ve already started picturing it.',
               reaction: {
                 default: '"...I have, kind of." A nervous laugh.'
@@ -2027,6 +2139,7 @@ export const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { shoulders: 'relaxed' },
               text: 'You don\'t have to make a speech. But I don\'t think saying nothing is working for you either.',
               reaction: {
                 default: '"No. It isn\'t." She takes a breath. "OK."'
@@ -2037,15 +2150,24 @@ export const MAYA = {
           ]
         }
       },
-      // How the round can end (SPEC.md 7.7). Shown on the ending page.
+      // How the round can end (SPEC.md 7.7). `text` is shown on the ending
+      // page; `summary` is the one line on the debrief's ending card.
       endings: {
-        breakthrough: { title: 'Breakthrough', text: 'Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."' },
-        partial: { title: 'Agreement without ownership', text: 'Maya agrees to the step you suggest. "OK. I\'ll look at the website." She takes the brochure with her. You are not sure she will open it.' },
-        polite: { title: 'Polite exit', text: '"Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.' },
-        early: { title: 'Early exit', text: '"Can I go now?" She is out of the door before you can answer.' }
+        breakthrough: { title: 'Breakthrough', summary: 'Maya chose her own next step, and how she wants to raise it at home.', text: 'Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."' },
+        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to look at the course you suggested. The step stayed yours.', text: 'Maya agrees to the step you suggest. "OK. I\'ll look at the website." She takes the brochure with her. You are not sure she will open it.' },
+        polite: { title: 'Polite exit', summary: 'A pleasant conversation. The brochure stayed on the desk.', text: '"Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.' },
+        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the real issue came up.', text: '"Can I go now?" She is out of the door before you can answer.' }
       }
     }
   },
+
+  // Debrief 2: three reflection prompts for self-study or the facilitator.
+  // Text only: nothing the counsellor thinks or writes is stored.
+  reflection: [
+    'At which moment did Maya\'s trust matter most to what happened next, and what had built or spent it before then?',
+    'Think of a real student who agreed to a plan without owning it. What might a move that builds ownership have sounded like?',
+    'Which lever do you reach for first when a conversation gets difficult, and what does it give or cost the student when you do?'
+  ],
 
   // The two biggest turning points per round, highlighted in the debrief.
   // Both are shared pages, so every path passes through them.

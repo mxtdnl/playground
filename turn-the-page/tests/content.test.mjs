@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { RULES, routeFor } from '../src/engine.js';
 import { MAYA } from '../src/content/maya.js';
+import { POSE_PARAMS } from '../src/art.js';
 
 const CASES = [MAYA];
 const ENDINGS = ['breakthrough', 'partial', 'polite', 'early'];
@@ -129,7 +130,8 @@ for (const c of CASES) {
     });
 
     test(label + ': all four endings are written' + (round.starts ? ' and each has a Round 2 opening' : ''), () => {
-      for (const e of ENDINGS) assert.ok(round.endings[e] && round.endings[e].text, 'ending ' + e);
+      for (const e of ENDINGS) assert.ok(round.endings[e] && round.endings[e].text && round.endings[e].summary, 'ending ' + e + ' text and summary');
+      if (round.starts) for (const e of ENDINGS) assert.ok(round.carryNote && round.carryNote[e], 'carry-over note for ' + e);
       if (round.starts) for (const e of ENDINGS) assert.ok(round.starts[e], 'opening for ' + e);
     });
   }
@@ -146,7 +148,32 @@ for (const c of CASES) {
       eachOption(round, (o, node, id) => { if (FORBIDDEN.test(o.debrief)) bad.push(rid + '/' + id + '/' + o.id + ': ' + o.debrief); });
     }
     for (const line of strings(c.roadNotTaken || {}, [])) if (FORBIDDEN.test(line)) bad.push('roadNotTaken: ' + line);
+    for (const round of Object.values(c.rounds)) {
+      for (const line of strings([Object.values(round.endings).map((e) => e.summary), round.carryNote || {}], [])) if (FORBIDDEN.test(line)) bad.push('debrief: ' + line);
+    }
+    for (const line of c.reflection || []) if (FORBIDDEN.test(line)) bad.push('reflection: ' + line);
     assert.deepEqual(bad, []);
+  });
+
+  test(c.id + ': pose hints on pages and options use known parameters and values', () => {
+    const bad = [];
+    const check = (pose, where) => {
+      for (const [k, v] of Object.entries(pose || {})) {
+        if (k === 'props') { if (!Array.isArray(v) || v.some((p) => !['phone', 'brochure'].includes(p))) bad.push(where + ' props'); continue; }
+        if (!POSE_PARAMS[k] || !POSE_PARAMS[k].includes(v)) bad.push(where + ' ' + k + ': ' + v);
+      }
+    };
+    for (const [rid, round] of Object.entries(c.rounds)) {
+      for (const [id, n] of Object.entries(round.nodes)) {
+        check((n.scene || {}).pose, rid + '/' + id);
+        for (const o of n.options) check(o.pose, rid + '/' + id + '/' + o.id);
+      }
+    }
+    assert.deepEqual(bad, []);
+  });
+
+  test(c.id + ': three reflection prompts for Debrief 2', () => {
+    assert.equal((c.reflection || []).length, 3);
   });
 
   test(c.id + ': turning points and road-not-taken refer to real nodes and levers', () => {

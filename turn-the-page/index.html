@@ -291,16 +291,9 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 .meters { grid-area: meters; }
 .story-col { grid-area: story; min-width: 0; }
 
-/* Placeholder scene (session 3; replaced in session 4). */
-.scene-frame { background: var(--paper-card); border: 3px solid var(--ink); }
-.scene-frame svg { display: block; width: 100%; height: auto; }
-.scene-caption {
-  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-  border-top: 3px solid var(--ink);
-  padding: 8px 12px;
-  font: 700 0.75rem/1.3 var(--ui); letter-spacing: 0.12em; text-transform: uppercase;
-}
-.scene-caption .posture { color: var(--plum); }
+/* Scene (SPEC.md 12): the SVG office and Maya, framed in ink. */
+.scene-frame { background: var(--paper-card); border: 3px solid var(--ink); margin: 0; }
+.scene-art svg { display: block; width: 100%; height: auto; }
 
 /* Story column. */
 .speaker { font: 800 0.75rem/1.2 var(--ui); letter-spacing: 0.18em; text-transform: uppercase; color: var(--plum); margin: 0 0 8px; }
@@ -453,18 +446,122 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 .interlude-title { font: italic 400 clamp(2.6rem, 1.6rem + 4vw, 5rem)/1.05 var(--story); color: var(--plum); margin: 4px 0 24px; }
 .interlude-text { font: 400 clamp(1.15rem, 1rem + 0.6vw, 1.45rem)/1.6 var(--story); max-width: 38rem; }
 
-/* ---- Minimal debrief (session 3; replaced in session 4) ---------------- */
+/* ---- Debriefs (SPEC.md 10) --------------------------------------------- */
 
-.path { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 14px; }
-.path li { background: var(--paper-card); border: 2px solid var(--ink); border-left: 8px solid var(--lc, var(--ink)); padding: 14px 16px; }
+.debrief { max-width: 1040px; margin: 0 auto; }
+.db-title { font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem); margin-bottom: 18px; }
+.db-section { margin-top: 44px; }
+.db-section > h2 {
+  font-size: 1.35rem; padding-top: 10px; border-top: 6px solid var(--ink); margin-bottom: 8px;
+}
+.db-intro { color: var(--ink-muted); max-width: 46rem; }
+.ending-card { background: var(--ink); color: var(--paper); padding: 18px 22px; border-left: 12px solid var(--plum); }
+.ending-card p.eyebrow { font: 700 0.75rem/1.3 var(--ui); color: var(--paper); margin-bottom: 4px; }
+.ending-card h2 { margin-bottom: 6px; font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem); }
+.ending-card p { margin: 0; font: 400 1.08rem/1.5 var(--story); }
+
+/* Meter traces: small line charts, ink line, lever-glyph markers. */
+.traces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.trace { margin: 0; background: var(--paper-card); border: 2px solid var(--ink); padding: 10px 10px 4px; }
+.trace figcaption { display: flex; justify-content: space-between; gap: 8px; font: 700 0.75rem/1.3 var(--ui); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+.trace .trace-end { color: var(--ink-muted); letter-spacing: 0.06em; }
+.trace svg { display: block; width: 100%; height: auto; overflow: visible; }
+.tr-bg { fill: var(--paper); }
+.tr-turn { fill: var(--plum); opacity: 0.14; }
+.tr-ref { stroke: var(--ink-muted); stroke-width: 1; stroke-dasharray: 4 3; }
+.tr-ref-label { font: 600 9px/1 var(--ui); fill: var(--ink-muted); stroke: var(--paper); stroke-width: 3px; paint-order: stroke; stroke-linejoin: round; }
+.tr-line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: miter; }
+.tr-start { fill: var(--ink); }
+.tr-break { stroke: var(--ink); stroke-width: 2; stroke-dasharray: 2 3; }
+.tr-axis { font: 700 9px/1 var(--ui); fill: var(--ink-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.mk { stroke: var(--ink); stroke-width: 1.5; }
+.mk-question { fill: var(--lever-question); }
+.mk-support { fill: var(--lever-support); }
+.mk-observe { fill: var(--lever-observe); }
+.mk-challenge { fill: var(--lever-challenge); }
+.mk-hole { fill: var(--paper-card); }
+.mk-dot { fill: var(--ink); }
+.trace-key { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; font: 700 0.78rem/1.3 var(--ui); margin: 6px 0 12px; }
+.key-item { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.key-swatch { display: inline-block; width: 16px; height: 12px; }
+.key-turn { background: var(--plum); opacity: 0.3; }
+.key-ref { border-top: 2px dashed var(--ink-muted); height: 0; }
+
+/* Lever counts. */
+.counts { list-style: none; padding: 0; margin: 8px 0 12px; display: grid; gap: 8px; }
+.count-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) auto; align-items: center; gap: 4px 14px; background: var(--paper-card); border: 2px solid var(--rule); padding: 8px 12px; }
+.count-blocks { display: flex; gap: 4px; flex-wrap: wrap; }
+.cb { display: inline-block; width: 18px; height: 18px; background: var(--lc); border: 2px solid var(--lc); }
+.cb.cb-clumsy { background: transparent; }
+.count-n { font: 700 0.85rem/1.3 var(--ui); }
+.count-q { grid-column: 2 / -1; font-size: 0.85rem; color: var(--ink-muted); }
+.count-total { max-width: 46rem; }
+
+/* Path replay. */
+.path { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 14px; }
+.path li { background: var(--paper-card); border: 2px solid var(--ink); border-left: 8px solid var(--lc, var(--ink)); padding: 14px 16px; position: relative; }
+.path li.turning { border-width: 4px 4px 4px 8px; border-color: var(--plum) var(--plum) var(--plum) var(--lc); }
+.turn-flag { display: inline-block; background: var(--plum); color: var(--white); font: 800 0.72rem/1 var(--ui); letter-spacing: 0.16em; text-transform: uppercase; padding: 6px 10px; margin: -4px 0 10px; }
 .path .path-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 8px; font: 700 0.8rem/1.3 var(--ui); }
 .path .path-head .pageno { font-size: 1rem; }
-.path .said { font: 400 1.04rem/1.5 var(--story); margin-bottom: 6px; }
-.path .reacted { font: italic 400 1rem/1.5 var(--story); color: var(--ink-muted); margin-bottom: 6px; }
-.path .note { font-size: 0.9rem; margin: 0; }
-.ending-card { background: var(--ink); color: var(--paper); padding: 18px 20px; border-left: 10px solid var(--plum); }
-.ending-card h2 { margin-bottom: 6px; }
-.ending-card p { margin: 0; font: 400 1.05rem/1.5 var(--story); }
+.quality { color: var(--ink-muted); }
+.quality.q-clumsy { text-decoration: underline; text-decoration-style: dotted; }
+.said { font: 400 1.04rem/1.5 var(--story); margin-bottom: 6px; }
+.path .reacted { font: italic 400 1rem/1.5 var(--story); color: var(--ink-muted); margin-bottom: 8px; }
+.path .note { font-size: 0.92rem; margin: 8px 0 0; padding-top: 8px; border-top: 1px solid var(--rule); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 700 0.72rem/1.2 var(--ui); letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 8px; background: var(--paper-deep); color: var(--ink); }
+.chip.up { background: var(--ink); color: var(--paper); }
+.chip.down { background: var(--paper); box-shadow: inset 0 0 0 2px var(--ink); }
+
+/* Road not taken. */
+.roads { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.road { background: var(--paper-card); border: 2px solid var(--ink); border-top: 8px solid var(--plum); padding: 14px 16px; }
+.road-head { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font: 700 0.85rem/1.3 var(--ui); }
+.road-line { font: italic 400 1rem/1.5 var(--story); color: var(--ink-muted); }
+.road ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.road li { display: grid; gap: 2px; font-size: 0.94rem; }
+
+/* Meet Maya. */
+.traits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.trait { background: var(--paper-card); border: 2px solid var(--ink); padding: 14px 16px; }
+.trait-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.trait-head h3 { margin: 0; font-size: 1.05rem; }
+.band { font: 800 0.72rem/1.2 var(--ui); letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 8px; background: var(--plum); color: var(--white); }
+.trait-changes { color: var(--ink-muted); font-size: 0.9rem; margin: 6px 0 10px; }
+.hint { border-left: 4px solid var(--plum); padding-left: 10px; margin-bottom: 10px; }
+.hint-label { font: 700 0.7rem/1.3 var(--ui); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); margin: 0 0 4px; }
+.hint-quote { font: italic 400 1rem/1.45 var(--story); margin: 0 0 4px; }
+.hint-note { font-size: 0.88rem; margin: 0; }
+.moments { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: 0.9rem; }
+.moments li { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.moments a.pageno { color: var(--plum); font-weight: 800; }
+.moments-none { font-size: 0.9rem; margin: 0; }
+
+/* Lever recognition (Debrief 2). */
+.recognition { font: 800 1.2rem/1.3 var(--ui); }
+.misses { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.misses li { background: var(--paper-card); border: 2px solid var(--rule); padding: 10px 14px; }
+.miss-line { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; margin: 0; font-size: 0.92rem; }
+.miss-line .pageno { margin-right: 6px; }
+
+/* Two sessions side by side (Debrief 2). */
+.session-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
+.session-card { background: var(--ink); color: var(--paper); padding: 16px 18px; }
+.session-card .eyebrow { color: var(--paper); margin-bottom: 4px; }
+.session-card h3 { font-size: 1.3rem; margin-bottom: 6px; }
+.session-summary { font: 400 1rem/1.5 var(--story); }
+.glyph-strip { display: flex; gap: 6px; margin: 0; font-size: 1.15rem; }
+.glyph-strip .glyph { color: var(--lc); }
+.carry { background: var(--paper-card); border-left: 8px solid var(--plum); padding: 12px 16px; margin-bottom: 8px; max-width: 52rem; }
+.carry-note { font: 400 1.02rem/1.55 var(--story); margin: 0; }
+
+/* Reflection and Copy summary (Debrief 2). */
+.reflection { font: 400 1.08rem/1.6 var(--story); max-width: 46rem; padding-left: 1.4em; }
+.reflection li { margin-bottom: 10px; }
+.summary-text { display: block; width: 100%; max-width: 46rem; font: 400 0.9rem/1.5 ui-monospace, 'SF Mono', Menlo, Consolas, monospace; background: var(--paper-card); color: var(--ink); border: 2px solid var(--ink); padding: 12px; resize: vertical; }
+.copy-row { align-items: center; }
+.copy-status { font: 700 0.85rem/1.3 var(--ui); color: var(--lever-support); }
 
 /* ---- Narrow layout (SPEC.md 13): single column below 860px, meters in a
    sticky top strip, touch targets of at least 44px. ------------------- */
@@ -489,6 +586,10 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
   .referral { padding: 40px 20px 24px; transform: rotate(-0.6deg); }
   .field { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .choices { margin-top: 20px; }
+  .traces, .roads, .traits, .session-cards { grid-template-columns: minmax(0, 1fr); }
+  .count-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .count-blocks { grid-column: 1 / -1; grid-row: 2; }
+  .count-q { grid-column: 1 / -1; }
 }
 @media (max-width: 420px) {
   .lever-card .def { font-size: 0.8rem; }
@@ -978,94 +1079,383 @@ function carryOver(r1State) {
 /* ---- src/art.js ---- */
 // Turn the Page — illustration (SPEC.md section 12).
 //
-// Session 3 PLACEHOLDER: a framed panel with a geometric silhouette and the
-// current posture state written as text. Session 4 replaces this file with
-// the full scene and figure system; keep the renderScene(sceneState) entry
-// point so ui.js does not need to change.
+// All art is inline SVG built from code: no image files. The office is made
+// of rectangles and circles; Maya is a seated figure of primitives (circle
+// head, cut-circle hair, trapezoid torso, jointed bar arms, block legs) in her
+// own colours, plum and ochre. Hard edges and flat fills only: no gradients,
+// no blur, no rounded rectangles.
 //
-// No scoring numbers live here. The posture bands below only choose which
-// picture to show; they never change the meters.
+// Three steps, so the interface can interpolate between poses:
+//   poseFor(sceneState)    the six pose parameters (SPEC.md 12) as words
+//   sceneVector(sceneState) every coordinate the drawing needs, as numbers
+//   drawScene(vec)         the SVG string for one vector
+// lerpScene(a, b, t) blends two vectors; ui.js runs it for 0.4s between
+// poses (instantly under reduced motion). renderScene(sceneState) does all
+// of it at once and also returns the generated alt text.
+//
+// No scoring numbers live here. The posture bands only choose which picture
+// to show; they never change the meters.
 
-// Posture states in order from most closed to most open (SPEC.md 12).
+// ---------------------------------------------------------------------------
+// Posture states (SPEC.md 12), from most closed to most open.
+
 const POSTURES = ['closed', 'guarded', 'neutral', 'open', 'animated'];
 
-// Placeholder rule: the mean of Trust and Confidence picks a band; the
-// profile's pose bias then pulls a neutral-or-better posture one step towards
-// it (a guarded profile skews guarded). Session 4 will refine this.
-const POSTURE_FLOORS = { closed: 0, guarded: 25, neutral: 40, open: 55, animated: 70 };
+// The mean of Trust and Confidence picks a band. Presentation only.
+const POSTURE_FLOORS = { closed: 0, guarded: 20, neutral: 40, open: 50, animated: 60 };
+
+// The profile's pose bias pulls the posture towards it: a band on the far
+// side of the bias needs this much more (or less) before it shows. With
+// Maya's 'guarded' bias, neutral needs a mean of 44 rather than 40, and
+// closed needs a mean below 16 rather than 20.
+const POSE_BIAS_MARGIN = 4;
 
 function postureFor(meters, poseBias) {
   const score = (meters.trust + meters.confidence) / 2;
-  let i = 0;
-  POSTURES.forEach(function (p, k) { if (score >= POSTURE_FLOORS[p]) i = k; });
   const b = POSTURES.indexOf(poseBias);
-  if (b >= 0 && i > b && i < POSTURES.length - 1 && score < POSTURE_FLOORS[POSTURES[i]] + 5) i -= 1;
+  let i = 0;
+  POSTURES.forEach(function (p, k) {
+    let floor = POSTURE_FLOORS[p];
+    if (b >= 0 && k > b) floor += POSE_BIAS_MARGIN; // further above the bias: harder to reach
+    if (b >= 0 && k <= b && k > 0) floor -= POSE_BIAS_MARGIN; // at or below it: easier to stay in
+    if (score >= floor) i = k;
+  });
   return POSTURES[i];
 }
 
-// Words for the node's pose hints, used in the caption and the alt text.
-const GAZE_WORDS = {
-  floor: 'looking at the floor', door: 'looking at the door', phone: 'looking at her phone',
-  counsellor: 'looking at you', window: 'looking out of the window'
+// The pose each posture state shows unless a page overrides a parameter.
+// Values: shoulders raised|neutral|relaxed; arms crossed|bag|lap|open|gesturing;
+// head down|level|up; gaze floor|door|phone|counsellor|window;
+// mouth flat|tight|slightSmile|smile; chair edge|back|leaningIn.
+const POSTURE_POSES = {
+  closed: { shoulders: 'raised', arms: 'crossed', head: 'down', gaze: 'floor', mouth: 'tight', chair: 'back' },
+  guarded: { shoulders: 'raised', arms: 'bag', head: 'level', gaze: 'door', mouth: 'flat', chair: 'edge' },
+  neutral: { shoulders: 'neutral', arms: 'lap', head: 'level', gaze: 'counsellor', mouth: 'flat', chair: 'back' },
+  open: { shoulders: 'relaxed', arms: 'open', head: 'level', gaze: 'counsellor', mouth: 'slightSmile', chair: 'back' },
+  animated: { shoulders: 'relaxed', arms: 'gesturing', head: 'up', gaze: 'counsellor', mouth: 'smile', chair: 'leaningIn' }
 };
 
-// Silhouette geometry per posture: shoulder lift, head drop, lean and arm angle.
-const POSTURE_SHAPES = {
-  closed: { lift: -10, head: 10, lean: -14, arm: 'crossed' },
-  guarded: { lift: -6, head: 6, lean: -8, arm: 'crossed' },
-  neutral: { lift: 0, head: 0, lean: 0, arm: 'lap' },
-  open: { lift: 3, head: -2, lean: 8, arm: 'lap' },
-  animated: { lift: 4, head: -5, lean: 14, arm: 'open' }
+const POSE_PARAMS = {
+  shoulders: ['raised', 'neutral', 'relaxed'],
+  arms: ['crossed', 'bag', 'lap', 'open', 'gesturing'],
+  head: ['down', 'level', 'up'],
+  gaze: ['floor', 'door', 'phone', 'counsellor', 'window'],
+  mouth: ['flat', 'tight', 'slightSmile', 'smile'],
+  chair: ['edge', 'back', 'leaningIn']
 };
 
-// sceneState: { meters, poseBias, pose (node hints), round }
-// Returns { svg, alt, posture, caption }.
-function renderScene(sceneState) {
+// sceneState: { meters, poseBias, pose (page overrides), props, round, step }
+// Returns the posture and the full set of parameters after overrides.
+function poseFor(sceneState) {
   const posture = postureFor(sceneState.meters, sceneState.poseBias);
-  const pose = sceneState.pose || {};
-  const g = POSTURE_SHAPES[posture];
-  const lean = g.lean;
-  const window2 = sceneState.round === 'r2';
-  const arms = g.arm === 'crossed'
-    ? '<rect x="' + (172 + lean) + '" y="' + (170 - g.lift) + '" width="64" height="14" fill="#1C1F33"/>'
-    : g.arm === 'open'
-      ? '<polygon points="' + (160 + lean) + ',' + (150 - g.lift) + ' ' + (132 + lean) + ',' + (196) + ' ' + (144 + lean) + ',' + (200) + ' ' + (170 + lean) + ',' + (158 - g.lift) + '" fill="#1C1F33"/>' +
-        '<polygon points="' + (248 + lean) + ',' + (150 - g.lift) + ' ' + (276 + lean) + ',' + (196) + ' ' + (264 + lean) + ',' + (200) + ' ' + (238 + lean) + ',' + (158 - g.lift) + '" fill="#1C1F33"/>'
-      : '<rect x="' + (170 + lean) + '" y="206" width="70" height="12" fill="#1C1F33"/>';
-  const props = (pose.props || []).map(function (p) {
-    if (p === 'phone') return '<rect x="' + (226 + lean) + '" y="196" width="10" height="18" fill="#D9A21B"/>';
-    if (p === 'brochure') return '<rect x="300" y="186" width="34" height="8" fill="#2747B8"/>';
-    return '';
-  }).join('');
-  const svg =
-    '<svg viewBox="0 0 400 300" role="img" aria-hidden="true" focusable="false">' +
-    // Wall, window (later light in Round 2), door and desk.
-    '<rect width="400" height="300" fill="#FFFBF2"/>' +
-    '<rect x="24" y="28" width="92" height="74" fill="' + (window2 ? '#D9A21B' : '#2747B8') + '" opacity="0.18"/>' +
-    '<rect x="24" y="28" width="92" height="74" fill="none" stroke="#1C1F33" stroke-width="4"/>' +
-    '<rect x="68" y="28" width="4" height="74" fill="#1C1F33"/>' +
-    '<rect x="340" y="40" width="44" height="200" fill="none" stroke="#1C1F33" stroke-width="4"/>' +
-    '<circle cx="350" cy="146" r="4" fill="#1C1F33"/>' +
-    '<rect x="270" y="194" width="110" height="12" fill="#1C1F33"/>' +
-    '<rect x="276" y="206" width="8" height="70" fill="#1C1F33"/><rect x="366" y="206" width="8" height="70" fill="#1C1F33"/>' +
-    '<rect x="0" y="276" width="400" height="24" fill="#E6DCC6"/>' +
-    // Chair.
-    '<rect x="150" y="222" width="110" height="12" fill="#565868"/>' +
-    '<rect x="' + (pose.chair === 'edge' ? 150 : 146) + '" y="134" width="12" height="100" fill="#565868"/>' +
-    '<rect x="156" y="234" width="8" height="42" fill="#565868"/><rect x="246" y="234" width="8" height="42" fill="#565868"/>' +
-    // Silhouette: legs, torso (trapezoid), arms, head (circle) and hair (cut circle).
-    '<rect x="' + (180 + lean / 2) + '" y="218" width="60" height="14" fill="#6B2E7A"/>' +
-    '<rect x="' + (224 + lean / 2) + '" y="218" width="16" height="58" fill="#6B2E7A"/>' +
-    '<rect x="' + (190 + lean / 2) + '" y="218" width="16" height="58" fill="#6B2E7A"/>' +
-    '<polygon points="' + (176 + lean) + ',' + (146 - g.lift) + ' ' + (236 + lean) + ',' + (146 - g.lift) + ' ' + (244 + lean / 2) + ',222 ' + (172 + lean / 2) + ',222" fill="#6B2E7A"/>' +
-    arms +
-    '<circle cx="' + (206 + lean * 1.2) + '" cy="' + (116 + g.head - g.lift) + '" r="24" fill="#1C1F33"/>' +
-    '<path d="M ' + (182 + lean * 1.2) + ' ' + (112 + g.head - g.lift) + ' A 24 24 0 0 1 ' + (230 + lean * 1.2) + ' ' + (112 + g.head - g.lift) + ' Z" fill="#D9A21B"/>' +
-    props +
-    '</svg>';
-  const gaze = GAZE_WORDS[pose.gaze] || '';
-  const alt = 'Placeholder figure: Maya, posture ' + posture + (gaze ? ', ' + gaze : '') + '.';
-  return { svg: svg, alt: alt, posture: posture, caption: gaze };
+  const pose = Object.assign({}, POSTURE_POSES[posture]);
+  const over = sceneState.pose || {};
+  Object.keys(POSE_PARAMS).forEach(function (k) {
+    if (POSE_PARAMS[k].indexOf(over[k]) >= 0) pose[k] = over[k];
+  });
+  const props = (sceneState.props || over.props || []).slice();
+  if (pose.gaze === 'phone' && props.indexOf('phone') < 0) props.push('phone');
+  return { posture: posture, pose: pose, props: props };
+}
+
+// ---------------------------------------------------------------------------
+// Colours. The office uses the page tokens (SPEC.md 11.1); Maya has her own
+// plum and ochre, plus a skin tone and darker shades for the far limbs.
+
+const C = {
+  paper: '#F3ECDC', card: '#FFFBF2', deep: '#E6DCC6', ink: '#1C1F33', muted: '#565868', rule: '#D9CFBA',
+  cobalt: '#2747B8', green: '#1A7050', ochre: '#D9A21B', vermilion: '#D2401E', plum: '#6B2E7A',
+  plumDark: '#4E1F5A', trousers: '#2B2F4A', trousersFar: '#1F2236', skin: '#B07A52', skinFar: '#97663F', hair: '#1C1F33',
+  wood: '#8C6A48'
+};
+
+// Time of day per round: the window's sky and sun, the light on the wall.
+const TIME = {
+  r1: { sky: '#C9D3EA', sun: C.ochre, sunY: 48, sunStep: 3, clockMin: 10, clockHour: 2, light: 0 },
+  r2: { sky: '#EDC59A', sun: C.vermilion, sunY: 86, sunStep: 3, clockMin: 10, clockHour: 4, light: 0.16 }
+};
+const CLOCK_STEP_MIN = 5; // minutes the clock advances per decision (presentation only)
+
+// ---------------------------------------------------------------------------
+// Geometry. Coordinates are in the 400 x 300 viewBox. Maya sits facing left,
+// towards the counsellor, whose silhouette fills the bottom-left corner.
+
+const FLOOR_Y = 262;
+// Maya and her chair are drawn at this scale about a point on the floor, so
+// her face reads at phone width (SPEC.md 12; checked in tests/art-gallery.mjs).
+const FIG_SCALE = 1.45;
+const FIG_PIVOT = { x: 262, y: 262 };
+const SEAT = { x: 226, y: 222, w: 74 };
+const HIP_Y = 213;
+const TORSO = 60;
+const HIP_X = { edge: 242, back: 266, leaningIn: 252 };
+const LEAN = { edge: 3, back: -7, leaningIn: 17 }; // degrees towards the counsellor
+const SHOULDER = {
+  raised: { lift: 7, spread: 14, neck: 4 },
+  neutral: { lift: 0, spread: 18, neck: 7 },
+  relaxed: { lift: -3, spread: 20, neck: 9 }
+};
+const GAZE = {
+  counsellor: { fx: -0.75, fy: 0.15 },
+  floor: { fx: -0.45, fy: 0.95 },
+  phone: { fx: -0.6, fy: 0.85 },
+  door: { fx: 0.85, fy: 0.05 },
+  window: { fx: -0.8, fy: -0.7 }
+};
+const HEAD = { down: { fwd: 6, drop: 2, fy: 0.45 }, level: { fwd: 0, drop: 0, fy: 0 }, up: { fwd: -2, drop: -2, fy: -0.35 } };
+// Mouth: width, upper and lower curve depth (a filled shape between them).
+const MOUTH = {
+  flat: { w: 10, up: 0, low: 2.2, brow: 0 },
+  tight: { w: 8, up: -2.6, low: 2.4, brow: 2.6 },
+  slightSmile: { w: 11, up: 2.4, low: 2.8, brow: -0.8 },
+  smile: { w: 13, up: 1.8, low: 8, brow: -1.6 }
+};
+
+function pt(x, y) { return { x: x, y: y }; }
+function add(a, b, k) { return pt(a.x + b.x * (k === undefined ? 1 : k), a.y + b.y * (k === undefined ? 1 : k)); }
+
+// Arm targets per arms value: elbow and hand for the near arm (1, towards the
+// counsellor) and the far arm (2). L and R are the shoulder joints, H the hip.
+function armTargets(arms, L, R, H, bag) {
+  // Elbows that hang by the side sit halfway between shoulder and hip height,
+  // so the arm keeps its length whether the shoulders are raised or dropped.
+  const e1y = (L.y + H.y) / 2 + 4;
+  const e2y = (R.y + H.y) / 2 + 4;
+  switch (arms) {
+    case 'crossed':
+      return { e1: pt(L.x - 5, L.y + 25), h1: pt(R.x + 7, R.y + 17), e2: pt(R.x + 7, R.y + 27), h2: pt(L.x - 7, L.y + 15) };
+    case 'bag':
+      return { e1: pt(L.x - 2, e1y), h1: pt(bag.x - 16, bag.y - 1), e2: pt(R.x - 2, e2y), h2: pt(bag.x + 8, bag.y - 10) };
+    case 'open':
+      return { e1: pt(L.x - 12, e1y - 4), h1: pt(L.x - 36, e1y - 12), e2: pt(R.x + 10, e2y - 4), h2: pt(R.x + 32, e2y - 14) };
+    case 'gesturing':
+      return { e1: pt(L.x - 22, L.y + 20), h1: pt(L.x - 34, L.y - 6), e2: pt(R.x - 2, e2y), h2: pt(H.x - 20, H.y - 7) };
+    default: // lap
+      return { e1: pt(L.x - 6, e1y), h1: pt(H.x - 30, H.y - 6), e2: pt(R.x - 2, e2y), h2: pt(H.x - 20, H.y - 8) };
+  }
+}
+
+// Every number the drawing needs. Flags (strings, booleans) are not blended.
+function sceneVector(sceneState) {
+  const r = poseFor(sceneState);
+  const pose = r.pose;
+  const round = sceneState.round === 'r2' ? 'r2' : 'r1';
+  const time = TIME[round];
+  const step = sceneState.step || 0;
+  const sh = SHOULDER[pose.shoulders];
+  const head = HEAD[pose.head];
+  const gaze = GAZE[pose.gaze];
+  const mouth = MOUTH[pose.mouth];
+
+  const H = pt(HIP_X[pose.chair], HIP_Y);
+  const th = LEAN[pose.chair] * Math.PI / 180;
+  const u = pt(-Math.sin(th), -Math.cos(th)); // up the spine
+  const p = pt(Math.cos(th), -Math.sin(th)); // across the body, towards the chair back
+  const S = add(add(H, u, TORSO), pt(0, -sh.lift));
+  const L = add(S, p, -sh.spread * 0.75);
+  const R = add(S, p, sh.spread * 0.75);
+  const hc = add(add(S, u, sh.neck + 19), pt(-head.fwd, head.drop));
+  const fx = gaze.fx;
+  const fy = Math.max(-1, Math.min(1.2, gaze.fy + head.fy));
+  const bagHeld = pose.arms === 'bag';
+  const bag = bagHeld ? pt(H.x - 26, H.y - 14) : pt(312, 250);
+  const a = armTargets(pose.arms, L, R, H, bag);
+  const K = pt(H.x - 44, H.y - 1);
+  const minutes = time.clockMin + step * CLOCK_STEP_MIN;
+
+  return {
+    round: round,
+    phone: r.props.indexOf('phone') >= 0,
+    brochure: round === 'r2' || r.props.indexOf('brochure') >= 0,
+    bagHeld: bagHeld ? 1 : 0,
+    // Office.
+    sunY: time.sunY + step * time.sunStep,
+    minAngle: minutes * 6,
+    hourAngle: (time.clockHour + minutes / 60) * 30,
+    light: time.light,
+    // Maya.
+    hx: H.x, hy: H.y, lean: th,
+    sx: S.x, sy: S.y, lx: L.x, ly: L.y, rx: R.x, ry: R.y, spread: sh.spread,
+    cx: hc.x, cy: hc.y, fx: fx, fy: fy,
+    e1x: a.e1.x, e1y: a.e1.y, h1x: a.h1.x, h1y: a.h1.y, e2x: a.e2.x, e2y: a.e2.y, h2x: a.h2.x, h2y: a.h2.y,
+    kx: K.x, ky: K.y, bagX: bag.x, bagY: bag.y,
+    mw: mouth.w, mup: mouth.up, mlow: mouth.low, brow: mouth.brow,
+    eyeH: fy > 0.6 ? 1.8 : 4.2
+  };
+}
+
+function lerpScene(a, b, t) {
+  const out = {};
+  Object.keys(b).forEach(function (k) {
+    out[k] = typeof b[k] === 'number' && typeof a[k] === 'number' ? a[k] + (b[k] - a[k]) * t : b[k];
+  });
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// Drawing.
+
+function n(v) { return Math.round(v * 10) / 10; }
+function rect(x, y, w, h, fill, extra) { return '<rect x="' + n(x) + '" y="' + n(y) + '" width="' + n(w) + '" height="' + n(h) + '" fill="' + fill + '"' + (extra || '') + '/>'; }
+function circ(x, y, r, fill, extra) { return '<circle cx="' + n(x) + '" cy="' + n(y) + '" r="' + n(r) + '" fill="' + fill + '"' + (extra || '') + '/>'; }
+function poly(pts, fill) { return '<polygon points="' + pts.map(function (q) { return n(q[0]) + ',' + n(q[1]); }).join(' ') + '" fill="' + fill + '"/>'; }
+function bar(x1, y1, x2, y2, w, colour, cap) {
+  return '<line x1="' + n(x1) + '" y1="' + n(y1) + '" x2="' + n(x2) + '" y2="' + n(y2) + '" stroke="' + colour + '" stroke-width="' + w + '" stroke-linecap="' + (cap || 'butt') + '"/>';
+}
+function hand(x, y, angleFrom, colour) {
+  return circ(x, y, 5, colour);
+}
+
+function office(v) {
+  const t = TIME[v.round];
+  let s = '';
+  s += rect(0, 0, 400, FLOOR_Y, C.card);
+  s += rect(0, FLOOR_Y - 6, 400, 6, C.rule); // skirting
+  s += rect(0, FLOOR_Y, 400, 300 - FLOOR_Y, C.deep);
+  // Window, top left: the sky shows the time of day; the sun sinks a little per decision.
+  s += '<svg x="24" y="26" width="88" height="84" overflow="hidden">' + rect(0, 0, 88, 84, t.sky) + circ(62, v.sunY - 26, 13, t.sun) + rect(0, 66, 88, 18, C.muted, ' opacity="0.35"') + '</svg>';
+  s += rect(22, 24, 92, 88, 'none', ' stroke="' + C.ink + '" stroke-width="4"');
+  s += rect(66, 26, 4, 84, C.ink) + rect(24, 66, 88, 4, C.ink);
+  s += rect(16, 112, 104, 6, C.ink); // sill
+  // Later light: a patch of low sun across the wall and floor (Round 2).
+  if (v.light > 0) s += poly([[112, 112], [150, 112], [262, FLOOR_Y], [196, FLOOR_Y]], C.ochre).replace('/>', ' opacity="' + v.light + '"/>');
+  // Clock: the hands advance one step per decision.
+  const ccx = 150, ccy = 36;
+  s += circ(ccx, ccy, 17, C.card, ' stroke="' + C.ink + '" stroke-width="4"');
+  for (let i = 0; i < 12; i += 3) s += rect(ccx - 1.5 + 12 * Math.sin(i * Math.PI / 6), ccy - 1.5 - 12 * Math.cos(i * Math.PI / 6), 3, 3, C.ink);
+  s += bar(ccx, ccy, ccx + 8 * Math.sin(v.hourAngle * Math.PI / 180), ccy - 8 * Math.cos(v.hourAngle * Math.PI / 180), 3.5, C.ink);
+  s += bar(ccx, ccy, ccx + 13 * Math.sin(v.minAngle * Math.PI / 180), ccy - 13 * Math.cos(v.minAngle * Math.PI / 180), 2, C.vermilion);
+  s += circ(ccx, ccy, 2.2, C.ink);
+  // Pinboard with notes.
+  const bx = 124, byy = 64;
+  s += rect(bx, byy, 54, 48, C.wood) + rect(bx, byy, 54, 48, 'none', ' stroke="' + C.ink + '" stroke-width="3"');
+  s += rect(bx + 6, byy + 6, 16, 13, C.card) + rect(bx + 27, byy + 5, 12, 16, C.plum) + rect(bx + 6, byy + 26, 22, 15, C.paper) + rect(bx + 33, byy + 26, 14, 14, C.card);
+  s += circ(bx + 14, byy + 7, 2, C.vermilion) + circ(bx + 33, byy + 6, 2, C.ink) + circ(bx + 17, byy + 27, 2, C.cobalt) + circ(bx + 40, byy + 27, 2, C.vermilion);
+  // Door, right: Maya's way out.
+  s += rect(332, 48, 56, FLOOR_Y - 48, C.deep) + rect(332, 48, 56, FLOOR_Y - 48, 'none', ' stroke="' + C.ink + '" stroke-width="4"');
+  s += rect(342, 60, 36, 44, C.card) + rect(342, 116, 36, 120, 'none', ' stroke="' + C.muted + '" stroke-width="2"');
+  s += circ(342, 160, 3.5, C.ink) + rect(342, 158.5, 9, 3, C.ink);
+  // Desk, between you and Maya; the course brochure lies on it in Round 2.
+  const dx = 58; // desk left edge
+  s += rect(dx, 196, 76, 7, C.ink) + rect(dx + 6, 203, 5, FLOOR_Y - 203, C.ink) + rect(dx + 66, 203, 5, FLOOR_Y - 203, C.ink);
+  s += rect(dx + 40, 203, 24, 22, C.muted);
+  s += rect(dx + 30, 188, 24, 8, C.paper) + rect(dx + 33, 184, 20, 4, C.card); // papers
+  if (v.brochure) s += poly([[dx + 44, 196], [dx + 72, 196], [dx + 76, 188], [dx + 48, 188]], C.cobalt) + poly([[dx + 48, 188], [dx + 76, 188], [dx + 75, 190.5], [dx + 47, 190.5]], C.ochre) + rect(dx + 56, 192, 8, 2, C.card);
+  return s;
+}
+
+function chair() {
+  let s = '';
+  // Maya's chair: seat, back and legs.
+  s += rect(SEAT.x + SEAT.w - 9, 136, 9, SEAT.y - 136, C.muted);
+  s += rect(SEAT.x, SEAT.y, SEAT.w, 8, C.muted);
+  s += rect(SEAT.x + 4, SEAT.y + 8, 6, FLOOR_Y - SEAT.y - 8, C.muted) + rect(SEAT.x + SEAT.w - 10, SEAT.y + 8, 6, FLOOR_Y - SEAT.y - 8, C.muted);
+  return s;
+}
+
+function maya(v) {
+  let s = '';
+  const H = pt(v.hx, v.hy), K = pt(v.kx, v.ky);
+  // Legs: blocks, far leg first and darker. Ankles drop to the floor.
+  const legs = function (dx, dy, cTrouser, cShoe) {
+    let o = '';
+    o += bar(H.x + dx, H.y + dy, K.x + dx, K.y + dy, 17, cTrouser, 'square');
+    o += bar(K.x + dx, K.y + dy, K.x + dx + 3, FLOOR_Y - 7, 13, cTrouser, 'square');
+    o += rect(K.x + dx - 13, FLOOR_Y - 8, 20, 8, cShoe);
+    return o;
+  };
+  s += legs(7, -2, C.trousersFar, C.ink) + legs(0, 0, C.trousers, C.ink);
+  // Bag: on the floor by the chair, or held on her lap.
+  s += rect(v.bagX - 17, v.bagY - 12, 34, 24, C.ochre) + rect(v.bagX - 17, v.bagY - 12, 34, 5, '#B5850F');
+  s += rect(v.bagX - 9, v.bagY - 20, 18, 3, C.ink) + rect(v.bagX - 9, v.bagY - 20, 3, 9, C.ink) + rect(v.bagX + 6, v.bagY - 20, 3, 9, C.ink);
+  // Far arm (drawn over the torso in a darker plum, so crossed arms read).
+  const far = function () {
+    return bar(v.rx, v.ry, v.e2x, v.e2y, 9, C.plumDark) + circ(v.e2x, v.e2y, 4.5, C.plumDark) + bar(v.e2x, v.e2y, v.h2x, v.h2y, 8, C.plumDark) + circ(v.h2x, v.h2y, 4.5, C.skinFar);
+  };
+  // Neck and torso (a trapezoid, wider at the shoulders), with an ochre collar.
+  const c = Math.cos(v.lean), sn = Math.sin(v.lean);
+  const px = c, py = -sn; // across the body
+  s += bar(v.sx, v.sy + 2, v.cx + 2, v.cy + 10, 9, C.skin);
+  const hipW = 16;
+  s += poly([
+    [v.sx - px * v.spread, v.sy - py * v.spread], [v.sx + px * v.spread, v.sy + py * v.spread],
+    [v.hx + px * hipW, v.hy + py * hipW + 4], [v.hx - px * hipW, v.hy - py * hipW + 4]
+  ], C.plum);
+  s += poly([
+    [v.sx - px * 8, v.sy - py * 8 - 0.5], [v.sx + px * 8, v.sy + py * 8 - 0.5],
+    [v.sx + px * 4 - sn * 7, v.sy + py * 4 + c * 7], [v.sx - px * 4 - sn * 7, v.sy - py * 4 + c * 7]
+  ], C.ochre);
+  s += far();
+  // Near arm: jointed bars with a visible elbow joint.
+  s += bar(v.lx, v.ly, v.e1x, v.e1y, 10, C.plum) + circ(v.lx, v.ly, 5, C.plum) + circ(v.e1x, v.e1y, 5, C.plum) + bar(v.e1x, v.e1y, v.h1x, v.h1y, 9, C.plum);
+  if (v.phone) s += rect(v.h1x - 4, v.h1y - 11, 8, 13, C.ink) + rect(v.h1x - 2.5, v.h1y - 9.5, 5, 8, C.cobalt);
+  s += hand(v.h1x, v.h1y, 0, C.skin);
+  // Head: hair disc, a bob behind the face, the face disc turned towards the gaze.
+  const fcx = v.cx + v.fx * 6.5, fcy = v.cy + v.fy * 4.5 + 2.5;
+  s += rect(v.cx - v.fx * 9 - 12, v.cy - 4, 24, 26, C.hair);
+  s += circ(v.cx, v.cy, 21, C.hair);
+  s += circ(fcx, fcy, 15.5, C.skin);
+  // Fringe: the top of the hair disc cut by a chord.
+  const yc = fcy - 6.5;
+  const dy = yc - v.cy;
+  const half = Math.sqrt(Math.max(0, 21 * 21 - dy * dy));
+  s += '<path d="M ' + n(v.cx - half) + ' ' + n(yc) + ' A 21 21 0 0 1 ' + n(v.cx + half) + ' ' + n(yc) + ' Z" fill="' + C.hair + '"/>';
+  // Eyes (squares; lowered lids become bars), brows, a triangle nose and the mouth.
+  const ex = fcx + v.fx * 4, ey = fcy + v.fy * 3 + 0.5;
+  const gap = 4.6 * (1 - 0.4 * Math.abs(v.fx));
+  const eh = v.eyeH;
+  s += rect(ex - gap - 2.2, ey - eh / 2, 4.4, eh, C.ink) + rect(ex + gap - 2.2, ey - eh / 2, 4.4, eh, C.ink);
+  const by = ey - 5 + Math.max(0, v.brow) * 0.3;
+  s += poly([[ex - gap - 3, by - v.brow * -0.0 - 1], [ex - gap + 3, by + v.brow * 0.6 - 1], [ex - gap + 3, by + v.brow * 0.6 + 0.8], [ex - gap - 3, by + 0.8]], C.hair);
+  s += poly([[ex + gap - 3, by + v.brow * 0.6 - 1], [ex + gap + 3, by - 1], [ex + gap + 3, by + 0.8], [ex + gap - 3, by + v.brow * 0.6 + 0.8]], C.hair);
+  const nx = fcx + v.fx * 9, ny = fcy + v.fy * 3 + 4;
+  s += poly([[nx, ny - 4], [nx + v.fx * 5, ny + 1.5], [nx, ny + 1.5]], C.skinFar);
+  const mx = fcx + v.fx * 4.5, my = fcy + v.fy * 3 + 8.5;
+  const hw = v.mw / 2 * (1 - 0.25 * Math.abs(v.fx));
+  s += '<path d="M ' + n(mx - hw) + ' ' + n(my) + ' Q ' + n(mx) + ' ' + n(my + v.mup) + ' ' + n(mx + hw) + ' ' + n(my) + ' Q ' + n(mx) + ' ' + n(my + v.mlow + v.mup) + ' ' + n(mx - hw) + ' ' + n(my) + ' Z" fill="' + C.ink + '"/>';
+  return s;
+}
+
+// You: a dark over-the-shoulder silhouette at the frame edge, and your chair.
+function counsellor() {
+  return rect(96, 236, 10, 64, C.muted) + rect(80, 232, 28, 7, C.muted) +
+    poly([[-40, 300], [-12, 262], [56, 250], [112, 270], [134, 300]], C.ink) +
+    rect(18, 230, 30, 26, C.ink) + circ(30, 208, 38, C.ink);
+}
+
+function drawScene(v) {
+  return '<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" shape-rendering="geometricPrecision">' +
+    office(v) + '<g transform="translate(' + FIG_PIVOT.x + ' ' + FIG_PIVOT.y + ') scale(' + FIG_SCALE + ') translate(' + (-FIG_PIVOT.x) + ' ' + (-FIG_PIVOT.y) + ')">' + chair() + maya(v) + '</g>' + counsellor() + '</svg>';
+}
+
+// ---------------------------------------------------------------------------
+// Alt text, generated from the pose (SPEC.md 12).
+
+const ALT_WORDS = {
+  chair: { edge: 'on the edge of the chair', back: 'back in the chair', leaningIn: 'leaning in towards you' },
+  arms: { crossed: 'arms crossed', bag: 'holding her bag on her lap', lap: 'hands in her lap', open: 'hands open', gesturing: 'gesturing as she talks' },
+  shoulders: { raised: 'shoulders raised', neutral: '', relaxed: 'shoulders relaxed' },
+  gaze: { floor: 'looking at the floor', door: 'looking at the door', phone: 'looking at her phone', counsellor: 'looking at you', window: 'looking out of the window' },
+  head: { down: 'head down', level: '', up: 'chin up' },
+  mouth: { flat: '', tight: 'lips pressed together', slightSmile: 'with a slight smile', smile: 'smiling' }
+};
+
+function altFor(r) {
+  const p = r.pose;
+  const parts = [ALT_WORDS.arms[p.arms], ALT_WORDS.shoulders[p.shoulders]];
+  if (r.props.indexOf('phone') >= 0 && p.gaze !== 'phone') parts.push('phone in her hand');
+  parts.push(ALT_WORDS.gaze[p.gaze]);
+  if (!(p.head === 'down' && (p.gaze === 'floor' || p.gaze === 'phone'))) parts.push(ALT_WORDS.head[p.head]);
+  parts.push(ALT_WORDS.mouth[p.mouth]);
+  return 'Maya sits ' + ALT_WORDS.chair[p.chair] + ', ' + parts.filter(Boolean).join(', ') + '.';
+}
+
+// sceneState: { meters, poseBias, pose (page overrides), props, round, step }
+// Returns { svg, alt, posture, pose, vec }.
+function renderScene(sceneState) {
+  const r = poseFor(sceneState);
+  const vec = sceneVector(sceneState);
+  return { svg: drawScene(vec), alt: altFor(r), posture: r.posture, pose: r.pose, vec: vec };
 }
 /* ---- src/content/maya.js ---- */
 // Turn the Page — case file: Maya, 16.
@@ -1103,6 +1493,9 @@ function renderScene(sceneState) {
 //             'trait:band' (for example 'readiness:mid') replace it when the
 //             student's trait has that band. Maya's own bands are in the profile;
 //             variants for other bands are written for future profiles.
+//   pose      optional pose hints for the consequence picture, when the reaction
+//             describes something visible (same values as a page's scene.pose;
+//             props: [] puts the phone away). Unset parameters follow the meters.
 //   override  optional hand-tuned adjustment, -5 to +5 per meter, used when the
 //             specific words fit (or misfit) the moment. Every override is
 //             listed in docs/CONTENT-REVIEW.md for review.
@@ -1176,6 +1569,7 @@ const MAYA = {
           options: [
             {
               id: 'q-s', lever: 'question', quality: 'skilful',
+              pose: { chair: 'back' },
               text: 'Thanks for coming. Before we get to grades, how has this term been for you?',
               reaction: {
                 default: 'She shrugs. "Fine. Busy. I don\'t know." But she sits back a little.',
@@ -1186,6 +1580,7 @@ const MAYA = {
             },
             {
               id: 'q-c', lever: 'question', quality: 'clumsy',
+              pose: { gaze: 'floor' },
               text: 'Why do you think you\'ve been lazy?',
               reaction: {
                 default: '"I just am. I don\'t know." She looks at the floor.'
@@ -1194,6 +1589,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { shoulders: 'relaxed', gaze: 'counsellor' },
               text: 'Thanks for coming in. You\'re not in trouble. I\'d just like to hear how things are from your side.',
               reaction: {
                 default: '"OK." Her shoulders come down a little. She looks at you properly for the first time.',
@@ -1204,6 +1600,7 @@ const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { mouth: 'slightSmile' },
               text: 'Oh, I\'m sure you\'re not lazy at all!',
               reaction: {
                 default: '"You don\'t know that." A half-smile, as if you have missed the point.'
@@ -1212,6 +1609,7 @@ const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { arms: 'lap' },
               text: 'You said that very quickly, before I\'d asked anything. It sounds like you\'ve had that conversation a few times already.',
               reaction: {
                 default: 'She blinks. "I mean... yeah. Everyone keeps saying it." She lets go of the bag strap.',
@@ -1222,6 +1620,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { arms: 'bag' },
               text: 'You look like you really don\'t want to be here.',
               reaction: {
                 default: '"Well, I didn\'t ask to come." She pulls the bag closer.'
@@ -1230,6 +1629,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { arms: 'crossed', mouth: 'tight' },
               text: '"Lazy" is one explanation. I\'m not sure it\'s the whole one.',
               reaction: {
                 default: 'She frowns. "What else would it be?" Her arms fold.',
@@ -1240,6 +1640,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { arms: 'crossed', mouth: 'tight' },
               text: 'Are you, though?',
               reaction: {
                 default: 'She folds her arms. "Yes." The room goes quiet.'
@@ -1276,6 +1677,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { arms: 'lap' },
               text: 'It\'s not a warning. It\'s just a chance to talk about how things are going, at whatever pace suits you.',
               reaction: {
                 default: '"OK." She puts the bag down on the floor.'
@@ -1285,6 +1687,7 @@ const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { mouth: 'flat' },
               text: 'Don\'t worry, we\'ll have you back on track in no time.',
               reaction: {
                 default: '"Right." She does not look convinced.'
@@ -1304,6 +1707,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { arms: 'bag', mouth: 'tight' },
               text: 'You seem very defensive.',
               reaction: {
                 default: '"I\'m not defensive." Her hands tighten on the bag.'
@@ -1312,6 +1716,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { head: 'up', gaze: 'counsellor' },
               text: 'I don\'t think Mr Okafor sees this as a warning. He told me he doesn\'t think "lazy" is the full story.',
               reaction: {
                 default: 'She looks up. "He said that?" She does not seem to know what to do with it.'
@@ -1321,6 +1726,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'door' },
               text: 'Well, two missed deadlines is a pretty serious warning sign.',
               reaction: {
                 default: '"So it is a warning." She looks at the door.'
@@ -1350,6 +1756,7 @@ const MAYA = {
             },
             {
               id: 'q-c', lever: 'question', quality: 'clumsy',
+              pose: { arms: 'lap' },
               text: 'Have you tried going to bed earlier?',
               reaction: {
                 default: '"Yeah. Obviously." She stops picking at the strap.'
@@ -1358,6 +1765,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { shoulders: 'relaxed' },
               text: 'That sounds exhausting. Tired, and then annoyed with yourself for being tired.',
               reaction: {
                 default: '"Yeah. Exactly that." She sighs.'
@@ -1384,6 +1792,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { arms: 'lap', shoulders: 'raised' },
               text: 'You obviously aren\'t sleeping enough. You look very tired.',
               reaction: {
                 default: '"Thanks." She pulls her sleeves down over her hands.'
@@ -1401,6 +1810,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'window', mouth: 'flat' },
               text: 'Well, that\'s a choice you\'re making every night.',
               reaction: {
                 default: '"I know." Flat. She looks away.'
@@ -1436,6 +1846,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { head: 'down' },
               text: 'That\'s a horrible feeling, wanting to start and not being able to.',
               reaction: {
                 default: '"Yeah." Quietly. "It is."'
@@ -1453,6 +1864,7 @@ const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { head: 'up' },
               text: 'You said "it\'s not like I don\'t try". It sounds like trying matters to you.',
               reaction: {
                 default: '"Well, yeah. I\'m not just sitting there doing nothing." She sits up a little.'
@@ -1462,6 +1874,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { mouth: 'tight' },
               text: 'You look like you\'ve given up on it.',
               reaction: {
                 default: '"I haven\'t given up." Sharper than she meant.'
@@ -1470,6 +1883,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'You keep sitting down to do it. That doesn\'t sound like someone who\'s lazy.',
               reaction: {
                 default: 'She looks at you. "I suppose not." She does not sound sure.'
@@ -1479,6 +1893,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { arms: 'crossed' },
               text: 'But sitting there isn\'t enough, is it? You have to actually do it.',
               reaction: {
                 default: '"I know that." She folds her arms.'
@@ -1514,6 +1929,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { mouth: 'slightSmile' },
               text: 'That sounds tiring. I\'ll try not to be one more person asking the same thing.',
               reaction: {
                 default: 'A small laugh. "Thanks."'
@@ -1540,6 +1956,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { arms: 'crossed' },
               text: 'You\'re very guarded, aren\'t you?',
               reaction: {
                 default: '"Not really." Her arms tighten.'
@@ -1548,6 +1965,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'I don\'t think Mr Okafor asked what was wrong to nag you. He noticed you\'d gone quiet, and that\'s not like you.',
               reaction: {
                 default: '"He noticed?" Surprised, then wary.'
@@ -1557,6 +1975,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'window' },
               text: 'People ask because your grades have dropped. That\'s fair, isn\'t it?',
               reaction: {
                 default: '"I didn\'t say it wasn\'t fair." She looks away.'
@@ -1592,6 +2011,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { gaze: 'counsellor', arms: 'lap' },
               text: 'I pushed a bit fast just then. Sorry. We can slow down.',
               reaction: {
                 default: 'She glances at you, surprised. Her arms loosen slightly.'
@@ -1609,6 +2029,7 @@ const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { gaze: 'counsellor', head: 'up' },
               text: 'You said "any more". So there was a time when you were bothered.',
               reaction: {
                 default: '"...Yeah. Last year I actually liked school." She looks surprised that she said it.'
@@ -1635,6 +2056,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'door' },
               text: 'That\'s a bit of an excuse, isn\'t it?',
               reaction: {
                 default: '"Can you just... not." She looks at the door.'
@@ -1662,6 +2084,7 @@ const MAYA = {
             },
             {
               id: 'q-c', lever: 'question', quality: 'clumsy',
+              pose: { props: [], gaze: 'floor' },
               text: 'So the phone is the problem, really?',
               reaction: {
                 default: '"I guess." She puts it away, as if caught.'
@@ -1687,6 +2110,7 @@ const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { props: [], head: 'down' },
               text: 'I noticed you picked up your phone just as you mentioned next year.',
               reaction: {
                 default: 'She looks at it in her hand, then puts it face down on her knee. "I didn\'t even notice."',
@@ -1697,6 +2121,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { props: [], mouth: 'tight' },
               text: 'You\'re on your phone again. Is this boring you?',
               reaction: {
                 default: '"No. Sorry." She pushes it into her pocket. Her face closes a little.'
@@ -1706,6 +2131,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { shoulders: 'raised' },
               text: 'You\'re calling that lazy. It sounds more like you\'re avoiding something.',
               reaction: {
                 default: 'She goes still. "Avoiding what?" She does not wait for an answer.'
@@ -1715,6 +2141,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { props: [], gaze: 'door' },
               text: 'Two hours on your phone? Well, that\'s where your grades went, then.',
               reaction: {
                 default: '"Wow. OK." She puts the phone away and looks at the door.'
@@ -1733,6 +2160,7 @@ const MAYA = {
           options: [
             {
               id: 'q-s', lever: 'question', quality: 'skilful',
+              pose: { gaze: 'phone' },
               text: 'What\'s it like when you try to think about next year?',
               reaction: {
                 default: 'She shrugs, eyes on the screen. "I don\'t really."'
@@ -1742,6 +2170,7 @@ const MAYA = {
             },
             {
               id: 'q-c', lever: 'question', quality: 'clumsy',
+              pose: { gaze: 'phone' },
               text: 'Are you worried about the exams?',
               reaction: {
                 default: '"Not really." She scrolls.'
@@ -1750,6 +2179,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'It\'s OK if this is hard to talk about. We don\'t have to rush.',
               reaction: {
                 default: 'She looks up from the phone. "OK."'
@@ -1759,6 +2189,7 @@ const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { gaze: 'phone' },
               text: 'Don\'t worry, the exams are ages away.',
               reaction: {
                 default: '"Right." She keeps scrolling.'
@@ -1767,6 +2198,7 @@ const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { arms: 'lap' },
               text: 'Every time next year comes up, you look at your phone. I\'m not telling you off. I just noticed it.',
               reaction: {
                 default: 'She stops scrolling. A pause. "It\'s easier than thinking about it."',
@@ -1777,6 +2209,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { gaze: 'phone' },
               text: 'You\'re more interested in your phone than in this conversation.',
               reaction: {
                 default: '"I\'m listening." She does not look up.'
@@ -1786,6 +2219,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'window' },
               text: 'I don\'t think you can\'t be bothered. I think something about next year is getting to you.',
               reaction: {
                 default: 'She looks up, then away. "Maybe."'
@@ -1795,6 +2229,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { chair: 'edge' },
               text: 'If you can\'t be bothered, there\'s not much I can do for you.',
               reaction: {
                 default: '"Fine." She half stands up, then sits back down.'
@@ -1813,6 +2248,7 @@ const MAYA = {
           options: [
             {
               id: 'q-s', lever: 'question', quality: 'skilful',
+              pose: { head: 'down' },
               text: 'What\'s it like, having that already decided?',
               reaction: {
                 default: '"It\'s fine. It\'s just... how it is." Her voice is smaller.'
@@ -1839,6 +2275,7 @@ const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { gaze: 'floor' },
               text: 'Don\'t worry about after school yet. That\'s years away.',
               reaction: {
                 default: '"It isn\'t, though." She looks at the floor.'
@@ -1857,6 +2294,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { mouth: 'tight' },
               text: 'You\'ve gone quiet. That clearly upsets you.',
               reaction: {
                 default: '"It doesn\'t upset me." It clearly does.'
@@ -1865,6 +2303,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'Maybe. But you\'d be the one living it, so I\'d be interested in what you think too.',
               reaction: {
                 default: '"What I think doesn\'t really change anything." But she is looking at you now.'
@@ -1874,6 +2313,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { gaze: 'window' },
               text: 'Well, nobody can decide your future for you.',
               reaction: {
                 default: '"You don\'t know that." She looks away.'
@@ -1910,6 +2350,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { shoulders: 'relaxed' },
               text: 'That makes sense. Feeling stuck every evening sounds really draining.',
               reaction: {
                 default: '"It is." She breathes out.'
@@ -1997,6 +2438,7 @@ const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { shoulders: 'relaxed' },
               text: 'You can always come to me with anything. I\'ll sort it out.',
               reaction: {
                 default: '"OK." She looks relieved, and a little let off.'
@@ -2005,6 +2447,7 @@ const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { mouth: 'slightSmile' },
               text: 'You said you don\'t really talk about it. You\'re talking about it now.',
               reaction: {
                 default: '"Yeah. Weird." A small smile.'
@@ -2014,6 +2457,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { head: 'up' },
               text: 'You look really down about it all.',
               reaction: {
                 default: '"I\'m fine." She sits up straighter, as if to prove it.'
@@ -2083,6 +2527,7 @@ const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'You laughed, but it didn\'t sound like you found it funny.',
               reaction: {
                 default: '"No. It isn\'t." She looks at you properly.'
@@ -2100,6 +2545,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { gaze: 'counsellor' },
               text: 'I think you might have more of an idea than you\'re letting yourself say.',
               reaction: {
                 default: 'She looks at you for a long moment. "Maybe."'
@@ -2144,6 +2590,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { mouth: 'smile' },
               text: 'Not knowing yet is fine. You\'ve thought about a lot today.',
               reaction: {
                 default: '"Yeah. My head hurts a bit." A smile.'
@@ -2153,6 +2600,7 @@ const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { gaze: 'counsellor' },
               text: 'Don\'t worry, I\'ll help you work out what to change.',
               reaction: {
                 default: '"OK." She waits for you to tell her.'
@@ -2178,6 +2626,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { mouth: 'tight' },
               text: 'I think you already have one idea. You just don\'t trust it yet.',
               reaction: {
                 default: '"...Maybe the phone thing." She pulls a face.'
@@ -2222,6 +2671,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { arms: 'lap' },
               text: 'That\'s fair. I pushed. I\'d still like to understand, if you\'ll let me.',
               reaction: {
                 default: 'She hesitates, then puts the bag down.'
@@ -2239,6 +2689,7 @@ const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { arms: 'bag', chair: 'edge' },
               text: 'You\'ve picked up your bag. I think I pushed too hard just now.',
               reaction: {
                 default: '"A bit." The bag stays on her lap, but she does not stand.'
@@ -2248,6 +2699,7 @@ const MAYA = {
             },
             {
               id: 'o-c', lever: 'observe', quality: 'clumsy',
+              pose: { mouth: 'tight', shoulders: 'raised' },
               text: 'You\'re getting really worked up about this.',
               reaction: {
                 default: '"I\'m not worked up." Her voice is louder.'
@@ -2265,6 +2717,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { chair: 'edge' },
               text: 'I think you just don\'t want to hear it.',
               reaction: {
                 default: 'She stands up. Then, slowly, she sits down again.'
@@ -2283,6 +2736,7 @@ const MAYA = {
           options: [
             {
               id: 'q-s', lever: 'question', quality: 'skilful',
+              pose: { gaze: 'window' },
               text: 'What\'s one small thing you\'d want to try before we meet again?',
               reaction: {
                 default: 'She thinks for a while. "Maybe... do the chemistry first. Before my phone. Just to see."'
@@ -2301,6 +2755,7 @@ const MAYA = {
             },
             {
               id: 's-s', lever: 'support', quality: 'skilful',
+              pose: { shoulders: 'relaxed' },
               text: 'You don\'t have to fix everything this week. We can meet again in two weeks and see how things are.',
               reaction: {
                 default: '"OK. Yeah." She seems lighter.'
@@ -2310,6 +2765,7 @@ const MAYA = {
             },
             {
               id: 's-c', lever: 'support', quality: 'clumsy',
+              pose: { chair: 'back', shoulders: 'relaxed' },
               text: 'Don\'t worry, I\'ll talk to your teachers and sort out some extensions for you.',
               reaction: {
                 default: '"Really? OK. Thanks." She relaxes. The problem is yours now.'
@@ -2319,6 +2775,7 @@ const MAYA = {
             },
             {
               id: 'o-s', lever: 'observe', quality: 'skilful',
+              pose: { gaze: 'window' },
               text: 'You\'ve talked about the moment you sit down and then stop. That moment seems to matter.',
               reaction: {
                 default: '"Yeah. If I could just get past the first bit..." She trails off, thinking.'
@@ -2336,6 +2793,7 @@ const MAYA = {
             },
             {
               id: 'c-s', lever: 'challenge', quality: 'skilful',
+              pose: { head: 'up' },
               text: 'I could give you a plan, but it would be my plan. I\'d rather hear yours, even if it\'s small.',
               reaction: {
                 default: 'She looks surprised. Then: "OK. Let me think."'
@@ -2345,6 +2803,7 @@ const MAYA = {
             },
             {
               id: 'c-c', lever: 'challenge', quality: 'clumsy',
+              pose: { arms: 'bag', chair: 'edge', gaze: 'door' },
               text: 'Saying "I don\'t know" isn\'t going to get your grades back up.',
               reaction: {
                 default: '"I didn\'t say I don\'t know." She picks up her bag.'
@@ -2354,12 +2813,13 @@ const MAYA = {
           ]
         }
       },
-      // How the round can end (SPEC.md 7.7). Shown on the ending page.
+      // How the round can end (SPEC.md 7.7). `text` is shown on the ending
+      // page; `summary` is the one line on the debrief's ending card.
       endings: {
-        breakthrough: { title: 'Breakthrough', text: 'Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"' },
-        partial: { title: 'Agreement without ownership', text: 'Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.' },
-        polite: { title: 'Polite exit', text: '"Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed.' },
-        early: { title: 'Early exit', text: '"Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began.' }
+        breakthrough: { title: 'Breakthrough', summary: 'Maya proposed a next step of her own, and asked to come back.', text: 'Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"' },
+        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to the step you suggested. The plan stayed yours.', text: 'Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.' },
+        polite: { title: 'Polite exit', summary: 'Maya stayed polite from start to finish and left unmoved.', text: '"Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed.' },
+        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the conversation really began.', text: '"Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began.' }
       }
     },
 
@@ -2380,6 +2840,14 @@ const MAYA = {
         partial: 'Two weeks have passed. Maya arrives on time, as agreed. Last time she said yes to the step you suggested. A course brochure is lying on your desk.',
         polite: 'Two weeks have passed. Mr Okafor has asked you to see Maya again. Last time she was polite from start to finish, and nothing much changed. A course brochure is lying on your desk.',
         early: 'Two weeks have passed. Mr Okafor has sent Maya back to see you. Last time she left before the conversation really began, and she has not forgotten it. A course brochure is lying on your desk.'
+      },
+      // Debrief 2, "Two sessions side by side": how the Round 1 ending shaped
+      // the Round 2 opening, in words (the numbers are in RULES.carry).
+      carryNote: {
+        breakthrough: 'She left Round 1 with a step of her own, so she came back with most of the trust you had built, more confidence than before, and more readiness to change. Ownership started low again: a new problem needs new ownership.',
+        partial: 'She had agreed to your step rather than chosen one, so she came back with some of the trust, the same confidence, and more readiness to change. Ownership started low again, and the step had not happened.',
+        polite: 'Nothing had changed, so she came back much as she was on the first day: trust a little lower, confidence and ownership where they started.',
+        early: 'The first conversation ended early, so she came back more reluctant than on the first day: trust lower than at the start of Round 1, everything else where it started.'
       },
       // Act titles and the cliffhanger line shown on the act banner at the end of each act.
       acts: {
@@ -2407,6 +2875,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { mouth: 'slightSmile' },
               text: 'Well done for trying it. I\'m really proud of you.',
               reaction: {
                 default: '"Thanks." A small smile that does not quite reach her eyes. "It didn\'t last, though."'
@@ -2416,6 +2885,7 @@ const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { head: 'up' },
               text: 'You look quite pleased about that week, even though it stopped.',
               reaction: {
                 default: '"I am, a bit." She sits up. "I didn\'t think I\'d manage any of it."'
@@ -2424,6 +2894,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { mouth: 'flat' },
               text: 'You say it didn\'t work. I think you might have given up on it a bit early.',
               reaction: {
                 default: '"Maybe." Her smile fades. "I knew you\'d say that."'
@@ -2444,6 +2915,7 @@ const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { gaze: 'counsellor', head: 'up' },
               text: 'What got in the way, do you think?',
               reaction: {
                 default: '"I don\'t know." She sits. "I think I said yes because you wanted me to." She looks up, checking.'
@@ -2452,6 +2924,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { shoulders: 'relaxed' },
               text: 'That\'s OK. Two weeks goes quickly. I\'m glad you came back.',
               reaction: {
                 default: '"Yeah." Relief, and then nothing more.'
@@ -2468,6 +2941,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { gaze: 'counsellor', shoulders: 'relaxed' },
               text: 'I wonder if it was ever really your plan. It might have been mine.',
               reaction: {
                 default: 'She looks up. "It was kind of yours." She seems relieved that someone said it.'
@@ -2497,6 +2971,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { mouth: 'slightSmile' },
               text: 'Thanks for coming back. That counts for something.',
               reaction: {
                 default: '"Mr Okafor made me." But she smiles slightly.'
@@ -2515,6 +2990,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { arms: 'crossed' },
               text: 'Nothing at all? I find that hard to believe.',
               reaction: {
                 default: '"Well, it\'s true." She folds her arms.'
@@ -2543,6 +3019,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { arms: 'lap', gaze: 'counsellor' },
               text: 'Last time didn\'t go well, and I think I pushed too hard. I\'m sorry. You can set the pace today.',
               reaction: {
                 default: 'She looks surprised. "OK." She lets the bag slide off her shoulder.'
@@ -2561,6 +3038,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { mouth: 'tight' },
               text: 'You\'re here, though. Part of you must want something from this.',
               reaction: {
                 default: '"I\'m here because I have to be." Her jaw tightens.'
@@ -2632,6 +3110,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { head: 'down' },
               text: 'It sounds like your family really cares about how things turn out for you.',
               reaction: {
                 default: '"They do. They really do." She sounds almost guilty.'
@@ -2649,6 +3128,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { mouth: 'flat' },
               text: 'Is it the plan, though? You\'re the one who\'d be studying it.',
               reaction: {
                 default: '"It\'s not that simple." She puts the brochure down.'
@@ -2677,6 +3157,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { head: 'up' },
               text: 'That\'s a big expectation to grow up with. It makes sense that it weighs on you.',
               reaction: {
                 default: '"Yeah." She looks up. "I don\'t want to let them down."'
@@ -2686,6 +3167,7 @@ const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { head: 'down' },
               text: 'You said "my parents want". You didn\'t say what you want.',
               reaction: {
                 default: '"Because it doesn\'t matter." Quietly.'
@@ -2695,6 +3177,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { arms: 'crossed' },
               text: 'I\'m not hearing much of you in that plan.',
               reaction: {
                 default: '"Well, it\'s not really up to me." Her arms fold.'
@@ -2723,6 +3206,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { arms: 'lap' },
               text: 'You don\'t have to talk about home if you don\'t want to. I\'m listening either way.',
               reaction: {
                 default: 'Her arms loosen a little. "It\'s fine. It\'s just medicine. They want me to be a doctor." She says it as if deciding to.'
@@ -2732,6 +3216,7 @@ const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { gaze: 'counsellor' },
               text: 'You looked at the door as soon as your family came up.',
               reaction: {
                 default: '"I didn\'t." She looks back at you, a bit too quickly.'
@@ -2741,6 +3226,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { gaze: 'door' },
               text: 'I\'m not sure it\'s as worked out as you\'re making it sound.',
               reaction: {
                 default: '"You don\'t know my family." She turns towards the door.'
@@ -2759,6 +3245,7 @@ const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { arms: 'gesturing', mouth: 'smile' },
               text: 'What is it about design that you like?',
               reaction: {
                 default: 'She talks for longer than she has all term: colours, layouts, the poster she made for the school play. Then she stops. "Anyway."',
@@ -2777,6 +3264,7 @@ const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { mouth: 'slightSmile' },
               text: 'You smiled when you said "design". Then you stopped.',
               reaction: {
                 default: '"Did I?" She smiles again, then catches herself. "It\'s silly."'
@@ -2785,6 +3273,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { chair: 'back' },
               text: 'Is there no point, or is there no permission?',
               reaction: {
                 default: '"Wow." She sits back. "It\'s not... it\'s not like that."'
@@ -2804,6 +3293,7 @@ const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { arms: 'lap' },
               text: 'What did you use to draw?',
               reaction: {
                 default: '"Rooms, mostly. How I\'d change them. Posters." Her hands stop moving.'
@@ -2822,6 +3312,7 @@ const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { arms: 'lap' },
               text: 'You\'re turning the brochure over and over while you talk about it.',
               reaction: {
                 default: 'She stops. Puts it down. "Habit."'
@@ -2849,6 +3340,7 @@ const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { shoulders: 'relaxed' },
               text: 'What would you want them to hear, if they did listen?',
               reaction: {
                 default: '"That I\'m not ungrateful. That I just... might want something else." A long breath.'
@@ -2866,6 +3358,7 @@ const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { mouth: 'slightSmile' },
               text: 'You said they\'d never listen, and then straight away that they work so hard for you. Both seem true for you.',
               reaction: {
                 default: '"Yeah. That\'s the problem." She almost laughs.'
@@ -2875,6 +3368,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { shoulders: 'raised' },
               text: 'You\'re sure they\'d never listen. Have you ever actually told them?',
               reaction: {
                 default: 'She goes very still. For a moment she says nothing at all.'
@@ -2894,6 +3388,7 @@ const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { arms: 'gesturing' },
               text: 'What would you want to find out?',
               reaction: {
                 default: '"What you actually do. Where you can study it. If it\'s a real job." She counts on her fingers.'
@@ -2910,6 +3405,7 @@ const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { chair: 'leaningIn' },
               text: 'You leaned forward when you said that.',
               reaction: {
                 default: '"Did I?" She does not lean back.'
@@ -2919,6 +3415,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { gaze: 'window' },
               text: 'Finding out is a good start. I wonder if it might also be a way of putting off the conversation at home.',
               reaction: {
                 default: '"...Maybe both." She thinks about it.'
@@ -2947,6 +3444,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { chair: 'back' },
               text: 'It is a lot. Go easy on yourself.',
               reaction: {
                 default: '"Yeah." She puts the brochure down. The conversation drifts.'
@@ -2992,6 +3490,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { mouth: 'slightSmile' },
               text: 'That took courage to say.',
               reaction: {
                 default: '"It doesn\'t feel brave." But she smiles.'
@@ -3027,6 +3526,7 @@ const MAYA = {
           options: [
             {
               id: 'q', lever: 'question',
+              pose: { shoulders: 'relaxed' },
               text: 'You\'re right, I don\'t. What are they like?',
               reaction: {
                 default: '"They\'re... nice. Strict. They worry a lot." She softens slightly.'
@@ -3079,6 +3579,7 @@ const MAYA = {
             },
             {
               id: 's', lever: 'support',
+              pose: { gaze: 'counsellor' },
               text: 'Whatever you decide, I\'m here to help you think it through.',
               reaction: {
                 default: '"Thanks." She nods, and waits.'
@@ -3088,6 +3589,7 @@ const MAYA = {
             },
             {
               id: 'o', lever: 'observe',
+              pose: { mouth: 'slightSmile' },
               text: 'You said "I can\'t just walk in". It sounds like you\'ve already started picturing it.',
               reaction: {
                 default: '"...I have, kind of." A nervous laugh.'
@@ -3097,6 +3599,7 @@ const MAYA = {
             },
             {
               id: 'c', lever: 'challenge',
+              pose: { shoulders: 'relaxed' },
               text: 'You don\'t have to make a speech. But I don\'t think saying nothing is working for you either.',
               reaction: {
                 default: '"No. It isn\'t." She takes a breath. "OK."'
@@ -3107,15 +3610,24 @@ const MAYA = {
           ]
         }
       },
-      // How the round can end (SPEC.md 7.7). Shown on the ending page.
+      // How the round can end (SPEC.md 7.7). `text` is shown on the ending
+      // page; `summary` is the one line on the debrief's ending card.
       endings: {
-        breakthrough: { title: 'Breakthrough', text: 'Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."' },
-        partial: { title: 'Agreement without ownership', text: 'Maya agrees to the step you suggest. "OK. I\'ll look at the website." She takes the brochure with her. You are not sure she will open it.' },
-        polite: { title: 'Polite exit', text: '"Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.' },
-        early: { title: 'Early exit', text: '"Can I go now?" She is out of the door before you can answer.' }
+        breakthrough: { title: 'Breakthrough', summary: 'Maya chose her own next step, and how she wants to raise it at home.', text: 'Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."' },
+        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to look at the course you suggested. The step stayed yours.', text: 'Maya agrees to the step you suggest. "OK. I\'ll look at the website." She takes the brochure with her. You are not sure she will open it.' },
+        polite: { title: 'Polite exit', summary: 'A pleasant conversation. The brochure stayed on the desk.', text: '"Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.' },
+        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the real issue came up.', text: '"Can I go now?" She is out of the door before you can answer.' }
       }
     }
   },
+
+  // Debrief 2: three reflection prompts for self-study or the facilitator.
+  // Text only: nothing the counsellor thinks or writes is stored.
+  reflection: [
+    'At which moment did Maya\'s trust matter most to what happened next, and what had built or spent it before then?',
+    'Think of a real student who agreed to a plan without owning it. What might a move that builds ownership have sounded like?',
+    'Which lever do you reach for first when a conversation gets difficult, and what does it give or cost the student when you do?'
+  ],
 
   // The two biggest turning points per round, highlighted in the debrief.
   // Both are shared pages, so every path passes through them.
@@ -3155,8 +3667,8 @@ const MAYA = {
 //
 // Screens: Cover, How it works, Referral note, Scene (Round 1 two-step choice
 // or Round 2 choice plus Name that lever), Consequence (with the Round 2
-// reveal), Act banner, Ending, Interlude and a minimal Debrief (session 4
-// replaces the debrief). Uses the engine, art and content names from the same
+// reveal), Act banner, Ending, Interlude, Debrief 1 and Debrief 2 (SPEC.md
+// 10). Uses the engine, art and content names from the same
 // inlined script scope (CLAUDE.md, technical conventions).
 //
 // No scoring happens here: every meter change comes from applyChoice.
@@ -3503,17 +4015,50 @@ function announce(text) {
 }
 
 // ---------------------------------------------------------------------------
-// Scene placeholder (session 3): art.js draws a silhouette and names the posture.
+// Scene (SPEC.md 12). art.js draws the office and Maya. On a scene page the
+// page's pose hints override the posture. On a consequence page the chosen
+// option's pose hints (what her reaction describes) override the posture
+// from the meters after the choice; the page's props stay unless the option
+// sets its own. Between two pictures in the same round the
+// pose interpolates over 0.4s, or changes at once under reduced motion.
 
-function sceneView(meters, node, roundId) {
-  const art = renderScene({ meters: meters, poseBias: MAYA.profile.poseBias, pose: (node.scene || {}).pose, round: roundId });
-  return h('figure', { class: 'scene-area scene-frame', style: 'margin:0', 'data-posture': art.posture }, [
-    h('div', { role: 'img', 'aria-label': art.alt, html: art.svg }),
-    h('figcaption', { class: 'scene-caption' }, [
-      h('span', { class: 'posture', text: 'Posture: ' + art.posture }),
-      h('span', { text: art.caption || 'Placeholder figure' })
-    ])
-  ]);
+const POSE_TWEEN_MS = 400;
+let lastArt = null; // { round, vec } of the last picture drawn
+
+function sceneView(st, node, consequence) {
+  const pagePose = (node.scene || {}).pose || {};
+  const pose = consequence ? (consequence.pose || {}) : pagePose;
+  const art = renderScene({
+    meters: st.meters,
+    poseBias: MAYA.profile.poseBias,
+    pose: pose,
+    props: pose.props || pagePose.props || [],
+    round: st.round,
+    step: st.history.length
+  });
+  const holder = h('div', { class: 'scene-art', role: 'img', 'aria-label': art.alt, html: art.svg });
+  const fig = h('figure', { class: 'scene-area scene-frame', 'data-posture': art.posture }, [holder]);
+  Object.keys(art.pose).forEach(function (k) { fig.setAttribute('data-' + k, art.pose[k]); });
+  const from = lastArt && lastArt.round === st.round ? lastArt.vec : null;
+  lastArt = { round: st.round, vec: art.vec };
+  if (from && !reducedMotion()) tweenScene(holder, from, art.vec);
+  return fig;
+}
+
+function tweenScene(holder, from, to) {
+  let start = null;
+  holder.setAttribute('data-tweening', '');
+  holder.innerHTML = drawScene(from);
+  function frame(now) {
+    if (!holder.isConnected && start !== null) return;
+    if (start === null) start = now;
+    const t = Math.min(1, (now - start) / POSE_TWEEN_MS);
+    const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // ease in and out
+    holder.innerHTML = drawScene(lerpScene(from, to, e));
+    if (t < 1) window.requestAnimationFrame(frame);
+    else holder.removeAttribute('data-tweening');
+  }
+  window.requestAnimationFrame(frame);
 }
 
 function storyHead(node) {
@@ -3719,7 +4264,7 @@ function screenScene() {
     runhead(roundLabel(st) + ' · Act ' + node.act + ': ' + currentRound().acts[node.act].title, node.page),
     h('div', { class: 'spread', 'data-node': st.nodeId }, [
       metersView(st.meters, null),
-      sceneView(st.meters, node, st.round),
+      sceneView(st, node, false),
       h('div', { class: 'story-col' }, storyHead(node).concat([choicePanel(st, node)]))
     ])
   ]);
@@ -3755,7 +4300,7 @@ function screenConsequence(opts) {
     runhead(roundLabel(st) + ' · Act ' + node.act + ': ' + round.acts[node.act].title, node.page),
     h('div', { class: 'spread', 'data-node': entry.nodeId }, [
       metersView(st.meters, { before: before, lever: entry.lever, animate: !!opts.animate && !reducedMotion() }),
-      sceneView(st.meters, node, st.round),
+      sceneView(st, node, option),
       h('div', { class: 'story-col' }, [
         h('p', { class: 'eyebrow', text: 'You said' }, []),
         h('p', { class: 'you-said', text: '“' + option.text + '”' }),
@@ -3822,29 +4367,386 @@ function screenEnding() {
   ]);
 }
 
-// Minimal debrief: the path, decision by decision. Session 4 replaces this
-// with the full debriefs in SPEC.md section 10.
+// ---------------------------------------------------------------------------
+// Debriefs (SPEC.md 10). Debrief 1 follows Round 1; Debrief 2 follows Round 2
+// and adds lever recognition, both sessions side by side, reflection prompts
+// and Copy summary. Everything is derived from the engine history and the
+// authored content: no scoring happens here.
+
+const TRAIT_INFO = {
+  confidence: { name: 'Self-confidence', changes: 'How much Support is needed before Challenge lands' },
+  extraversion: { name: 'Extraversion', changes: 'How much an open Question yields; how visible cues are for Observe' },
+  defensiveness: { name: 'Defensiveness', changes: 'How strongly Challenge and Observe cost Trust' },
+  readiness: { name: 'Readiness for change', changes: 'How fast Ownership can rise' }
+};
+const BAND_WORDS = { low: 'Low', mid: 'Mid', high: 'High' };
+
+// Reference lines on the meter traces: the ending thresholds from RULES.
+function traceLines(meter) {
+  const E = RULES.endings;
+  if (meter === 'trust') return [{ y: E.breakthrough.trustAtLeast, label: 'Breakthrough or agreement' }, { y: E.early.trustAtMost, label: 'Early exit' }];
+  if (meter === 'ownership') return [{ y: E.breakthrough.ownershipAtLeast, label: 'Breakthrough' }, { y: E.partial.ownershipAtLeast, label: 'Agreement' }];
+  return [];
+}
+
+// A lever glyph drawn in SVG at (x, y): lever colour with an ink outline, so
+// it reads on paper even where the colour alone would not (ochre).
+function glyphMark(lever, x, y, r) {
+  const o = ' class="mk mk-' + lever + '"';
+  if (lever === 'question') return '<circle' + o + ' cx="' + x + '" cy="' + y + '" r="' + r + '"/>';
+  if (lever === 'support') return '<rect' + o + ' x="' + (x - r * 0.9) + '" y="' + (y - r * 0.9) + '" width="' + (r * 1.8) + '" height="' + (r * 1.8) + '"/>';
+  if (lever === 'observe') return '<circle' + o + ' cx="' + x + '" cy="' + y + '" r="' + r + '"/><circle class="mk-hole" cx="' + x + '" cy="' + y + '" r="' + (r * 0.55) + '"/><circle class="mk-dot" cx="' + x + '" cy="' + y + '" r="' + (r * 0.28) + '"/>';
+  return '<polygon' + o + ' points="' + x + ',' + (y - r * 1.15) + ' ' + (x + r * 1.1) + ',' + (y + r * 0.85) + ' ' + (x - r * 1.1) + ',' + (y + r * 0.85) + '"/>';
+}
+
+function esc(t) {
+  return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function changeWords(m, d) {
+  if (!d) return METER_INFO[m].name + ' held';
+  const size = Math.abs(d) <= CHANGE_WORDS.little ? ' a little' : Math.abs(d) >= CHANGE_WORDS.lot ? ' a lot' : '';
+  return METER_INFO[m].name + (d > 0 ? ' rose' : ' fell') + size;
+}
+
+function startMeters(st) {
+  const e = st.history[0];
+  const out = {};
+  RULES.meters.forEach(function (m) { out[m] = e ? e.meters[m] - e.deltas[m] : st.meters[m]; });
+  return out;
+}
+
+// Turning points: the authored ones this path reached (SPEC.md 14.2), topped
+// up with the decisions that moved the meters most when the round ended
+// before reaching them.
+function turningIndexes(st) {
+  const authored = (MAYA.turningPoints[st.round] || []);
+  const idx = [];
+  st.history.forEach(function (e, i) { if (authored.indexOf(e.nodeId) >= 0) idx.push(i); });
+  const swing = function (e) { return RULES.meters.reduce(function (a, m) { return a + Math.abs(e.deltas[m]); }, 0); };
+  const rest = st.history.map(function (e, i) { return i; }).filter(function (i) { return idx.indexOf(i) < 0; })
+    .sort(function (a, b) { return swing(st.history[b]) - swing(st.history[a]) || a - b; });
+  while (idx.length < Math.min(2, st.history.length)) idx.push(rest.shift());
+  return idx.sort(function (a, b) { return a - b; });
+}
+
+// One meter trace: an SVG line chart across the decisions, with a marker in
+// each choice's lever colour and glyph. `series` is a list of segments
+// [{ label, start, history, turning }]; two segments (Debrief 2) are drawn
+// side by side with a break for the two weeks between them.
+function traceChart(meter, series, opts) {
+  opts = opts || {};
+  const W = 320, H = 150, padL = 8, padR = 8, padT = 12, padB = 22, gapW = series.length > 1 ? 26 : 0;
+  const steps = series.reduce(function (a, s) { return a + s.history.length; }, 0);
+  const unit = (W - padL - padR - gapW * (series.length - 1)) / Math.max(1, steps + series.length - 1);
+  const yOf = function (v) { return padT + (H - padT - padB) * (1 - v / 100); };
+  let out = '';
+  const labels = []; // drawn over the line, under the markers
+  // Plot area, reference lines and labels.
+  out += '<rect class="tr-bg" x="' + padL + '" y="' + padT + '" width="' + (W - padL - padR) + '" height="' + (H - padT - padB) + '"/>';
+  traceLines(meter).forEach(function (l) {
+    out += '<line class="tr-ref" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + yOf(l.y) + '" y2="' + yOf(l.y) + '"/>';
+    labels.push('<text class="tr-ref-label" x="' + (padL + 4) + '" y="' + (yOf(l.y) - 3) + '">' + esc(l.label) + '</text>');
+  });
+  let x0 = padL;
+  const marks = [];
+  series.forEach(function (s, si) {
+    const pts = [[x0, yOf(s.start[meter])]];
+    s.history.forEach(function (e, i) { pts.push([x0 + unit * (i + 1), yOf(e.meters[meter])]); });
+    (s.turning || []).forEach(function (i) {
+      const bw = Math.min(unit * 0.8, 22);
+      const bx = Math.max(padL, x0 + unit * (i + 1) - bw / 2);
+      const bx2 = Math.min(W - padR, x0 + unit * (i + 1) + bw / 2);
+      out += '<rect class="tr-turn" x="' + bx.toFixed(1) + '" y="' + padT + '" width="' + (bx2 - bx).toFixed(1) + '" height="' + (H - padT - padB) + '"/>';
+    });
+    out += '<polyline class="tr-line" points="' + pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ') + '"/>';
+    out += '<rect class="tr-start" x="' + (pts[0][0] - 3) + '" y="' + (pts[0][1] - 3) + '" width="6" height="6"><title>' + esc(s.label + ': start') + '</title></rect>';
+    s.history.forEach(function (e, i) {
+      const node = MAYA.rounds[s.round].nodes[e.nodeId];
+      marks.push('<g class="tr-mark">' + glyphMark(e.lever, +pts[i + 1][0].toFixed(1), +pts[i + 1][1].toFixed(1), 5.5) +
+        '<title>' + esc(s.label + ', p. ' + node.page + ': ' + LEVER_INFO[e.lever].name + '. ' + changeWords(meter, e.deltas[meter]) + '.') + '</title></g>');
+    });
+    out += '<text class="tr-axis" x="' + x0 + '" y="' + (H - 6) + '">' + esc(s.label) + '</text>';
+    x0 += unit * s.history.length;
+    if (si < series.length - 1) {
+      out += '<line class="tr-break" x1="' + (x0 + gapW / 2 + unit / 2) + '" x2="' + (x0 + gapW / 2 + unit / 2) + '" y1="' + padT + '" y2="' + (H - padB) + '"/>';
+      x0 += gapW + unit;
+    }
+  });
+  out += labels.join('') + marks.join('');
+  const first = series[0].start[meter];
+  const lastS = series[series.length - 1];
+  const last = lastS.history.length ? lastS.history[lastS.history.length - 1].meters[meter] : lastS.start[meter];
+  const label = METER_INFO[meter].name + ': started ' + LEVEL_WORDS[segCount(first)] + ', ended ' + LEVEL_WORDS[segCount(last)] + '.';
+  return h('figure', { class: 'trace', 'data-trace': meter }, [
+    h('figcaption', {}, [h('span', { class: 'trace-name', text: METER_INFO[meter].name }), h('span', { class: 'trace-end', text: 'ends ' + LEVEL_WORDS[segCount(last)] })]),
+    h('div', { role: 'img', 'aria-label': label, html: '<svg viewBox="0 0 ' + W + ' ' + H + '" focusable="false">' + out + '</svg>' })
+  ]);
+}
+
+function tracesView(series) {
+  return h('div', { class: 'traces' }, RULES.meters.map(function (m) { return traceChart(m, series); }));
+}
+
+function traceKey() {
+  return h('p', { class: 'trace-key' }, RULES.levers.map(function (l) { return leverTag(l); }).concat([
+    h('span', { class: 'key-item' }, [h('span', { class: 'key-swatch key-turn', 'aria-hidden': 'true' }), 'Turning point']),
+    h('span', { class: 'key-item' }, [h('span', { class: 'key-swatch key-ref', 'aria-hidden': 'true' }), 'Ending threshold'])
+  ]));
+}
+
+function section(id, title, kids, intro) {
+  return h('section', { class: 'db-section', 'data-section': id, 'aria-labelledby': 'db-' + id }, [
+    h('h2', { id: 'db-' + id, text: title }),
+    intro ? h('p', { class: 'db-intro', text: intro }) : null
+  ].concat(kids));
+}
+
+function leverStats(st) {
+  const out = {};
+  RULES.levers.forEach(function (l) { out[l] = { n: 0, skilful: 0, clumsy: 0 }; });
+  st.history.forEach(function (e) {
+    out[e.lever].n += 1;
+    if (e.quality) out[e.lever][e.quality] += 1;
+  });
+  return out;
+}
+
+function leverCountsView(st) {
+  const stats = leverStats(st);
+  const isB = MAYA.rounds[st.round].format === 'B';
+  const skilful = st.history.filter(function (e) { return e.quality === 'skilful'; }).length;
+  const rows = RULES.levers.map(function (l) {
+    const s = stats[l];
+    const blocks = h('span', { class: 'count-blocks', 'aria-hidden': 'true' }, st.history.filter(function (e) { return e.lever === l; }).map(function (e) {
+      return h('span', { class: 'cb lv-' + l + (e.quality === 'clumsy' ? ' cb-clumsy' : '') });
+    }));
+    return h('li', { class: 'count-row', 'data-lever-count': l + ':' + s.n }, [
+      leverTag(l),
+      blocks,
+      h('span', { class: 'count-n', text: s.n === 1 ? 'once' : s.n === 0 ? 'not used' : s.n + ' times' }),
+      isB && s.n ? h('span', { class: 'count-q', text: s.skilful + ' skilful · ' + s.clumsy + ' clumsy' }) : null
+    ]);
+  });
+  return [
+    h('ul', { class: 'counts' }, rows),
+    isB ? h('p', { class: 'count-total', 'data-skilful': skilful + '/' + st.history.length }, [
+      h('strong', { text: 'Skilful wording ' + skilful + ' of ' + st.history.length + '. ' }),
+      'Clumsy wordings (hollow blocks above) were leading, closed, judgemental, premature or rescuing. They kept less of the lever\'s gain and cost some trust.'
+    ]) : null
+  ];
+}
+
+function meterChips(e) {
+  return h('span', { class: 'chips' }, RULES.meters.map(function (m) {
+    const d = e.deltas[m];
+    return h('span', { class: 'chip' + (d > 0 ? ' up' : d < 0 ? ' down' : '') }, [h('span', { 'aria-hidden': 'true', text: d > 0 ? '▲ ' : d < 0 ? '▼ ' : '– ' }), changeWords(m, d)]);
+  }));
+}
+
+function pathReplay(st, turning) {
+  const round = MAYA.rounds[st.round];
+  const isC = round.format === 'C';
+  return h('ol', { class: 'path' }, st.history.map(function (e, i) {
+    const node = round.nodes[e.nodeId];
+    const option = node.options.find(function (o) { return o.id === e.optionId; });
+    const isTurn = turning.indexOf(i) >= 0;
+    return h('li', { class: 'lv-' + e.lever + (isTurn ? ' turning' : ''), 'data-turning': isTurn ? 'yes' : null, id: 'replay-' + st.round + '-' + i }, [
+      isTurn ? h('p', { class: 'turn-flag', text: 'Turning point' }) : null,
+      h('div', { class: 'path-head' }, [
+        h('span', { class: 'pageno', text: 'p. ' + node.page }),
+        leverTag(e.lever),
+        e.quality ? h('span', { class: 'quality q-' + e.quality, text: e.quality === 'skilful' ? 'Skilful wording' : 'Clumsy wording' }) : null,
+        isC ? h('span', { class: 'muted' }, e.guessCorrect ? ['✓ You named it'] : ['✗ You named ', leverTag(e.guess)]) : null
+      ]),
+      h('p', { class: 'said', text: '“' + option.text + '”' }),
+      h('p', { class: 'reacted', text: e.reaction }),
+      meterChips(e),
+      h('p', { class: 'note', text: option.debrief })
+    ]);
+  }));
+}
+
+function roadNotTakenView(st) {
+  const ids = MAYA.turningPoints[st.round] || [];
+  const round = MAYA.rounds[st.round];
+  return h('div', { class: 'roads' }, ids.map(function (id) {
+    const node = round.nodes[id];
+    const lines = MAYA.roadNotTaken[id] || {};
+    const entry = st.history.find(function (e) { return e.nodeId === id; });
+    const others = RULES.levers.filter(function (l) { return lines[l] && (!entry || entry.lever !== l); });
+    return h('article', { class: 'road', 'data-road': id }, [
+      h('p', { class: 'road-head' }, [h('span', { class: 'pageno', text: 'p. ' + node.page }), h('span', { text: entry ? 'You used ' : 'You did not reach this page.' }), entry ? leverTag(entry.lever) : null]),
+      h('p', { class: 'road-line', text: '“' + node.line + '”' }),
+      h('ul', {}, others.map(function (l) { return h('li', {}, [leverTag(l), h('span', { text: lines[l] })]); }))
+    ]);
+  }));
+}
+
+// Where each trait showed on this path: a trait multiplier or cap in the
+// engine's trace, or a reaction written for that trait band.
+function traitMoments(st, trait) {
+  const round = MAYA.rounds[st.round];
+  const out = [];
+  st.history.forEach(function (e) {
+    const node = round.nodes[e.nodeId];
+    const option = node.options.find(function (o) { return o.id === e.optionId; });
+    const why = [];
+    (e.trace || []).forEach(function (t) {
+      const p = t.split(':');
+      if (p[0] === 'trait' && p[1] === trait) {
+        const rule = RULES.traitMultipliers.find(function (r) { return r.trait === p[1] && r.band === p[2] && r.meter === p[3] && r.lever === e.lever; });
+        if (!rule) return;
+        const more = rule.factor > 1;
+        why.push(rule.sign === 'gain'
+          ? LEVER_INFO[e.lever].name + ' raised ' + METER_INFO[rule.meter].name.toLowerCase() + (more ? ' more' : ' less') + ' than usual'
+          : LEVER_INFO[e.lever].name + ' cost ' + (more ? 'more ' : 'less ') + METER_INFO[rule.meter].name.toLowerCase() + ' than usual');
+      }
+      if (p[0] === 'cap' && p[1] === trait) why.push(METER_INFO[p[2]].name + ' could not rise further this early in the conversation');
+    });
+    const r = option.reaction;
+    if (r && typeof r === 'object' && r[trait + ':' + st.traits[trait]]) why.push('her reaction showed it');
+    if (why.length) out.push({ e: e, node: node, why: why });
+  });
+  return out;
+}
+
+function meetMayaView(st) {
+  const r1Traits = MAYA.profile.traits;
+  return h('div', { class: 'traits' }, Object.keys(TRAIT_INFO).map(function (t) {
+    const band = st.traits[t];
+    const rose = r1Traits[t] !== band;
+    const hint = (MAYA.referral.hints || []).find(function (x) { return x.trait === t; });
+    const moments = traitMoments(st, t);
+    return h('article', { class: 'trait', 'data-trait': t + ':' + band }, [
+      h('div', { class: 'trait-head' }, [
+        h('h3', { text: TRAIT_INFO[t].name }),
+        h('span', { class: 'band band-' + band, text: BAND_WORDS[band] + (rose ? ' (rose from ' + BAND_WORDS[r1Traits[t]].toLowerCase() + ' after Round 1)' : '') })
+      ]),
+      h('p', { class: 'trait-changes', text: TRAIT_INFO[t].changes + '.' }),
+      hint ? h('div', { class: 'hint' }, [
+        h('p', { class: 'hint-label', text: 'In the referral note' }),
+        h('blockquote', { class: 'hint-quote', text: hint.text }),
+        h('p', { class: 'hint-note', text: hint.note })
+      ]) : null,
+      h('p', { class: 'hint-label', text: 'Where it showed on your path' }),
+      moments.length
+        ? h('ul', { class: 'moments' }, moments.map(function (m) {
+            return h('li', {}, [h('a', { href: '#replay-' + st.round + '-' + st.history.indexOf(m.e), class: 'pageno', text: 'p. ' + m.node.page }), leverTag(m.e.lever), h('span', { text: m.why.join('; ') + '.' })]);
+          }))
+        : h('p', { class: 'muted moments-none', text: band === 'mid' ? 'A mid band does not change the numbers, and no reaction on this path was written for it.' : 'It did not change the numbers or her reactions on this path.' })
+    ]);
+  }));
+}
+
+function recognitionView(st) {
+  const round = MAYA.rounds[st.round];
+  const named = st.history.filter(function (e) { return e.guessCorrect; }).length;
+  const misses = st.history.filter(function (e) { return !e.guessCorrect; });
+  return [
+    h('p', { class: 'recognition', 'data-recognition': named + '/' + st.history.length, text: 'You named the lever correctly ' + named + ' of ' + st.history.length + ' times.' }),
+    misses.length ? h('ul', { class: 'misses' }, misses.map(function (e) {
+      const node = round.nodes[e.nodeId];
+      const option = node.options.find(function (o) { return o.id === e.optionId; });
+      return h('li', {}, [
+        h('p', { class: 'said', text: '“' + option.text + '”' }),
+        h('p', { class: 'miss-line' }, [h('span', { class: 'pageno', text: 'p. ' + node.page }), 'You named ', leverTag(e.guess), '. It used ', leverTag(e.lever), '.'])
+      ]);
+    })) : h('p', { class: 'muted', text: 'No misses.' })
+  ];
+}
+
+function sessionCard(st) {
+  const round = MAYA.rounds[st.round];
+  const ending = round.endings[st.ending];
+  return h('article', { class: 'session-card', 'data-session': st.round }, [
+    h('p', { class: 'eyebrow', text: ROUND_LABELS[st.round] + ' · ' + round.title }),
+    h('h3', { text: ending.title }),
+    h('p', { class: 'session-summary', text: ending.summary }),
+    h('p', { class: 'glyph-strip', 'aria-label': 'Levers in order: ' + st.history.map(function (e) { return LEVER_INFO[e.lever].name; }).join(', ') }, st.history.map(function (e) {
+      return h('span', { class: 'lv-' + e.lever, 'aria-hidden': 'true' }, [glyph(e.lever)]);
+    }))
+  ]);
+}
+
+function summaryText(r1, r2) {
+  const lines = ['Turn the Page — summary', ''];
+  [r1, r2].forEach(function (st) {
+    if (!st) return;
+    const round = MAYA.rounds[st.round];
+    const stats = leverStats(st);
+    lines.push(ROUND_LABELS[st.round] + ' (' + round.title + '): ' + round.endings[st.ending].title);
+    lines.push('  Levers: ' + RULES.levers.map(function (l) { return LEVER_INFO[l].name + ' ' + stats[l].n; }).join(', '));
+    lines.push('  Order: ' + st.history.map(function (e) { return LEVER_INFO[e.lever].name; }).join(' → '));
+    if (round.format === 'B') lines.push('  Skilful wording: ' + st.history.filter(function (e) { return e.quality === 'skilful'; }).length + ' of ' + st.history.length);
+    if (round.format === 'C') lines.push('  Lever recognition: ' + st.history.filter(function (e) { return e.guessCorrect; }).length + ' of ' + st.history.length);
+  });
+  return lines.join('\n');
+}
+
+function copySummaryView(text) {
+  const status = h('span', { class: 'copy-status', role: 'status', 'aria-live': 'polite' });
+  const area = h('textarea', { class: 'summary-text', readonly: true, rows: String(text.split('\n').length + 1), 'aria-label': 'Summary text', spellcheck: 'false' });
+  area.value = text;
+  function fallback() {
+    area.focus();
+    area.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    status.textContent = ok ? 'Copied.' : 'Selected: press Ctrl+C or Cmd+C to copy.';
+  }
+  const btn = button('Copy summary', function () {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { status.textContent = 'Copied.'; }, fallback);
+    } else {
+      fallback();
+    }
+  }, { ghost: true, action: 'copy-summary' });
+  return [area, h('div', { class: 'actions copy-row' }, [btn, status])];
+}
+
 function screenDebrief() {
   const st = view.state;
   const round = currentRound();
   const ending = round.endings[st.ending];
   const isR2 = st.round === 'r2';
-  const named = st.history.filter(function (e) { return e.guessCorrect; }).length;
-  const items = st.history.map(function (e) {
-    const node = round.nodes[e.nodeId];
-    const option = node.options.find(function (o) { return o.id === e.optionId; });
-    return h('li', { class: 'lv-' + e.lever }, [
-      h('div', { class: 'path-head' }, [
-        h('span', { class: 'pageno', text: 'p. ' + node.page }),
-        leverTag(e.lever),
-        e.quality ? h('span', { class: 'muted', text: e.quality === 'skilful' ? 'Skilful wording' : 'Clumsy wording' }) : null,
-        isR2 ? h('span', { class: 'muted' }, e.guessCorrect ? ['✓ You named it'] : ['✗ You named ', leverTag(e.guess)]) : null
+  const r1 = isR2 && view.r1 && view.r1.ending ? view.r1 : null;
+  const turning = turningIndexes(st);
+  const series = [{ round: st.round, label: ROUND_LABELS[st.round], start: startMeters(st), history: st.history, turning: turning }];
+
+  const kids = [
+    h('p', { class: 'eyebrow', text: (isR2 ? 'Debrief 2' : 'Debrief 1') + ' · ' + roundLabel(st) }),
+    h('h1', { class: 'db-title', text: 'Your path through ' + ROUND_LABELS[st.round] }),
+    h('div', { class: 'ending-card', 'data-ending-card': st.ending }, [
+      h('p', { class: 'eyebrow', text: 'Ending' }),
+      h('h2', { text: ending.title }),
+      h('p', { text: ending.summary })
+    ]),
+    section('traces', 'Meter traces', [traceKey(), tracesView(series)], 'How each meter moved, decision by decision. Each marker is the lever you used; shaded columns are the turning points.'),
+    section('levers', 'Your levers', leverCountsView(st))
+  ];
+  if (isR2) kids.push(section('recognition', 'Lever recognition', recognitionView(st)));
+  kids.push(
+    section('path', 'Path replay', [pathReplay(st, turning)], 'Each decision: what you said, how Maya reacted, how the meters moved, and the trade-off it carried. The two turning points are marked.'),
+    section('road', 'Road not taken', [roadNotTakenView(st)], 'At the two turning points, what the other levers tended to do there. These lines are written in advance, not simulated.'),
+    section('maya', 'Meet Maya', [meetMayaView(st)], 'Her trait profile, hidden during play: what each trait changes, the hint in Mr Okafor\'s referral note, and where it showed on your path.')
+  );
+  if (r1) {
+    const r1Series = { round: 'r1', label: 'Round 1', start: startMeters(r1), history: r1.history, turning: turningIndexes(r1) };
+    kids.push(
+      section('sessions', 'Two sessions side by side', [
+        h('div', { class: 'session-cards' }, [sessionCard(r1), sessionCard(st)]),
+        h('div', { class: 'carry' }, [
+          h('p', { class: 'hint-label', text: 'How Round 1 shaped Round 2' }),
+          h('p', { class: 'carry-note', text: MAYA.rounds.r2.carryNote[r1.ending] })
+        ]),
+        traceKey(),
+        tracesView([r1Series, series[0]])
       ]),
-      h('p', { class: 'said', text: '“' + option.text + '”' }),
-      h('p', { class: 'reacted', text: e.reaction }),
-      h('p', { class: 'note', text: option.debrief })
-    ]);
-  });
+      section('reflect', 'Reflection prompts', [h('ol', { class: 'reflection' }, MAYA.reflection.map(function (q) { return h('li', { text: q }); }))], 'For self-study or with your facilitator. Nothing you think or write here is stored.'),
+      section('copy', 'Copy summary', copySummaryView(summaryText(r1, st)), 'Plain text of the endings, lever counts and recognition score, for pasting into a shared document. No names or free text.')
+    );
+  }
   const actions = isR2
     ? [
         button('Replay Round 2', function () { go('interlude'); }, { primary: true }),
@@ -3854,16 +4756,10 @@ function screenDebrief() {
         button('Continue to Round 2', function () { view.r1 = st; go('interlude'); }, { primary: true }),
         button('Try a different route', startRound1, { ghost: true })
       ];
+  kids.push(section('next', isR2 ? 'What next' : 'Try again', [h('div', { class: 'actions' }, actions)]));
   return pageEl('debrief', null, [
     runhead('Debrief · ' + roundLabel(st), null),
-    h('div', { class: 'narrow' }, [
-      h('h1', { text: 'Your path through ' + ROUND_LABELS[st.round] }),
-      h('div', { class: 'ending-card' }, [h('h2', { text: ending.title }), h('p', { text: ending.text })]),
-      isR2 ? h('p', { style: 'margin-top:16px;font-weight:700', 'data-recognition': named + '/' + st.history.length, text: 'You named the lever correctly ' + named + ' of ' + st.history.length + ' times.' }) : null,
-      h('p', { class: 'muted', style: 'margin-top:16px', text: 'This is a short version of the debrief: each decision, what Maya said, and the trade-off it carried.' }),
-      h('ol', { class: 'path' }, items),
-      h('div', { class: 'actions' }, actions)
-    ])
+    h('div', { class: 'debrief', 'data-debrief': isR2 ? '2' : '1' }, kids)
   ]);
 }
 
