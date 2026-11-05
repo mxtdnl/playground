@@ -330,8 +330,10 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 .seg.on { background: var(--ink); }
 .seg.flash-on { animation: flash-on var(--flash) ease-out both; }
 .seg.flash-off { animation: flash-off var(--flash) ease-out both; }
-@keyframes flash-on { 0%, 45% { background: var(--flash-colour); } 100% { background: var(--ink); } }
-@keyframes flash-off { 0%, 45% { background: var(--flash-colour); } 100% { background: var(--paper-deep); } }
+/* While a segment flashes it carries an ink edge, so the shape keeps 3:1
+   against the paper even in ochre (WCAG 1.4.11). */
+@keyframes flash-on { 0%, 45% { background: var(--flash-colour); border: 2px solid var(--ink); } 100% { background: var(--ink); border: 2px solid var(--ink); } }
+@keyframes flash-off { 0%, 45% { background: var(--flash-colour); border: 2px solid var(--ink); } 100% { background: var(--paper-deep); border: 0 solid var(--paper-deep); } }
 .mark { font: 700 0.8rem/1 var(--ui); color: var(--ink); text-align: center; }
 
 /* ---- How it works ------------------------------------------------------ */
@@ -396,17 +398,19 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 
 /* ---- Act banner (SPEC.md 11.3) ----------------------------------------- */
 
-.act-1 { --act: var(--lever-question); }
-.act-2 { --act: var(--lever-observe); }
-.act-3 { --act: var(--lever-challenge); }
+.act-1 { --act: var(--lever-question); --act-on: var(--white); }
+.act-2 { --act: var(--lever-observe); --act-on: var(--ink); }
+.act-3 { --act: var(--lever-challenge); --act-on: var(--white); }
 .banner {
   display: grid;
-  grid-template-columns: clamp(28px, 6vw, 96px) minmax(0, 1fr);
+  grid-template-columns: clamp(56px, 9vw, 132px) minmax(0, 1fr);
   margin: clamp(24px, 10vh, 120px) calc(-1 * var(--gutter)) 0;
   background: var(--ink);
   color: var(--paper);
 }
-.banner .slab { background: var(--act); }
+.banner .slab { background: var(--act); display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+/* The act number, heavy and cut off by the slab's bottom edge (pulp). */
+.banner .act-no { font: 900 clamp(4rem, 2rem + 6vw, 9rem)/0.8 var(--ui); color: var(--act-on); margin-bottom: -0.08em; }
 .banner .banner-body { padding: clamp(28px, 6vh, 64px) var(--gutter); max-width: 1000px; }
 .banner .tag {
   display: inline-block; background: var(--plum); color: var(--white);
@@ -415,7 +419,7 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 }
 .cliff { font: 400 clamp(1.6rem, 1.1rem + 2.2vw, 2.8rem)/1.3 var(--story); margin: 0; }
 /* Aligned with the banner text: the slab width past the page gutter. */
-.banner-actions { margin: 28px 0 0 clamp(28px, 6vw, 96px); }
+.banner-actions { margin: 28px 0 0 clamp(56px, 9vw, 132px); }
 
 /* ---- Ending page (SPEC.md 11.3) ---------------------------------------- */
 
@@ -482,7 +486,8 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 .counts { list-style: none; padding: 0; margin: 8px 0 12px; display: grid; gap: 8px; }
 .count-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) auto; align-items: center; gap: 4px 14px; background: var(--paper-card); border: 2px solid var(--rule); padding: 8px 12px; }
 .count-blocks { display: flex; gap: 4px; flex-wrap: wrap; }
-.cb { display: inline-block; width: 18px; height: 18px; background: var(--lc); border: 2px solid var(--lc); }
+/* Ink edge: the block reads at 3:1 in every lever colour; hollow = clumsy. */
+.cb { display: inline-block; width: 18px; height: 18px; background: var(--lc); border: 2px solid var(--ink); }
 .cb.cb-clumsy { background: transparent; }
 .count-n { font: 700 0.85rem/1.3 var(--ui); }
 .count-q { grid-column: 2 / -1; font-size: 0.85rem; color: var(--ink-muted); }
@@ -526,15 +531,15 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 .hint-note { font-size: 0.88rem; margin: 0; }
 .moments { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: 0.9rem; }
 .moments li { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
-.moments a.pageno { color: var(--plum); font-weight: 800; }
+.moments a.pageno { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; color: var(--plum); font-weight: 800; }
 .moments-none { font-size: 0.9rem; margin: 0; }
 
 /* Lever recognition (Debrief 2). */
 .recognition { font: 800 1.2rem/1.3 var(--ui); }
 .misses { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .misses li { background: var(--paper-card); border: 2px solid var(--rule); padding: 10px 14px; }
-.miss-line { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; margin: 0; font-size: 0.92rem; }
-.miss-line .pageno { margin-right: 6px; }
+.miss-line { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; margin: 0; font-size: 0.92rem; }
+.miss-line .lever-tag { margin-left: 4px; }
 
 /* Two sessions side by side (Debrief 2). */
 .session-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
@@ -542,15 +547,17 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 .session-card .eyebrow { color: var(--paper); margin-bottom: 4px; }
 .session-card h3 { font-size: 1.3rem; margin-bottom: 6px; }
 .session-summary { font: 400 1rem/1.5 var(--story); }
-.glyph-strip { display: flex; gap: 6px; margin: 0; font-size: 1.15rem; }
-.glyph-strip .glyph { color: var(--lc); }
+/* The order of levers as ink-outlined marks on a paper tile, so each shape
+   reads at 3:1 on the ink card (cobalt and green alone would not). */
+.glyph-strip { display: inline-flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 6px 8px; background: var(--paper-card); }
+.glyph-strip svg { display: block; width: 20px; height: 20px; overflow: visible; }
 .carry { background: var(--paper-card); border-left: 8px solid var(--plum); padding: 12px 16px; margin-bottom: 8px; max-width: 52rem; }
 .carry-note { font: 400 1.02rem/1.55 var(--story); margin: 0; }
 
 /* Reflection and Copy summary (Debrief 2). */
 .reflection { font: 400 1.08rem/1.6 var(--story); max-width: 46rem; padding-left: 1.4em; }
 .reflection li { margin-bottom: 10px; }
-.summary-text { display: block; width: 100%; max-width: 46rem; font: 400 0.9rem/1.5 ui-monospace, 'SF Mono', Menlo, Consolas, monospace; background: var(--paper-card); color: var(--ink); border: 2px solid var(--ink); padding: 12px; resize: vertical; }
+.summary-text { field-sizing: content; min-height: 8rem; display: block; width: 100%; max-width: 46rem; font: 400 0.9rem/1.5 ui-monospace, 'SF Mono', Menlo, Consolas, monospace; background: var(--paper-card); color: var(--ink); border: 2px solid var(--ink); padding: 12px; resize: vertical; }
 .copy-row { align-items: center; }
 .copy-status { font: 700 0.85rem/1.3 var(--ui); color: var(--lever-support); }
 
@@ -596,4 +603,33 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
   .seg.flash-on, .seg.flash-off { animation: none; }
   .btn, .lever-card, .line-option { transition: none; }
   .btn:hover, button.lever-card:hover, .line-option:hover { transform: none; }
+}
+
+/* ---- Print (debriefs only) ---------------------------------------------
+   A counsellor may print their path. The debriefs print on white with ink
+   text, no decoration, no buttons, the three traces in a row and no card
+   split across pages. Any other screen prints a one-line note instead. */
+.print-note { display: none; }
+@media print {
+  @page { margin: 14mm 12mm; }
+  html, body { background: #FFFFFF; }
+  body { font-size: 11pt; }
+  .print-note { display: block; font: 400 12pt/1.5 var(--story); padding: 24px 0; }
+  body:has(.page--debrief) .print-note,
+  #app .page:not(.page--debrief), .turn-out, .notice, #meter-announcer { display: none; }
+  .page--debrief { min-height: 0; padding: 0; overflow: visible; }
+  .page--debrief .deco, .page--debrief .db-section[data-section="next"],
+  .page--debrief button, .page--debrief .copy-row { display: none !important; }
+  .page--debrief .runhead { margin-bottom: 12px; }
+  .debrief { max-width: none; }
+  .db-section { margin-top: 22px; }
+  .db-section > h2 { break-after: avoid; }
+  .traces { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .roads, .traits, .session-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trace, .path li, .road, .trait, .session-card, .misses li, .count-row, .ending-card, .carry { break-inside: avoid; }
+  .tr-bg { fill: #FFFFFF; }
+  .summary-text { resize: none; border-width: 1px; }
+  .moments a.pageno { text-decoration: none; }
+  /* Keep the lever colours, ink spreads and markers. */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }

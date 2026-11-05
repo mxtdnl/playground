@@ -91,6 +91,17 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - Meet Maya lists, per trait, the referral hint and the moments where it showed: a trait multiplier or cap in the engine's `trace`, or a reaction written for that trait band.
 - Copy summary: plain text (round, ending, lever counts, order, skilful wording, recognition) via the Clipboard API, falling back to selecting the text. Ending `summary`, `rounds.r2.carryNote` and `reflection` are content, listed in CONTENT-REVIEW.md and checked for the forbidden words.
 
+## Polish decisions (session 5)
+
+- Contrast: `tests/contrast.mjs` measures the colour actually behind each text node (ancestor backgrounds plus any decorative shape showing through, worst case) and fails below 4.5:1, or 3:1 for large text (24px, or 18.66px bold). Graphics that carry meaning without a label beside them (trace markers, the lever-order strip, lever-count blocks, meter segments) need 3:1 at their edge. Fixes: flashing meter segments carry an ink edge (ochre alone was 1.95); lever-count blocks have an ink edge; the session cards' lever order is drawn as ink-outlined marks on a paper tile (cobalt and green on ink were 2.1 and 2.7).
+- Every screen has one h1 (visually hidden on scene and consequence pages; the act banner's tag on act pages). Every target is at least 44 x 44px, including the page links in Meet Maya.
+- Decoration: two or three shapes per screen in at least two different lever colours (no plum), 0.06–0.12 opacity, each bleeding off an edge, none over the meters; the consequence page has its own set.
+- Act banners show the act number, heavy and cut off by the slab's bottom edge, in the act's colour.
+- Typographic quotes are display only: `typo()` in ui.js curls straight quotes in every text it renders, and `quoted()` wraps a spoken line, turning quotes inside it into single ones. Content keeps straight quotes.
+- In Debrief 2's two-session traces the threshold lines are named in a note under the charts, not on the chart (the labels collided with the markers at 390px).
+- Print: only the debriefs print (white paper, no decoration or buttons, three traces in a row, cards kept whole); any other screen prints a one-line note. Each debrief has a Print this debrief button.
+- Hosting: GitHub Pages is enabled for the repository and deploys `main` (checked in session 5 through the public deployments API), so the page is at `https://mxtdnl.github.io/playground/turn-the-page/` once merged.
+
 ## File map
 
 ```
@@ -121,11 +132,21 @@ turn-the-page/
                           both debriefs (Breakthrough and Early exit paths), screenshots
   tests/art-gallery.mjs   Renders every posture, sample page and consequence hints, every pose value, tweens;
                           geometry checks (limbs attached); not part of `node --test`
+  tests/states.mjs        Screen-state catalogue shared by contrast.mjs and a11y.test.mjs (59 states reached
+                          by writing a save and pressing Resume), one state per page, browser helpers
+  tests/wcag.mjs          pageAudit(): in-page WCAG contrast measurement (text, graphics, focus indicator)
+  tests/contrast.mjs      WCAG AA walk of every text node in every catalogue state at 1440 and 390; exits 1 on
+                          failure; not part of `node --test`
+  tests/a11y.test.mjs     Playwright: every state at 1440/390/360 (focus order, focus ring 3:1, 44px targets,
+                          one h1, labelled images, decoration, narrow layout, sticky meters), keyboard-only
+                          playthrough, focus kept on page turns, reduced motion, alt text on all 31 pages,
+                          contrast self-check, print stylesheet
+  .gitignore              Ignores tests/screenshots/states/
   tests/screenshots/      Screenshots from ui.test.mjs at 1440x900 and 390x844 (regenerated on every run)
   tests/screenshots/art/  Images and contact sheets from art-gallery.mjs at 540px and 352px wide
+  tests/screenshots/states/ Every catalogue state at 1440x900 and 390x844 and the debrief print PDFs, from
+                          a11y.test.mjs (not committed)
 ```
-
-Planned, not yet created: `tests/contrast.mjs` (session 5).
 
 ## Commands (run from `turn-the-page/`)
 
@@ -135,6 +156,7 @@ node --test               # unit, content and UI tests (finds tests/*.test.mjs; 
 node tests/calibrate.mjs  # calibration report; exits 1 while any criterion fails
 node tests/export-review.mjs  # regenerates docs/CONTENT-REVIEW.md (run after any content or RULES change)
 node tests/art-gallery.mjs    # renders the art gallery; exits 1 if a geometry check fails
+node tests/contrast.mjs   # WCAG AA contrast walk of every screen state; exits 1 on any failure
 ```
 
 `node --test tests/` does not work on Node 22 (it treats the directory as a file); use `node --test` with no arguments. Before committing, also run `scripts/check-boundaries.sh` from the repository root. Playwright and Chromium are preinstalled in cloud sessions; do not install another version.

@@ -21,6 +21,8 @@ const here = dirname(fileURLToPath(import.meta.url));
 const PAGE_URL = pathToFileURL(join(here, '..', 'index.html')).href + '?seed=7';
 const SHOTS = join(here, 'screenshots');
 const ENDINGS = ['breakthrough', 'partial', 'polite', 'early'];
+// The page shows typographic quotes; the content keeps straight ones.
+const plain = (t) => t.replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
 
 let chromium = null;
 try {
@@ -162,7 +164,7 @@ for (const target of ENDINGS) {
     assert.equal(await page.locator('.path li').count(), r1Path.length);
     await page.click('[data-primary]');
     assert.equal(await screenOf(page), 'interlude');
-    assert.equal(await page.textContent('.interlude-text'), MAYA.rounds.r2.interlude[target]);
+    assert.equal(plain(await page.textContent('.interlude-text')), MAYA.rounds.r2.interlude[target]);
     await page.click('[data-primary]');
 
     const r2Start = createRound(MAYA, 'r2', carryOver(r1End), 1);
@@ -433,7 +435,7 @@ for (const target of ['breakthrough', 'early']) {
       assert.equal(await page.locator('.misses li').count(), r2Path.length - named);
       assert.equal(await page.locator('.session-card').count(), 2);
       assert.equal(await page.locator('[data-section="sessions"] .tr-mark').count(), 3 * (r1End.history.length + r2End.history.length));
-      assert.equal(await page.textContent('.carry-note'), MAYA.rounds.r2.carryNote[target]);
+      assert.equal(plain(await page.textContent('.carry-note')), MAYA.rounds.r2.carryNote[target]);
       assert.equal(await page.locator('.reflection li').count(), 3);
       const summary = await page.inputValue('.summary-text');
       assert.match(summary, new RegExp('Round 1 \\(Just lazy\\): ' + MAYA.rounds.r1.endings[target].title));

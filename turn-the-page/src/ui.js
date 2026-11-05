@@ -45,6 +45,20 @@ const SCREEN_NAMES = ['cover', 'how', 'referral', 'scene', 'consequence', 'act',
 // ---------------------------------------------------------------------------
 // DOM helpers.
 
+// Typographic quotes for display (presentation only: the content keeps
+// straight quotes, CLAUDE.md). An apostrophe or closing quote follows a
+// letter, digit or punctuation; an opening quote starts a word.
+function typo(t) {
+  return String(t)
+    .replace(/(^|[\s(\[—–-])"/g, '$1“').replace(/"/g, '”')
+    .replace(/(^|[\s(\[—–-])'/g, '$1‘').replace(/'/g, '’');
+}
+
+// Wrap a spoken line in double quotes; quotes inside it become single.
+function quoted(t) {
+  return '“' + typo(t).replace(/“/g, '‘').replace(/”/g, '’') + '”';
+}
+
 function h(tag, props, kids) {
   const e = document.createElement(tag);
   if (props) {
@@ -52,7 +66,7 @@ function h(tag, props, kids) {
       const v = props[k];
       if (v === null || v === undefined || v === false) return;
       if (k === 'class') e.className = v;
-      else if (k === 'text') e.textContent = v;
+      else if (k === 'text') e.textContent = typo(v);
       else if (k === 'html') e.innerHTML = v;
       else if (k === 'onclick') e.addEventListener('click', v);
       else e.setAttribute(k, v === true ? '' : String(v));
@@ -109,11 +123,11 @@ const DECO = {
   how: [['ring', 'observe', 'width:420px;height:420px;right:-170px;top:-120px;border-width:60px'], ['triangle', 'question', 'width:300px;height:260px;left:-120px;bottom:-60px']],
   referral: [['square', 'question', 'width:300px;height:300px;left:-140px;top:18%'], ['circle', 'challenge', 'width:380px;height:380px;right:-160px;bottom:-140px']],
   scene: [['circle', 'observe', 'width:380px;height:380px;right:-170px;bottom:-150px'], ['triangle', 'question', 'width:240px;height:210px;right:-90px;top:42%']],
-  consequence: null,
-  act: [['circle', 'support', 'width:360px;height:360px;right:-140px;bottom:-140px'], ['square', 'plum', 'width:200px;height:200px;left:-80px;bottom:8%']],
+  consequence: [['square', 'challenge', 'width:300px;height:300px;right:-150px;bottom:-130px'], ['ring', 'question', 'width:260px;height:260px;right:-120px;top:38%;border-width:44px']],
+  act: [['circle', 'support', 'width:360px;height:360px;right:-140px;bottom:-140px'], ['square', 'challenge', 'width:200px;height:200px;left:-80px;bottom:8%']],
   ending: [['ring', 'observe', 'width:460px;height:460px;left:-200px;top:-160px;border-width:70px'], ['triangle', 'support', 'width:320px;height:280px;right:-110px;bottom:-80px']],
   debrief: [['square', 'challenge', 'width:260px;height:260px;right:-120px;top:120px'], ['circle', 'question', 'width:340px;height:340px;left:-180px;bottom:-120px']],
-  interlude: [['circle', 'plum', 'width:480px;height:480px;right:-200px;top:-140px'], ['triangle', 'observe', 'width:280px;height:240px;left:-100px;bottom:-60px'], ['square', 'question', 'width:140px;height:140px;right:20%;bottom:-60px']]
+  interlude: [['circle', 'support', 'width:480px;height:480px;right:-200px;top:-140px'], ['triangle', 'observe', 'width:280px;height:240px;left:-100px;bottom:-60px'], ['square', 'question', 'width:140px;height:140px;right:20%;bottom:-60px']]
 };
 
 function pageEl(screen, extraClass, kids) {
@@ -190,6 +204,8 @@ function validSave(d) {
 registerCase(MAYA);
 
 const root = document.getElementById('app');
+// Shown only in print, on screens other than the debriefs (style.css).
+document.body.appendChild(h('p', { class: 'print-note', text: 'Turn the Page prints from the debrief pages only. Finish a round and open its debrief to print your path.' }));
 const live = h('div', { class: 'sr-only', 'aria-live': 'polite', 'aria-atomic': 'true', id: 'meter-announcer' });
 document.body.appendChild(live);
 
@@ -399,7 +415,7 @@ function tweenScene(holder, from, to) {
 function storyHead(node) {
   return [
     h('p', { class: 'speaker', text: MAYA.profile.name }),
-    h('p', { class: 'maya-line', text: '“' + node.line + '”' }),
+    h('p', { class: 'maya-line', text: quoted(node.line) }),
     node.cue ? h('p', { class: 'cue', text: node.cue }) : null
   ];
 }
@@ -533,7 +549,7 @@ function lineButtons(options, round, node, onPick, coloured) {
       onclick: function () { onPick(o.id); }
     }, [
       h('span', { class: 'num', 'aria-hidden': 'true', text: String(i + 1) }),
-      h('span', { class: 'quote', text: '“' + o.text + '”' }),
+      h('span', { class: 'quote', text: quoted(o.text) }),
       h('span', { class: 'dest', text: destLabel(round, node, [o]) })
     ]);
   }));
@@ -577,7 +593,7 @@ function choicePanel(st, node) {
   const picked = node.options.find(function (o) { return o.id === view.picked; });
   return h('div', { class: 'choices', 'data-step': 'name' }, [
     h('p', { class: 'eyebrow', text: 'You chose to say' }),
-    h('p', { class: 'picked-line', text: '“' + picked.text + '”' }),
+    h('p', { class: 'picked-line', text: quoted(picked.text) }),
     h('p', { class: 'eyebrow', id: 'choice-prompt', text: 'Name that lever: which lever does this line use?' }),
     leverButtons(function (lever) { commit(view.picked, lever); }, { compact: true, attr: 'guess' })
   ]);
@@ -597,6 +613,7 @@ function screenScene() {
   const node = getNode(st);
   return pageEl('scene', null, [
     runhead(roundLabel(st) + ' · Act ' + node.act + ': ' + currentRound().acts[node.act].title, node.page),
+    h('h1', { class: 'sr-only', text: ROUND_LABELS[st.round] + ', page ' + node.page }),
     h('div', { class: 'spread', 'data-node': st.nodeId }, [
       metersView(st.meters, null),
       sceneView(st, node, false),
@@ -633,12 +650,13 @@ function screenConsequence(opts) {
   const next = st.ending ? '→ the end' : '→ p. ' + round.nodes[st.nodeId].page;
   return pageEl('consequence', null, [
     runhead(roundLabel(st) + ' · Act ' + node.act + ': ' + round.acts[node.act].title, node.page),
+    h('h1', { class: 'sr-only', text: ROUND_LABELS[st.round] + ', page ' + node.page + ': what happened' }),
     h('div', { class: 'spread', 'data-node': entry.nodeId }, [
       metersView(st.meters, { before: before, lever: entry.lever, animate: !!opts.animate && !reducedMotion() }),
       sceneView(st, node, option),
       h('div', { class: 'story-col' }, [
         h('p', { class: 'eyebrow', text: 'You said' }, []),
-        h('p', { class: 'you-said', text: '“' + option.text + '”' }),
+        h('p', { class: 'you-said', text: quoted(option.text) }),
         reveal,
         h('p', { class: 'speaker', text: MAYA.profile.name }),
         h('p', { class: 'reaction', text: entry.reaction }),
@@ -665,9 +683,9 @@ function screenAct() {
   return pageEl('act', 'act-' + act, [
     runhead(roundLabel(st), null),
     h('div', { class: 'banner' }, [
-      h('div', { class: 'slab', 'aria-hidden': 'true' }),
+      h('div', { class: 'slab', 'aria-hidden': 'true' }, [h('span', { class: 'act-no', text: String(act) })]),
       h('div', { class: 'banner-body' }, [
-        h('p', { class: 'tag', text: 'End of Act ' + act + ' · ' + round.acts[act].title }),
+        h('h1', { class: 'tag', text: 'End of Act ' + act + ' · ' + round.acts[act].title }),
         h('p', { class: 'cliff', text: round.acts[act].cliffhanger })
       ])
     ]),
@@ -781,7 +799,8 @@ function traceChart(meter, series, opts) {
   out += '<rect class="tr-bg" x="' + padL + '" y="' + padT + '" width="' + (W - padL - padR) + '" height="' + (H - padT - padB) + '"/>';
   traceLines(meter).forEach(function (l) {
     out += '<line class="tr-ref" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + yOf(l.y) + '" y2="' + yOf(l.y) + '"/>';
-    labels.push('<text class="tr-ref-label" x="' + (padL + 4) + '" y="' + (yOf(l.y) - 3) + '">' + esc(l.label) + '</text>');
+    // Two rounds side by side leave no room for labels: the caption names the lines instead.
+    if (series.length === 1) labels.push('<text class="tr-ref-label" x="' + (padL + 4) + '" y="' + (yOf(l.y) - 3) + '">' + esc(l.label) + '</text>');
   });
   let x0 = padL;
   const marks = [];
@@ -894,7 +913,7 @@ function pathReplay(st, turning) {
         e.quality ? h('span', { class: 'quality q-' + e.quality, text: e.quality === 'skilful' ? 'Skilful wording' : 'Clumsy wording' }) : null,
         isC ? h('span', { class: 'muted' }, e.guessCorrect ? ['✓ You named it'] : ['✗ You named ', leverTag(e.guess)]) : null
       ]),
-      h('p', { class: 'said', text: '“' + option.text + '”' }),
+      h('p', { class: 'said', text: quoted(option.text) }),
       h('p', { class: 'reacted', text: e.reaction }),
       meterChips(e),
       h('p', { class: 'note', text: option.debrief })
@@ -912,7 +931,7 @@ function roadNotTakenView(st) {
     const others = RULES.levers.filter(function (l) { return lines[l] && (!entry || entry.lever !== l); });
     return h('article', { class: 'road', 'data-road': id }, [
       h('p', { class: 'road-head' }, [h('span', { class: 'pageno', text: 'p. ' + node.page }), h('span', { text: entry ? 'You used ' : 'You did not reach this page.' }), entry ? leverTag(entry.lever) : null]),
-      h('p', { class: 'road-line', text: '“' + node.line + '”' }),
+      h('p', { class: 'road-line', text: quoted(node.line) }),
       h('ul', {}, others.map(function (l) { return h('li', {}, [leverTag(l), h('span', { text: lines[l] })]); }))
     ]);
   }));
@@ -984,8 +1003,8 @@ function recognitionView(st) {
       const node = round.nodes[e.nodeId];
       const option = node.options.find(function (o) { return o.id === e.optionId; });
       return h('li', {}, [
-        h('p', { class: 'said', text: '“' + option.text + '”' }),
-        h('p', { class: 'miss-line' }, [h('span', { class: 'pageno', text: 'p. ' + node.page }), 'You named ', leverTag(e.guess), '. It used ', leverTag(e.lever), '.'])
+        h('p', { class: 'said', text: quoted(option.text) }),
+        h('p', { class: 'miss-line' }, [h('span', { class: 'pageno', text: 'p. ' + node.page }), h('span', {}, ['You named ', leverTag(e.guess), '.']), h('span', {}, ['It used ', leverTag(e.lever), '.'])])
       ]);
     })) : h('p', { class: 'muted', text: 'No misses.' })
   ];
@@ -998,8 +1017,8 @@ function sessionCard(st) {
     h('p', { class: 'eyebrow', text: ROUND_LABELS[st.round] + ' · ' + round.title }),
     h('h3', { text: ending.title }),
     h('p', { class: 'session-summary', text: ending.summary }),
-    h('p', { class: 'glyph-strip', 'aria-label': 'Levers in order: ' + st.history.map(function (e) { return LEVER_INFO[e.lever].name; }).join(', ') }, st.history.map(function (e) {
-      return h('span', { class: 'lv-' + e.lever, 'aria-hidden': 'true' }, [glyph(e.lever)]);
+    h('p', { class: 'glyph-strip', role: 'img', 'aria-label': 'Levers in order: ' + st.history.map(function (e) { return LEVER_INFO[e.lever].name; }).join(', ') }, st.history.map(function (e) {
+      return h('span', { 'aria-hidden': 'true', title: LEVER_INFO[e.lever].name, html: '<svg viewBox="0 0 20 20" focusable="false">' + glyphMark(e.lever, 10, 10, 7) + '</svg>' });
     }))
   ]);
 }
@@ -1050,7 +1069,7 @@ function screenDebrief() {
   const series = [{ round: st.round, label: ROUND_LABELS[st.round], start: startMeters(st), history: st.history, turning: turning }];
 
   const kids = [
-    h('p', { class: 'eyebrow', text: (isR2 ? 'Debrief 2' : 'Debrief 1') + ' · ' + roundLabel(st) }),
+    h('p', { class: 'eyebrow', text: isR2 ? 'Debrief 2: both sessions' : 'Debrief 1' }),
     h('h1', { class: 'db-title', text: 'Your path through ' + ROUND_LABELS[st.round] }),
     h('div', { class: 'ending-card', 'data-ending-card': st.ending }, [
       h('p', { class: 'eyebrow', text: 'Ending' }),
@@ -1076,7 +1095,8 @@ function screenDebrief() {
           h('p', { class: 'carry-note', text: MAYA.rounds.r2.carryNote[r1.ending] })
         ]),
         traceKey(),
-        tracesView([r1Series, series[0]])
+        tracesView([r1Series, series[0]]),
+        h('p', { class: 'muted trace-lines-note', text: 'Dashed lines: on Trust, the level for a Breakthrough or agreement (upper) and for an early exit (lower); on Ownership, the level for a Breakthrough (upper) and for agreement (lower). The dotted line marks the two weeks between sessions.' })
       ]),
       section('reflect', 'Reflection prompts', [h('ol', { class: 'reflection' }, MAYA.reflection.map(function (q) { return h('li', { text: q }); }))], 'For self-study or with your facilitator. Nothing you think or write here is stored.'),
       section('copy', 'Copy summary', copySummaryView(summaryText(r1, st)), 'Plain text of the endings, lever counts and recognition score, for pasting into a shared document. No names or free text.')
@@ -1091,6 +1111,7 @@ function screenDebrief() {
         button('Continue to Round 2', function () { view.r1 = st; go('interlude'); }, { primary: true }),
         button('Try a different route', startRound1, { ghost: true })
       ];
+  actions.push(button('Print this debrief', function () { window.print(); }, { ghost: true, action: 'print' }));
   kids.push(section('next', isR2 ? 'What next' : 'Try again', [h('div', { class: 'actions' }, actions)]));
   return pageEl('debrief', null, [
     runhead('Debrief · ' + roundLabel(st), null),
