@@ -68,19 +68,20 @@ test('7.2 base effects of skilful levers (neutral state)', () => {
   assert.deepEqual(d('challenge'), { trust: -4, confidence: 2, ownership: 9 });
 });
 
-test('7.2 clumsy wording: positives x 0.4, then Trust -3', () => {
-  // Question: 3*0.4-3 = -1.8, 1*0.4 = 0.4, 6*0.4 = 2.4
-  assert.deepEqual(d('question', { quality: 'clumsy' }), { trust: -2, confidence: 0, ownership: 2 });
-  // Support: 7*0.4-3 = -0.2, 5*0.4 = 2, 0
-  assert.deepEqual(d('support', { quality: 'clumsy' }), { trust: 0, confidence: 2, ownership: 0 });
-  // Challenge: -4 (negative, untouched) -3 = -7, 0.8, 3.6
-  assert.deepEqual(d('challenge', { quality: 'clumsy' }), { trust: -7, confidence: 1, ownership: 4 });
+test('7.2 clumsy wording: positives x 0.4, then Trust -2 (calibrated from -3, SPEC.md calibration log)', () => {
+  assert.equal(RULES.clumsy.trustPenalty, -2);
+  // Question: 3*0.4-2 = -0.8, 1*0.4 = 0.4, 6*0.4 = 2.4
+  assert.deepEqual(d('question', { quality: 'clumsy' }), { trust: -1, confidence: 0, ownership: 2 });
+  // Support: 7*0.4-2 = 0.8, 5*0.4 = 2, 0
+  assert.deepEqual(d('support', { quality: 'clumsy' }), { trust: 1, confidence: 2, ownership: 0 });
+  // Challenge: -4 (negative, untouched) -2 = -6, 0.8, 3.6
+  assert.deepEqual(d('challenge', { quality: 'clumsy' }), { trust: -6, confidence: 1, ownership: 4 });
 });
 
 // --- 7.3 state rules ---------------------------------------------------------
 
-test('7.3 Challenge with Trust < 50 replaces the base row', () => {
-  assert.deepEqual(d('challenge', { trust: 49 }), { trust: -10, confidence: -5, ownership: 2 });
+test('7.3 Challenge with Trust < 50 replaces the base row (Trust -5, calibrated from -10)', () => {
+  assert.deepEqual(d('challenge', { trust: 49 }), { trust: -5, confidence: -5, ownership: 2 });
   assert.deepEqual(d('challenge', { trust: 50 }), RULES.base.challenge);
 });
 
@@ -131,7 +132,7 @@ test('7.5 confidence low: Support Confidence gain x 1.5 in Act 1 only', () => {
 
 test('7.5 confidence low: Challenge Trust cost x 1.5 (also on the state-rule row)', () => {
   assert.equal(d('challenge', { traits: { confidence: 'low' } }).trust, -6);
-  assert.equal(d('challenge', { traits: { confidence: 'low' }, trust: 40 }).trust, -15);
+  assert.equal(d('challenge', { traits: { confidence: 'low' }, trust: 40 }).trust, -8); // -5 x 1.5 = -7.5
 });
 
 test('7.5 confidence high: Support Confidence x 0.5; Challenge Ownership x 1.3', () => {
@@ -191,9 +192,9 @@ test('meters clamp to 0-100 and the recorded delta is the applied change', () =>
 // --- 7.7 endings -------------------------------------------------------------
 
 test('7.7 early exit at Trust <= 10 ends the round at once', () => {
-  const c = makeCase({ id: 'early', start: { trust: 20, confidence: 40, ownership: 40 } });
-  const s = applyChoice(createRound(c, 'r1'), 'challenge-clumsy'); // -10 -3 = -13 -> 7
-  assert.equal(s.meters.trust, 7);
+  const c = makeCase({ id: 'early', start: { trust: 17, confidence: 40, ownership: 40 } });
+  const s = applyChoice(createRound(c, 'r1'), 'challenge-clumsy'); // -5 -2 = -7 -> 10
+  assert.equal(s.meters.trust, 10);
   assert.equal(s.ending, 'early');
   assert.equal(s.nodeId, null);
   assert.equal(s.history.length, 1);
@@ -208,11 +209,11 @@ test('7.7 early exit at exactly 10, not at 11', () => {
   assert.equal(checkEnding(st(10, null)), 'early'); // checked before Breakthrough
 });
 
-test('7.7 end-of-round endings and their thresholds', () => {
+test('7.7 end-of-round endings and their thresholds (Breakthrough at 45/45, calibrated from 60/50)', () => {
   const st = (trust, ownership) => checkEnding({ meters: { trust, confidence: 50, ownership }, nodeId: null });
-  assert.equal(st(50, 60), 'breakthrough');
-  assert.equal(st(49, 60), 'partial');
-  assert.equal(st(50, 59), 'partial');
+  assert.equal(st(45, 45), 'breakthrough');
+  assert.equal(st(44, 60), 'polite');
+  assert.equal(st(45, 44), 'partial');
   assert.equal(st(45, 30), 'partial');
   assert.equal(st(44, 30), 'polite');
   assert.equal(st(45, 29), 'polite');
@@ -301,16 +302,16 @@ test('9.2 carry-over by Round 1 ending', () => {
   registerCase(makeCase({ id: 'carry', traits: { readiness: 'low' }, start: { trust: 35, confidence: 30, ownership: 15 } }));
   const r1 = (ending) => ({ caseId: 'carry', ending, meters: { trust: 65, confidence: 47, ownership: 70 } });
   const b = carryOver(r1('breakthrough'));
-  assert.deepEqual(b.meters, { trust: 52, confidence: 57, ownership: 25 });
+  assert.deepEqual(b.meters, { trust: 46, confidence: 57, ownership: 20 }); // 65 x 0.7 = 45.5 -> 46
   assert.equal(b.traits.readiness, 'mid');
   const p = carryOver(r1('partial'));
-  assert.deepEqual(p.meters, { trust: 46, confidence: 47, ownership: 15 }); // 45.5 -> 46
+  assert.deepEqual(p.meters, { trust: 39, confidence: 47, ownership: 15 }); // 65 x 0.6 = 39
   assert.equal(p.traits.readiness, 'mid');
   const po = carryOver(r1('polite'));
   assert.deepEqual(po.meters, { trust: 30, confidence: 30, ownership: 15 });
   assert.equal(po.traits.readiness, 'low');
   const e = carryOver(r1('early'));
-  assert.deepEqual(e.meters, { trust: 20, confidence: 30, ownership: 15 });
+  assert.deepEqual(e.meters, { trust: 25, confidence: 30, ownership: 15 });
   assert.equal(e.traits.readiness, 'low');
 });
 
