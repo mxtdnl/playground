@@ -146,6 +146,9 @@ turn-the-page/
                           by writing a save and pressing Resume), one state per page, browser helpers
   tests/wording-tells.mjs Length, punctuation, opening word of every Round 1 wording; flags surface tells
                           (SPEC.md 9.4, 14.3); exits 1 on a flag; not part of `node --test`
+  tests/flow-audit.mjs    Every reaction-to-next-page pair (session 7); regenerates docs/FLOW-AUDIT.md keeping the
+                          hand-written ratings and notes; exits 1 if a pair has no rating; not part of `node --test`
+  docs/FLOW-AUDIT.md      Flow audit: generated pairs plus hand-written ratings (edit only the rating columns and notes)
   tests/wcag.mjs          pageAudit(): in-page WCAG contrast measurement (text, graphics, focus indicator)
   tests/contrast.mjs      WCAG AA walk of every text node in every catalogue state at 1440 and 390; exits 1 on
                           failure; not part of `node --test`
@@ -170,6 +173,7 @@ node tests/export-review.mjs  # regenerates docs/CONTENT-REVIEW.md (run after an
 node tests/art-gallery.mjs    # renders the art gallery; exits 1 if a geometry check fails
 node tests/contrast.mjs   # WCAG AA contrast walk of every screen state; exits 1 on any failure
 node tests/wording-tells.mjs  # surface tells in Round 1 wordings; exits 1 on any flag
+node tests/flow-audit.mjs     # regenerates docs/FLOW-AUDIT.md (about a minute); exits 1 if a pair has no rating
 ```
 
 `node --test tests/` does not work on Node 22 (it treats the directory as a file); use `node --test` with no arguments. Before committing, also run `scripts/check-boundaries.sh` from the repository root. Playwright and Chromium are preinstalled in cloud sessions; do not install another version.
