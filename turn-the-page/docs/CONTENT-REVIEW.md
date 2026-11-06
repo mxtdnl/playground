@@ -6,7 +6,7 @@ This document is for review by a developmental-coaching expert. It contains the 
 
 How to read the scripts: each page shows what Maya says, what the counsellor can see, and the options. For each option: the lever, the wording quality (Round 1 only), Maya's reaction, any override, the meter change it causes in two reference states, and the debrief note. The reference states have no previous choices; in play, repetition and the meters at that moment change the numbers. **Round 1 reference:** Maya's starting meters (Trust 35, Confidence 30, Ownership 15), and the same with Trust 55. **Round 2 reference:** the "after Polite exit" start (Trust 30, Confidence 30, Ownership 15, readiness low), and the same with Trust 55. T = Trust, C = Confidence, O = Ownership.
 
-Contents: [Maya](#maya) · [Round 1](#round-1-just-lazy) · [Round 2](#round-2-two-weeks-later) · [Turning points](#turning-points-and-road-not-taken) · [Overrides](#every-override) · [Rules](#rules-table) · [Calibration](#calibration-report) · [Placeholders](#placeholder-strings)
+Contents: [Maya](#maya) · [Round 1](#round-1-just-lazy) · [Round 2](#round-2-two-weeks-later) · [Bridges](#bridging-lines-and-branch-pages) · [Turning points](#turning-points-and-road-not-taken) · [Overrides](#every-override) · [Rules](#rules-table) · [Calibration](#calibration-report) · [Placeholders](#placeholder-strings)
 
 ## Maya
 
@@ -121,9 +121,9 @@ flowchart TD
 
 #### r1-02 · p. 12 · Act 1
 
-**Maya:** "So what is this, then? Like, a warning?"
+**Maya:** "So what is this, then? Like, a warning?" *(+ 3 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
-**Cue:** The bag is off her shoulder now, but it is on her lap, both hands on it. *(pose: gaze counsellor, arms bag, chair edge)*
+**Cue:** The bag is off her shoulder now, but it is on her lap, both hands on it. *(+ 2 bridging cue(s))* *(pose: gaze counsellor, arms bag, chair edge)*
 
 **Next:** question → r1-03a; support → r1-03b; observe → r1-03c; challenge → r1-03d; default → r1-03a
 
@@ -190,7 +190,7 @@ flowchart TD
 
 #### r1-03c · p. 26 · Act 2
 
-**Maya:** "I'm not expecting trouble. I'm just tired of everyone asking what's wrong."
+**Maya:** "I'm not expecting trouble. I'm just tired of everyone asking what's wrong." *(+ 2 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** The bag is on the floor now. Her arms are loosely crossed. *(pose: gaze counsellor, arms crossed, shoulders neutral)*
 
@@ -213,9 +213,9 @@ flowchart TD
 
 #### r1-03d · p. 31 · Act 2
 
-**Maya:** "Whatever. I'm just not bothered any more. It's pointless anyway."
+**Maya:** "Whatever. I'm just not bothered any more. It's pointless anyway." *(+ 1 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
-**Cue:** Her arms are folded. She is looking at the clock above the door. *(pose: gaze door, arms crossed, shoulders raised, mouth tight)*
+**Cue:** Her arms are folded. She is looking at the clock above the door. *(+ 1 bridging cue(s))* *(pose: gaze door, arms crossed, shoulders raised, mouth tight)*
 
 **Next:** r1-04a if trust ≥ 45; r1-04b otherwise
 
@@ -236,7 +236,7 @@ flowchart TD
 
 #### r1-04a · p. 36 · Act 2
 
-**Maya:** "Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same."
+**Maya:** "Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same." *(+ 9 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** When she mentions next year's exams, she takes out her phone and turns it over and over in her hand. *(pose: gaze phone, arms lap, props phone)*
 
@@ -259,7 +259,7 @@ flowchart TD
 
 #### r1-04b · p. 40 · Act 2
 
-**Maya:** "Dunno. Can't be bothered, I guess."
+**Maya:** "Dunno. Can't be bothered, I guess." *(+ 12 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** She has her phone out. Each time you mention exams or next year, she looks down at the screen. *(pose: gaze phone, arms crossed, shoulders raised, props phone)*
 
@@ -282,7 +282,7 @@ flowchart TD
 
 #### r1-05 · p. 45 · Act 2
 
-**Maya:** "Anyway. Everyone's already decided what I'm doing after school."
+**Maya:** "Anyway. Everyone's already decided what I'm doing after school." *(+ 1 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** She says it quietly, to the window. She does not explain, and she does not look at you. *(pose: gaze window, head down, mouth flat)*
 
@@ -305,9 +305,9 @@ flowchart TD
 
 #### r1-06a · p. 51 · Act 3
 
-**Maya:** "I don't know. I just want it to stop feeling like this."
+**Maya:** "I don't know. I just want it to stop feeling like this." *(+ 1 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
-**Cue:** She looks at you for the first time in a while. *(pose: gaze counsellor, arms lap)*
+**Cue:** She looks at you for the first time in a while. *(+ 1 bridging cue(s))* *(pose: gaze counsellor, arms lap)*
 
 **Next:** r1-07
 
@@ -328,7 +328,7 @@ flowchart TD
 
 #### r1-06b · p. 54 · Act 3
 
-**Maya:** "Yeah. It is a lot. I don't really talk about it."
+**Maya:** "Yeah. It is a lot. I don't really talk about it." *(+ 1 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** Her shoulders drop. She does not seem in a hurry to leave. *(pose: gaze floor, arms lap, shoulders relaxed)*
 
@@ -351,7 +351,7 @@ flowchart TD
 
 #### r1-06c · p. 58 · Act 3
 
-**Maya:** "...I didn't say what I want, did I."
+**Maya:** "...I didn't say what I want, did I." *(+ 1 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** A short laugh that is not really a laugh. *(pose: gaze counsellor, mouth tight)*
 
@@ -374,9 +374,9 @@ flowchart TD
 
 #### r1-06d · p. 62 · Act 3
 
-**Maya:** "I suppose. I just don't know what I'd change."
+**Maya:** "I suppose. I just don't know what I'd change." *(+ 1 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
-**Cue:** She sits back and thinks. She has not looked at the door for a while. *(pose: gaze window, chair back)*
+**Cue:** She sits back and thinks. She has not looked at the door for a while. *(+ 1 bridging cue(s))* *(pose: gaze window, chair back)*
 
 **Next:** r1-07
 
@@ -397,9 +397,9 @@ flowchart TD
 
 #### r1-06e · p. 64 · Act 3
 
-**Maya:** "You don't get it."
+**Maya:** "You don't get it." *(+ 2 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
-**Cue:** She pulls her bag back onto her lap. *(pose: gaze door, arms bag, chair edge, shoulders raised)*
+**Cue:** She pulls her bag back onto her lap. *(+ 1 bridging cue(s))* *(pose: gaze door, arms bag, chair edge, shoulders raised)*
 
 **Next:** r1-07
 
@@ -420,7 +420,7 @@ flowchart TD
 
 #### r1-07 · p. 70 · Act 3
 
-**Maya:** "So what am I supposed to do, then?"
+**Maya:** "So what am I supposed to do, then?" *(+ 5 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** She glances at the clock. The bell will ring soon. *(pose: gaze counsellor)*
 
@@ -445,10 +445,10 @@ flowchart TD
 
 | Ending | Title | Text | Debrief summary |
 |---|---|---|---|
-| breakthrough | Breakthrough | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | Maya proposed a next step of her own, and asked to come back. |
-| partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. | Maya agreed to the step you suggested. The plan stayed yours. |
-| polite | Polite exit | "Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed. | Maya stayed polite from start to finish and left unmoved. *If ownership ended high:* She did a lot of her own thinking: ownership ended high. Trust stayed below the level where she would commit to a step out loud, so the ideas left the room with her. |
-| early | Early exit | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | Trust ran out, and Maya left before the conversation really began. |
+| breakthrough | Breakthrough | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" *(+ 7 bridging text(s))* | Maya proposed a next step of her own, and asked to come back. |
+| partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. *(+ 3 bridging text(s))* | Maya agreed to the step you suggested. The plan stayed yours. |
+| polite | Polite exit | "Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed. *(+ 1 bridging text(s))* | Maya stayed polite from start to finish and left unmoved. *If ownership ended high:* She did a lot of her own thinking: ownership ended high. Trust stayed below the level where she would commit to a step out loud, so the ideas left the room with her. |
+| early | Early exit | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. *(+ 41 bridging text(s))* | Trust ran out, and Maya left before the conversation really began. |
 
 ## Round 2: Two weeks later
 
@@ -601,7 +601,7 @@ flowchart TD
 
 #### r2-02 · p. 93 · Act 1
 
-**Maya:** "The thing is, even when I do the work, it doesn't feel like it's for anything."
+**Maya:** "The thing is, even when I do the work, it doesn't feel like it's for anything." *(+ 2 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** She picks up the course brochure from your desk, turns a page, then puts it down quickly. *(pose: gaze floor, arms lap, props brochure)*
 
@@ -616,7 +616,7 @@ flowchart TD
 
 #### r2-03a · p. 98 · Act 2
 
-**Maya:** "My mum brought one of these home. Medicine. It's kind of... already the plan."
+**Maya:** "My mum brought one of these home. Medicine. It's kind of... already the plan." *(+ 1 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** She taps the cover of the brochure. She does not sound unhappy. She does not sound happy, either. *(pose: gaze counsellor, arms open, props brochure)*
 
@@ -676,9 +676,9 @@ flowchart TD
 
 #### r2-04b · p. 114 · Act 2
 
-**Maya:** "I used to draw a lot. Design stuff. There's no point even thinking about it now."
+**Maya:** "I used to draw a lot. Design stuff. There's no point even thinking about it now." *(+ 1 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
-**Cue:** She is turning the brochure over and over in her hands. *(pose: gaze floor, arms lap, props brochure)*
+**Cue:** She is turning the brochure over and over in her hands. *(+ 1 bridging cue(s))* *(pose: gaze floor, arms lap, props brochure)*
 
 **Next:** r2-05
 
@@ -691,7 +691,7 @@ flowchart TD
 
 #### r2-05 · p. 119 · Act 2
 
-**Maya:** "They'd never listen anyway. They've wanted this since I was little. They work so hard for me."
+**Maya:** "They'd never listen anyway. They've wanted this since I was little. They work so hard for me." *(+ 1 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
 **Cue:** She looks at the floor. Her voice goes quiet on "so hard". *(pose: gaze floor, head down, props brochure)*
 
@@ -766,9 +766,9 @@ flowchart TD
 
 #### r2-07 · p. 138 · Act 3
 
-**Maya:** "So what do I do? I can't just walk in and say "I don't want to be a doctor"."
+**Maya:** "So what do I do? I can't just walk in and say "I don't want to be a doctor"." *(+ 6 bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*
 
-**Cue:** She is looking straight at you. *(pose: gaze counsellor, props brochure)*
+**Cue:** She is looking straight at you. *(+ 2 bridging cue(s))* *(pose: gaze counsellor, props brochure)*
 
 **Next:** end of round
 
@@ -783,10 +783,143 @@ flowchart TD
 
 | Ending | Title | Text | Debrief summary |
 |---|---|---|---|
-| breakthrough | Breakthrough | Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." | Maya chose her own next step, and how she wants to raise it at home. |
-| partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll look at the website." She takes the brochure with her. You are not sure she will open it. | Maya agreed to look at the course you suggested. The step stayed yours. |
-| polite | Polite exit | "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved. | A pleasant conversation. The brochure stayed on the desk. *If ownership ended high:* Ownership ended high: the thinking was hers. Trust stayed below the level where she would say a next step out loud, so it went home unspoken. |
-| early | Early exit | "Can I go now?" She is out of the door before you can answer. | Trust ran out, and Maya left before the real issue came up. |
+| breakthrough | Breakthrough | Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." *(+ 2 bridging text(s))* | Maya chose her own next step, and how she wants to raise it at home. |
+| partial | Agreement without ownership | Maya agrees to the step you suggest. "OK. I'll look at the website." She takes the brochure with her. You are not sure she will open it. *(+ 1 bridging text(s))* | Maya agreed to look at the course you suggested. The step stayed yours. |
+| polite | Polite exit | "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved. *(+ 2 bridging text(s))* | A pleasant conversation. The brochure stayed on the desk. *If ownership ended high:* Ownership ended high: the thinking was hers. Trust stayed below the level where she would say a next step out loud, so it went home unspoken. |
+| early | Early exit | "Can I go now?" She is out of the door before you can answer. *(+ 3 bridging text(s))* | Trust ran out, and Maya left before the real issue came up. |
+
+## Bridging lines and branch pages
+
+Session 7 (SPEC.md 9.5). A bridging line replaces a page's opening line or cue, or an ending's text, when the page is reached straight from the page and option named; every other way in, and the page after a reload, shows the default. Presentation only: scores and routes do not change. Each bridge answers a pair rated "bridge" in `docs/FLOW-AUDIT.md`, which gives the reason. **Branch pages:** none; the audit found no jump that a bridge could not fix.
+
+### Round 1 (97 bridging texts)
+
+| Into | Replaces | After | Default | Bridging text |
+|---|---|---|---|---|
+| p. 12 `r1-02` | line | p. 7 `r1-01:c-p` Challenge (plausible) | So what is this, then? Like, a warning? | See, you don't know either. So what is this, then? A warning? |
+| p. 12 `r1-02` | line | p. 7 `r1-01:c-s` Challenge (skilful) | So what is this, then? Like, a warning? | You don't know either, then. So what is this? Like, a warning? |
+| p. 12 `r1-02` | line | p. 7 `r1-01:s-s` Support (skilful) | So what is this, then? Like, a warning? | So if it's not about trouble... what is it, then? What happens now? |
+| p. 12 `r1-02` | cue | p. 7 `r1-01:c-c` Challenge (clumsy) | The bag is off her shoulder now, but it is on her lap, both hands on it. | She has unfolded her arms, but only to grip the bag on her lap with both hands. |
+| p. 12 `r1-02` | cue | p. 7 `r1-01:c-s` Challenge (skilful) | The bag is off her shoulder now, but it is on her lap, both hands on it. | Her arms unfold, and both hands go back to the bag on her lap. |
+| p. 26 `r1-03c` | line | p. 12 `r1-02:o-p` Observe (plausible) | I'm not expecting trouble. I'm just tired of everyone asking what's wrong. | I'm not going anywhere. I'm just tired of everyone asking what's wrong. |
+| p. 26 `r1-03c` | line | p. 12 `r1-02:o-s` Observe (skilful) | I'm not expecting trouble. I'm just tired of everyone asking what's wrong. | It's not even trouble, really. I'm just tired of everyone asking what's wrong. |
+| p. 31 `r1-03d` | line | p. 12 `r1-02:c-s` Challenge (skilful) | Whatever. I'm just not bothered any more. It's pointless anyway. | Doesn't change anything, though. I'm just not bothered any more. It's pointless anyway. |
+| p. 31 `r1-03d` | cue | p. 12 `r1-02:c-s` Challenge (skilful) | Her arms are folded. She is looking at the clock above the door. | She turns it over for a moment, then folds her arms and looks at the clock above the door. |
+| p. 36 `r1-04a` | line | p. 26 `r1-03c:c-s` Challenge (skilful) | Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. | It's mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. |
+| p. 36 `r1-04a` | line | p. 26 `r1-03c:o-c` Observe (clumsy) | Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. | It's mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. |
+| p. 36 `r1-04a` | line | p. 26 `r1-03c:o-p` Observe (plausible) | Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. | It's mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. |
+| p. 36 `r1-04a` | line | p. 26 `r1-03c:o-s` Observe (skilful) | Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. | It's mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. |
+| p. 36 `r1-04a` | line | p. 26 `r1-03c:q-c` Question (clumsy) | Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. | It's mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. |
+| p. 36 `r1-04a` | line | p. 26 `r1-03c:q-p` Question (plausible) | Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. | It's mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. |
+| p. 36 `r1-04a` | line | p. 26 `r1-03c:s-p` Support (plausible) | Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. | It's mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. |
+| p. 36 `r1-04a` | line | p. 26 `r1-03c:s-s` Support (skilful) | Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. | It's mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. |
+| p. 36 `r1-04a` | line | p. 31 `r1-03d:s-s` Support (skilful) | Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. | It's not that I don't care. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it's the same. |
+| p. 40 `r1-04b` | line | p. 19 `r1-03a:o-s` Observe (skilful) | Dunno. Can't be bothered, I guess. | Or I just can't be bothered, I guess. Dunno. |
+| p. 40 `r1-04b` | line | p. 19 `r1-03a:s-s` Support (skilful) | Dunno. Can't be bothered, I guess. | And then I just can't be bothered, I guess. |
+| p. 40 `r1-04b` | line | p. 23 `r1-03b:c-s` Challenge (skilful) | Dunno. Can't be bothered, I guess. | But then I still don't do it. Can't be bothered, I guess. |
+| p. 40 `r1-04b` | line | p. 23 `r1-03b:o-c` Observe (clumsy) | Dunno. Can't be bothered, I guess. | But I still don't do it. So... can't be bothered, I guess. |
+| p. 40 `r1-04b` | line | p. 23 `r1-03b:o-s` Observe (skilful) | Dunno. Can't be bothered, I guess. | But I still don't do it. So... can't be bothered, I guess. |
+| p. 40 `r1-04b` | line | p. 23 `r1-03b:s-s` Support (skilful) | Dunno. Can't be bothered, I guess. | And then I tell myself I can't be bothered. It's easier, I guess. |
+| p. 40 `r1-04b` | line | p. 26 `r1-03c:c-s` Challenge (skilful) | Dunno. Can't be bothered, I guess. | Well. It's not that deep. I just can't be bothered, I guess. |
+| p. 40 `r1-04b` | line | p. 26 `r1-03c:o-s` Observe (skilful) | Dunno. Can't be bothered, I guess. | And I can't be bothered explaining any more, I guess. Dunno. |
+| p. 40 `r1-04b` | line | p. 26 `r1-03c:s-s` Support (skilful) | Dunno. Can't be bothered, I guess. | It's not that deep, anyway. I just can't be bothered, I guess. |
+| p. 40 `r1-04b` | line | p. 31 `r1-03d:o-s` Observe (skilful) | Dunno. Can't be bothered, I guess. | Dunno what happened. Now I just can't be bothered, I guess. |
+| p. 40 `r1-04b` | line | p. 31 `r1-03d:q-c` Question (clumsy) | Dunno. Can't be bothered, I guess. | I do. I just can't be bothered, I guess. Dunno. |
+| p. 40 `r1-04b` | line | p. 31 `r1-03d:s-s` Support (skilful) | Dunno. Can't be bothered, I guess. | It's fine. I just... can't be bothered, I guess. |
+| p. 45 `r1-05` | line | p. 36 `r1-04a:c-c` Challenge (clumsy) | Anyway. Everyone's already decided what I'm doing after school. | Doesn't matter anyway. Everyone's already decided what I'm doing after school. |
+| p. 51 `r1-06a` | line | p. 45 `r1-05:q-c` Question (clumsy) | I don't know. I just want it to stop feeling like this. | Can we not talk about that? I just want it to stop feeling like this. |
+| p. 51 `r1-06a` | cue | p. 45 `r1-05:q-c` Question (clumsy) | She looks at you for the first time in a while. | She looks straight at you, as if daring you to ask again. |
+| p. 54 `r1-06b` | line | p. 45 `r1-05:s-c` Support (clumsy) | Yeah. It is a lot. I don't really talk about it. | Doesn't feel like it. It's a lot. I don't really talk about it. |
+| p. 58 `r1-06c` | line | p. 45 `r1-05:o-p` Observe (plausible) | ...I didn't say what I want, did I. | It's easier than saying what I want. ...Which I didn't, did I. |
+| p. 62 `r1-06d` | line | p. 45 `r1-05:c-c` Challenge (clumsy) | I suppose. I just don't know what I'd change. | Sorry. It's me living it, I suppose. I just don't know what I'd change. |
+| p. 62 `r1-06d` | cue | p. 45 `r1-05:c-c` Challenge (clumsy) | She sits back and thinks. She has not looked at the door for a while. | After a moment she turns to the window, thinking. She has not looked at the door for a while. |
+| p. 64 `r1-06e` | line | p. 45 `r1-05:c-p` Challenge (plausible) | You don't get it. | It's not that simple, though. You don't get it. |
+| p. 64 `r1-06e` | line | p. 45 `r1-05:c-s` Challenge (skilful) | You don't get it. | It doesn't. You don't get it. |
+| p. 64 `r1-06e` | cue | p. 45 `r1-05:c-s` Challenge (skilful) | She pulls her bag back onto her lap. | She holds your look for a moment, then glances at the door and pulls her bag back onto her lap. |
+| p. 70 `r1-07` | line | p. 51 `r1-06a:q-s` Question (skilful) | So what am I supposed to do, then? | Even one thing would do. I just don't know which. So what am I supposed to do? |
+| p. 70 `r1-07` | line | p. 54 `r1-06b:q-s` Question (skilful) | So what am I supposed to do, then? | Homework without the drama. But how? What am I supposed to do? |
+| p. 70 `r1-07` | line | p. 58 `r1-06c:q-s` Question (skilful) | So what am I supposed to do, then? | Actually starting things. But I don't know how. What am I supposed to do? |
+| p. 70 `r1-07` | line | p. 62 `r1-06d:c-s` Challenge (skilful) | So what am I supposed to do, then? | The phone thing, maybe. But then what? What am I supposed to do? |
+| p. 70 `r1-07` | line | p. 62 `r1-06d:q-s` Question (skilful) | So what am I supposed to do, then? | Chemistry before my phone. Is that even a plan? What am I supposed to do? |
+| Ending: Breakthrough | text | p. 70 `r1-07:c-c` Challenge (clumsy) | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | She gets as far as the door, then turns back. "Fine. But I'll pick it." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. "Same time in two weeks?" |
+| Ending: Breakthrough | text | p. 70 `r1-07:c-p` Challenge (plausible) | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | Then, before you start: "Actually... I've got an idea." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" |
+| Ending: Breakthrough | text | p. 70 `r1-07:o-c` Observe (clumsy) | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | Then she thinks again. "Well. Maybe one thing." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" |
+| Ending: Breakthrough | text | p. 70 `r1-07:q-c` Question (clumsy) | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | Then she looks back from the clock. "Or... could I try something I picked?" Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" |
+| Ending: Breakthrough | text | p. 70 `r1-07:q-p` Question (plausible) | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | Then she shakes her head. "That's what everyone says. What I'd actually try is..." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" |
+| Ending: Breakthrough | text | p. 70 `r1-07:s-c` Support (clumsy) | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | Then she shakes her head. "Actually, don't. I want to sort it myself." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" |
+| Ending: Breakthrough | text | p. 70 `r1-07:s-p` Support (plausible) | Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" | Then she stops nodding. "Actually... can I choose the thing?" Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" |
+| Ending: Agreement without ownership | text | p. 70 `r1-07:c-s` Challenge (skilful) | Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. | She thinks, but nothing comes, and in the end you offer a step after all. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. |
+| Ending: Agreement without ownership | text | p. 70 `r1-07:o-p` Observe (plausible) | Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. | "Or... I don't know. What would you do?" Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. |
+| Ending: Agreement without ownership | text | p. 70 `r1-07:q-s` Question (skilful) | Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. | Then she shakes her head. "Or... I don't know. What do you think?" Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it. |
+| Ending: Polite exit | text | p. 70 `r1-07:q-s` Question (skilful) | "Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed. | "Anyway. Thanks for this." Maya picks up her bag and leaves on time, without saying whether she will really try it. She was polite from start to finish. Nothing much has changed. |
+| Ending: Early exit | text | p. 26 `r1-03c:c-s` Challenge (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | She thinks about it for a second, then stands, bag on her shoulder. "Can I go now?" The conversation is over before it really began. |
+| Ending: Early exit | text | p. 31 `r1-03d:c-s` Challenge (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she does get up, bag on her shoulder. "Can I go now?" The conversation is over before it really began. |
+| Ending: Early exit | text | p. 31 `r1-03d:o-c` Observe (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she does get up, bag on her shoulder. "Can I go now?" The conversation is over before it really began. |
+| Ending: Early exit | text | p. 40 `r1-04b:c-c` Challenge (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | Then she stands again, properly this time, bag on her shoulder. "Can I go now?" The conversation is over before it really began. |
+| Ending: Early exit | text | p. 45 `r1-05:c-s` Challenge (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | She thinks about it for a second, then stands, bag on her shoulder. "Can I go now?" The conversation is over before it really began. |
+| Ending: Early exit | text | p. 51 `r1-06a:c-c` Challenge (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 51 `r1-06a:c-p` Challenge (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 51 `r1-06a:c-s` Challenge (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 51 `r1-06a:o-c` Observe (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 51 `r1-06a:o-p` Observe (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 51 `r1-06a:o-s` Observe (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 51 `r1-06a:q-c` Question (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 51 `r1-06a:q-p` Question (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 54 `r1-06b:c-c` Challenge (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 54 `r1-06b:c-p` Challenge (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 54 `r1-06b:c-s` Challenge (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 54 `r1-06b:o-c` Observe (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 54 `r1-06b:o-p` Observe (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 58 `r1-06c:c-c` Challenge (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 58 `r1-06c:c-p` Challenge (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 58 `r1-06c:c-s` Challenge (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 58 `r1-06c:o-c` Observe (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 58 `r1-06c:o-p` Observe (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 58 `r1-06c:o-s` Observe (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 58 `r1-06c:q-c` Question (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 64 `r1-06e:c-c` Challenge (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 64 `r1-06e:c-p` Challenge (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 64 `r1-06e:c-s` Challenge (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 64 `r1-06e:o-c` Observe (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 64 `r1-06e:o-p` Observe (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 64 `r1-06e:o-s` Observe (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 64 `r1-06e:q-c` Question (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 70 `r1-07:c-c` Challenge (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 70 `r1-07:c-p` Challenge (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 70 `r1-07:c-s` Challenge (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 70 `r1-07:o-c` Observe (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 70 `r1-07:o-p` Observe (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 70 `r1-07:o-s` Observe (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 70 `r1-07:q-c` Question (clumsy) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 70 `r1-07:q-p` Question (plausible) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | "Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again. |
+| Ending: Early exit | text | p. 70 `r1-07:q-s` Question (skilful) | "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began. | A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again. |
+
+### Round 2 (22 bridging texts)
+
+| Into | Replaces | After | Default | Bridging text |
+|---|---|---|---|---|
+| p. 93 `r2-02` | line | p. 89 `r2-01d:c` Challenge | The thing is, even when I do the work, it doesn't feel like it's for anything. | Whatever. Even when I do the work, it doesn't feel like it's for anything. |
+| p. 93 `r2-02` | line | p. 89 `r2-01d:q` Question | The thing is, even when I do the work, it doesn't feel like it's for anything. | It's not even the grades. Even when I do the work, it doesn't feel like it's for anything. |
+| p. 98 `r2-03a` | line | p. 93 `r2-02:o` Observe | My mum brought one of these home. Medicine. It's kind of... already the plan. | Medicine. That's what hers is for. It's kind of... already the plan. |
+| p. 114 `r2-04b` | line | p. 105 `r2-03c:c` Challenge | I used to draw a lot. Design stuff. There's no point even thinking about it now. | They're not like that. ...I used to draw a lot, though. Design stuff. There's no point even thinking about it now. |
+| p. 114 `r2-04b` | cue | p. 98 `r2-03a:c` Challenge | She is turning the brochure over and over in her hands. | She picks the brochure up again and turns it over and over in her hands. |
+| p. 119 `r2-05` | line | p. 114 `r2-04b:o` Observe | They'd never listen anyway. They've wanted this since I was little. They work so hard for me. | Doesn't matter anyway. They'd never listen. They've wanted this since I was little. They work so hard for me. |
+| p. 138 `r2-07` | line | p. 124 `r2-06a:o` Observe | So what do I do? I can't just walk in and say "I don't want to be a doctor". | And then what? Even if I found out everything, I can't just walk in and say "I don't want to be a doctor". |
+| p. 138 `r2-07` | line | p. 124 `r2-06a:q` Question | So what do I do? I can't just walk in and say "I don't want to be a doctor". | And then what? Even if I found out everything, I can't just walk in and say "I don't want to be a doctor". |
+| p. 138 `r2-07` | line | p. 124 `r2-06a:s` Support | So what do I do? I can't just walk in and say "I don't want to be a doctor". | And then what? Even if I found out everything, I can't just walk in and say "I don't want to be a doctor". |
+| p. 138 `r2-07` | line | p. 127 `r2-06b:s` Support | So what do I do? I can't just walk in and say "I don't want to be a doctor". | I don't even know what I'd do. I can't just walk in and say "I don't want to be a doctor". |
+| p. 138 `r2-07` | line | p. 133 `r2-06d:c` Challenge | So what do I do? I can't just walk in and say "I don't want to be a doctor". | Anyway. Even if you were right, I can't just walk in and say "I don't want to be a doctor". |
+| p. 138 `r2-07` | line | p. 133 `r2-06d:o` Observe | So what do I do? I can't just walk in and say "I don't want to be a doctor". | ...Fine. So what would I even do? I can't just walk in and say "I don't want to be a doctor". |
+| p. 138 `r2-07` | cue | p. 127 `r2-06b:s` Support | She is looking straight at you. | She looks up from the brochure, as if she has only just thought of it. |
+| p. 138 `r2-07` | cue | p. 133 `r2-06d:c` Challenge | She is looking straight at you. | She looks back from the clock, straight at you. |
+| Ending: Breakthrough | text | p. 138 `r2-07:q` Question | Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." | She thinks a little longer. "Actually... maybe I could do it soon." Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." |
+| Ending: Breakthrough | text | p. 138 `r2-07:s` Support | Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." | You wait too. After a moment she fills the silence herself. Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." |
+| Ending: Agreement without ownership | text | p. 138 `r2-07:q` Question | Maya agrees to the step you suggest. "OK. I'll look at the website." She takes the brochure with her. You are not sure she will open it. | "But I don't know. What do you think I should do first?" Maya agrees to the step you suggest. "OK. I'll look at the website." She takes the brochure with her. You are not sure she will open it. |
+| Ending: Polite exit | text | p. 138 `r2-07:c` Challenge | "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved. | She does not say what the "OK" was for. "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved. |
+| Ending: Polite exit | text | p. 138 `r2-07:q` Question | "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved. | "Anyway. Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Whatever she was picturing, she keeps it to herself. |
+| Ending: Early exit | text | p. 119 `r2-05:o` Observe | "Can I go now?" She is out of the door before you can answer. | The almost-laugh goes. She stands. "Can I go now?" She is out of the door before you can answer. |
+| Ending: Early exit | text | p. 124 `r2-06a:c` Challenge | "Can I go now?" She is out of the door before you can answer. | She thinks about it a moment longer. Then she stands. "Can I go now?" She is out of the door before you can answer. |
+| Ending: Early exit | text | p. 138 `r2-07:c` Challenge | "Can I go now?" She is out of the door before you can answer. | Then the breath goes out of her. She stands. "Can I go now?" She is out of the door before you can answer. |
 
 ## Turning points and road not taken
 

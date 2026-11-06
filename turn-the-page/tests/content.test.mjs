@@ -25,6 +25,34 @@ function eachOption(round, fn) {
   for (const [id, node] of Object.entries(round.nodes)) for (const o of node.options) fn(o, node, id);
 }
 
+// A page's line or cue, or an ending's text: a string, or a bridged text
+// { default, from: { 'previousNodeId:optionId': text } } (SPEC.md 9.5).
+function isText(x, allowEmpty) {
+  if (typeof x === 'string') return allowEmpty || x.trim().length > 0;
+  return !!x && typeof x === 'object' && typeof x.default === 'string' && x.default.trim().length > 0 &&
+    Object.keys(x).every((k) => k === 'default' || k === 'from') &&
+    !!x.from && typeof x.from === 'object' && Object.keys(x.from).length > 0 &&
+    Object.values(x.from).every((v) => typeof v === 'string' && v.trim() && v !== x.default);
+}
+const fromKeys = (x) => (x && typeof x === 'object' && x.from ? Object.keys(x.from) : []);
+
+// Can a meter condition such as { trust: { min: 45 } } hold for some meters (0-100)?
+function satisfiable(cond) {
+  return !cond || Object.values(cond).every((c) => (c.min === undefined || c.min <= 100) && (c.max === undefined || c.max >= 0) && (c.min === undefined || c.max === undefined || c.min <= c.max));
+}
+// Targets an option can actually reach on some meters: list entries whose
+// condition can hold and which an earlier unconditional entry does not shadow.
+function reachableTargets(node, option) {
+  const r = routeFor(node, option);
+  if (!Array.isArray(r)) return [r];
+  const out = [];
+  for (const x of r) {
+    if (satisfiable(x.if)) out.push(x.to);
+    if (!x.if) break;
+  }
+  return out;
+}
+
 function strings(x, out) {
   if (typeof x === 'string') out.push(x);
   else if (x && typeof x === 'object') for (const v of Object.values(x)) strings(v, out);
@@ -74,6 +102,30 @@ for (const c of CASES) {
       }
       assert.ok(round.acts, 'round has act titles and cliffhangers');
       for (const act of acts) assert.ok(round.acts[act] && round.acts[act].cliffhanger, 'act ' + act + ' has a cliffhanger');
+    });
+
+    // Branch pages (SPEC.md 9.5) are ordinary nodes, often reached by one
+    // option's own `next`; this checks that every page, branch or not, can
+    // still reach its act's bottleneck (the one page that leaves the act).
+    test(label + ': every page rejoins its act at the bottleneck', () => {
+      const bottleneck = {};
+      eachOption(round, (o, node, id) => {
+        for (const t of targets(node, o)) if (t === null || nodes[t].act !== node.act) bottleneck[node.act] = id;
+      });
+      for (const [id, node] of Object.entries(nodes)) {
+        const goal = bottleneck[node.act];
+        const seen = new Set();
+        const stack = [id];
+        let found = false;
+        while (stack.length && !found) {
+          const x = stack.pop();
+          if (x === null || seen.has(x) || nodes[x].act !== node.act) continue;
+          if (x === goal) found = true;
+          seen.add(x);
+          for (const o of nodes[x].options) stack.push(...targets(nodes[x], o));
+        }
+        assert.ok(found, id + ' never reaches the act ' + node.act + ' bottleneck ' + goal);
+      }
     });
 
     test(label + ': format ' + round.format + ' option sets', () => {
@@ -128,15 +180,43 @@ for (const c of CASES) {
       for (const [id, n] of Object.entries(nodes)) {
         assert.ok(Number.isInteger(n.page) && n.page > 0, id + ' page');
         assert.ok(Number.isInteger(n.act) && n.act >= 1, id + ' act');
-        assert.ok(typeof n.line === 'string' && n.line.trim(), id + ' line');
-        assert.ok(typeof n.cue === 'string', id + ' cue');
+        assert.ok(isText(n.line), id + ' line');
+        assert.ok(isText(n.cue, true), id + ' cue');
       }
     });
 
     test(label + ': all four endings are written' + (round.starts ? ' and each has a Round 2 opening' : ''), () => {
-      for (const e of ENDINGS) assert.ok(round.endings[e] && round.endings[e].text && round.endings[e].summary, 'ending ' + e + ' text and summary');
+      for (const e of ENDINGS) assert.ok(round.endings[e] && isText(round.endings[e].text) && round.endings[e].summary, 'ending ' + e + ' text and summary');
       if (round.starts) for (const e of ENDINGS) assert.ok(round.carryNote && round.carryNote[e], 'carry-over note for ' + e);
       if (round.starts) for (const e of ENDINGS) assert.ok(round.starts[e], 'opening for ' + e);
+    });
+  }
+
+  // Bridging lines (SPEC.md 9.5): every `from` key names a real page and option
+  // in the same round that can route to this page (or end the round here) on
+  // some meters. Early exit can follow any option, since it depends only on Trust.
+  for (const [rid, round] of Object.entries(c.rounds)) {
+    test(c.id + '/' + rid + ': every bridging key names a page and option that can lead here', () => {
+      let n = 0;
+      const check = (key, where, leadsHere) => {
+        const m = /^([^:]+):([^:]+)$/.exec(key);
+        assert.ok(m, where + ': bad key ' + key);
+        const node = round.nodes[m[1]];
+        assert.ok(node, where + ': ' + key + ' names no page in ' + rid);
+        const o = node.options.find((x) => x.id === m[2]);
+        assert.ok(o, where + ': ' + key + ' names no option on ' + m[1]);
+        assert.ok(leadsHere(node, o), where + ': ' + key + ' cannot lead here');
+        n++;
+      };
+      for (const [id, node] of Object.entries(round.nodes)) {
+        for (const field of ['line', 'cue']) {
+          for (const key of fromKeys(node[field])) check(key, id + '.' + field, (from, o) => reachableTargets(from, o).includes(id));
+        }
+      }
+      for (const [e, ending] of Object.entries(round.endings)) {
+        for (const key of fromKeys(ending.text)) check(key, 'ending ' + e, (from, o) => e === 'early' || reachableTargets(from, o).includes(null));
+      }
+      assert.ok(n > 0, 'no bridging lines in ' + rid);
     });
   }
 

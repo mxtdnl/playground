@@ -1547,6 +1547,14 @@ function renderScene(sceneState) {
 //             chair: 'edge' | 'back' | 'leaningIn'; props: ['phone', 'brochure']
 //   line      what Maya says when the page opens
 //   cue       what the counsellor can see (Observe has something to work with)
+//             Bridging lines (SPEC.md 9.5): `line` or `cue` can instead be
+//               { default: '...', from: { 'r1-01:s-s': '...' } }
+//             The `from` text is shown when the page is reached straight from
+//             that page and option ('previous page id:option id'), so the opening
+//             follows on from what Maya has just said. The default is shown for
+//             every other way in, and after a reload. Presentation only: no
+//             score or route changes. Each `from` entry has a comment saying
+//             which choice it follows. An ending's `text` works the same way.
 //   next      where the page leads after a choice: a node id, null (the round
 //             ends), an object keyed by lever (with a `default`), or a list of
 //             { to, if: { trust: { min } } } checked on the meters AFTER the choice
@@ -1760,8 +1768,26 @@ const MAYA = {
           page: 12,
           act: 1,
           scene: { pose: { gaze: 'counsellor', arms: 'bag', chair: 'edge' } },
-          line: 'So what is this, then? Like, a warning?',
-          cue: 'The bag is off her shoulder now, but it is on her lap, both hands on it.',
+          line: {
+            default: 'So what is this, then? Like, a warning?',
+            from: {
+              // after p. 7, Challenge (plausible): ""Lazy" is one explanation. Usually there's somethi..."
+              'r1-01:c-p': 'See, you don\'t know either. So what is this, then? A warning?',
+              // after p. 7, Challenge (skilful): ""Lazy" is one explanation. I'm not sure it's the w..."
+              'r1-01:c-s': 'You don\'t know either, then. So what is this? Like, a warning?',
+              // after p. 7, Support (skilful): "Thanks for coming in. You're not in trouble. I'd j..."
+              'r1-01:s-s': 'So if it\'s not about trouble... what is it, then? What happens now?'
+            }
+          },
+          cue: {
+            default: 'The bag is off her shoulder now, but it is on her lap, both hands on it.',
+            from: {
+              // after p. 7, Challenge (clumsy): ""Lazy" is one explanation. It doesn't sound like t..."
+              'r1-01:c-c': 'She has unfolded her arms, but only to grip the bag on her lap with both hands.',
+              // after p. 7, Challenge (skilful): ""Lazy" is one explanation. I'm not sure it's the w..."
+              'r1-01:c-s': 'Her arms unfold, and both hands go back to the bag on her lap.'
+            }
+          },
           next: { question: 'r1-03a', support: 'r1-03b', observe: 'r1-03c', challenge: 'r1-03d', default: 'r1-03a' },
           options: [
             {
@@ -2111,7 +2137,15 @@ const MAYA = {
           page: 26,
           act: 2,
           scene: { pose: { gaze: 'counsellor', arms: 'crossed', shoulders: 'neutral' } },
-          line: 'I\'m not expecting trouble. I\'m just tired of everyone asking what\'s wrong.',
+          line: {
+            default: 'I\'m not expecting trouble. I\'m just tired of everyone asking what\'s wrong.',
+            from: {
+              // after p. 12, Observe (plausible): "You're holding on to your bag with both hands. It ..."
+              'r1-02:o-p': 'I\'m not going anywhere. I\'m just tired of everyone asking what\'s wrong.',
+              // after p. 12, Observe (skilful): "You asked if it's a warning. It sounds like you're..."
+              'r1-02:o-s': 'It\'s not even trouble, really. I\'m just tired of everyone asking what\'s wrong.'
+            }
+          },
           cue: 'The bag is on the floor now. Her arms are loosely crossed.',
           next: [{ to: 'r1-04a', if: { trust: { min: 45 } } }, { to: 'r1-04b' }],
           options: [
@@ -2226,8 +2260,20 @@ const MAYA = {
           page: 31,
           act: 2,
           scene: { pose: { gaze: 'door', arms: 'crossed', shoulders: 'raised', mouth: 'tight' } },
-          line: 'Whatever. I\'m just not bothered any more. It\'s pointless anyway.',
-          cue: 'Her arms are folded. She is looking at the clock above the door.',
+          line: {
+            default: 'Whatever. I\'m just not bothered any more. It\'s pointless anyway.',
+            from: {
+              // after p. 12, Challenge (skilful): "I don't think Mr Okafor sees this as a warning. He..."
+              'r1-02:c-s': 'Doesn\'t change anything, though. I\'m just not bothered any more. It\'s pointless anyway.'
+            }
+          },
+          cue: {
+            default: 'Her arms are folded. She is looking at the clock above the door.',
+            from: {
+              // after p. 12, Challenge (skilful): "I don't think Mr Okafor sees this as a warning. He..."
+              'r1-02:c-s': 'She turns it over for a moment, then folds her arms and looks at the clock above the door.'
+            }
+          },
           next: [{ to: 'r1-04a', if: { trust: { min: 45 } } }, { to: 'r1-04b' }],
           options: [
             {
@@ -2340,7 +2386,29 @@ const MAYA = {
           page: 36,
           act: 2,
           scene: { pose: { gaze: 'phone', arms: 'lap', props: ['phone'] } },
-          line: 'Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+          line: {
+            default: 'Like last week. I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+            from: {
+              // after p. 26, Challenge (skilful): "I don't think Mr Okafor asked what was wrong to na..."
+              'r1-03c:c-s': 'It\'s mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+              // after p. 26, Observe (clumsy): "You said "everyone". It sounds like you feel every..."
+              'r1-03c:o-c': 'It\'s mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+              // after p. 26, Observe (plausible): "You put your bag down a minute ago. You seem a bit..."
+              'r1-03c:o-p': 'It\'s mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+              // after p. 26, Observe (skilful): "You said "everyone". It sounds like it's coming fr..."
+              'r1-03c:o-s': 'It\'s mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+              // after p. 26, Question (clumsy): "So when they ask, is there something you'd rather ..."
+              'r1-03c:q-c': 'It\'s mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+              // after p. 26, Question (plausible): "What do you usually say when people ask you what's..."
+              'r1-03c:q-p': 'It\'s mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+              // after p. 26, Support (plausible): "That sounds tiring. People only ask because they c..."
+              'r1-03c:s-p': 'It\'s mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+              // after p. 26, Support (skilful): "That sounds tiring. I'll try not to be one more pe..."
+              'r1-03c:s-s': 'It\'s mostly the work, though. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.',
+              // after p. 31, Support (skilful): "I pushed a bit fast just then. Sorry. We can slow ..."
+              'r1-03d:s-s': 'It\'s not that I don\'t care. Last week I had a chemistry thing due. I opened it, looked at it, and then I was on my phone for two hours. Every night it\'s the same.'
+            }
+          },
           cue: 'When she mentions next year\'s exams, she takes out her phone and turns it over and over in her hand.',
           next: 'r1-05',
           options: [
@@ -2459,7 +2527,35 @@ const MAYA = {
           page: 40,
           act: 2,
           scene: { pose: { gaze: 'phone', arms: 'crossed', shoulders: 'raised', props: ['phone'] } },
-          line: 'Dunno. Can\'t be bothered, I guess.',
+          line: {
+            default: 'Dunno. Can\'t be bothered, I guess.',
+            from: {
+              // after p. 19, Observe (skilful): "You said "so I don't". You didn't say "I can't"."
+              'r1-03a:o-s': 'Or I just can\'t be bothered, I guess. Dunno.',
+              // after p. 19, Support (skilful): "That sounds exhausting. Tired, and then annoyed wi..."
+              'r1-03a:s-s': 'And then I just can\'t be bothered, I guess.',
+              // after p. 23, Challenge (skilful): "You keep sitting down to do it. That doesn't sound..."
+              'r1-03b:c-s': 'But then I still don\'t do it. Can\'t be bothered, I guess.',
+              // after p. 23, Observe (clumsy): "You said "it's not like I don't try". It sounds li..."
+              'r1-03b:o-c': 'But I still don\'t do it. So... can\'t be bothered, I guess.',
+              // after p. 23, Observe (skilful): "You said "it's not like I don't try". It sounds li..."
+              'r1-03b:o-s': 'But I still don\'t do it. So... can\'t be bothered, I guess.',
+              // after p. 23, Support (skilful): "That's a horrible feeling, wanting to start and no..."
+              'r1-03b:s-s': 'And then I tell myself I can\'t be bothered. It\'s easier, I guess.',
+              // after p. 26, Challenge (skilful): "I don't think Mr Okafor asked what was wrong to na..."
+              'r1-03c:c-s': 'Well. It\'s not that deep. I just can\'t be bothered, I guess.',
+              // after p. 26, Observe (skilful): "You said "everyone". It sounds like it's coming fr..."
+              'r1-03c:o-s': 'And I can\'t be bothered explaining any more, I guess. Dunno.',
+              // after p. 26, Support (skilful): "That sounds tiring. I'll try not to be one more pe..."
+              'r1-03c:s-s': 'It\'s not that deep, anyway. I just can\'t be bothered, I guess.',
+              // after p. 31, Observe (skilful): "You said "any more". So there was a time when you ..."
+              'r1-03d:o-s': 'Dunno what happened. Now I just can\'t be bothered, I guess.',
+              // after p. 31, Question (clumsy): "Don't you care about your grades?"
+              'r1-03d:q-c': 'I do. I just can\'t be bothered, I guess. Dunno.',
+              // after p. 31, Support (skilful): "I pushed a bit fast just then. Sorry. We can slow ..."
+              'r1-03d:s-s': 'It\'s fine. I just... can\'t be bothered, I guess.'
+            }
+          },
           cue: 'She has her phone out. Each time you mention exams or next year, she looks down at the screen.',
           next: 'r1-05',
           options: [
@@ -2582,7 +2678,13 @@ const MAYA = {
           page: 45,
           act: 2,
           scene: { pose: { gaze: 'window', head: 'down', mouth: 'flat' } },
-          line: 'Anyway. Everyone\'s already decided what I\'m doing after school.',
+          line: {
+            default: 'Anyway. Everyone\'s already decided what I\'m doing after school.',
+            from: {
+              // after p. 36, Challenge (clumsy): "You're calling that lazy. Two hours a night is whe..."
+              'r1-04a:c-c': 'Doesn\'t matter anyway. Everyone\'s already decided what I\'m doing after school.'
+            }
+          },
           cue: 'She says it quietly, to the window. She does not explain, and she does not look at you.',
           next: { question: 'r1-06a', support: 'r1-06b', observe: 'r1-06c', challenge: [{ to: 'r1-06d', if: { trust: { min: 50 } } }, { to: 'r1-06e' }], default: 'r1-06a' },
           options: [
@@ -2703,8 +2805,20 @@ const MAYA = {
           page: 51,
           act: 3,
           scene: { pose: { gaze: 'counsellor', arms: 'lap' } },
-          line: 'I don\'t know. I just want it to stop feeling like this.',
-          cue: 'She looks at you for the first time in a while.',
+          line: {
+            default: 'I don\'t know. I just want it to stop feeling like this.',
+            from: {
+              // after p. 45, Question (clumsy): "Who's decided that? Is it your family?"
+              'r1-05:q-c': 'Can we not talk about that? I just want it to stop feeling like this.'
+            }
+          },
+          cue: {
+            default: 'She looks at you for the first time in a while.',
+            from: {
+              // after p. 45, Question (clumsy): "Who's decided that? Is it your family?"
+              'r1-05:q-c': 'She looks straight at you, as if daring you to ask again.'
+            }
+          },
           next: 'r1-07',
           options: [
             {
@@ -2817,7 +2931,13 @@ const MAYA = {
           page: 54,
           act: 3,
           scene: { pose: { gaze: 'floor', arms: 'lap', shoulders: 'relaxed' } },
-          line: 'Yeah. It is a lot. I don\'t really talk about it.',
+          line: {
+            default: 'Yeah. It is a lot. I don\'t really talk about it.',
+            from: {
+              // after p. 45, Support (clumsy): "There's still plenty of time to work that out."
+              'r1-05:s-c': 'Doesn\'t feel like it. It\'s a lot. I don\'t really talk about it.'
+            }
+          },
           cue: 'Her shoulders drop. She does not seem in a hurry to leave.',
           next: 'r1-07',
           options: [
@@ -2929,7 +3049,13 @@ const MAYA = {
           page: 58,
           act: 3,
           scene: { pose: { gaze: 'counsellor', mouth: 'tight' } },
-          line: '...I didn\'t say what I want, did I.',
+          line: {
+            default: '...I didn\'t say what I want, did I.',
+            from: {
+              // after p. 45, Observe (plausible): "You said that to the window. It seems hard to say ..."
+              'r1-05:o-p': 'It\'s easier than saying what I want. ...Which I didn\'t, did I.'
+            }
+          },
           cue: 'A short laugh that is not really a laugh.',
           next: 'r1-07',
           options: [
@@ -3043,8 +3169,20 @@ const MAYA = {
           page: 62,
           act: 3,
           scene: { pose: { gaze: 'window', chair: 'back' } },
-          line: 'I suppose. I just don\'t know what I\'d change.',
-          cue: 'She sits back and thinks. She has not looked at the door for a while.',
+          line: {
+            default: 'I suppose. I just don\'t know what I\'d change.',
+            from: {
+              // after p. 45, Challenge (clumsy): "Maybe. But you're the one living it, so they need ..."
+              'r1-05:c-c': 'Sorry. It\'s me living it, I suppose. I just don\'t know what I\'d change.'
+            }
+          },
+          cue: {
+            default: 'She sits back and thinks. She has not looked at the door for a while.',
+            from: {
+              // after p. 45, Challenge (clumsy): "Maybe. But you're the one living it, so they need ..."
+              'r1-05:c-c': 'After a moment she turns to the window, thinking. She has not looked at the door for a while.'
+            }
+          },
           next: 'r1-07',
           options: [
             {
@@ -3156,8 +3294,22 @@ const MAYA = {
           page: 64,
           act: 3,
           scene: { pose: { gaze: 'door', arms: 'bag', chair: 'edge', shoulders: 'raised' } },
-          line: 'You don\'t get it.',
-          cue: 'She pulls her bag back onto her lap.',
+          line: {
+            default: 'You don\'t get it.',
+            from: {
+              // after p. 45, Challenge (plausible): "Maybe. But you'd be the one living it. Is it what ..."
+              'r1-05:c-p': 'It\'s not that simple, though. You don\'t get it.',
+              // after p. 45, Challenge (skilful): "Maybe. But you'd be the one living it, so I'd be i..."
+              'r1-05:c-s': 'It doesn\'t. You don\'t get it.'
+            }
+          },
+          cue: {
+            default: 'She pulls her bag back onto her lap.',
+            from: {
+              // after p. 45, Challenge (skilful): "Maybe. But you'd be the one living it, so I'd be i..."
+              'r1-05:c-s': 'She holds your look for a moment, then glances at the door and pulls her bag back onto her lap.'
+            }
+          },
           next: 'r1-07',
           options: [
             {
@@ -3274,7 +3426,21 @@ const MAYA = {
           page: 70,
           act: 3,
           scene: { pose: { gaze: 'counsellor' } },
-          line: 'So what am I supposed to do, then?',
+          line: {
+            default: 'So what am I supposed to do, then?',
+            from: {
+              // after p. 51, Question (skilful): "If things were a bit better two weeks from now, wh..."
+              'r1-06a:q-s': 'Even one thing would do. I just don\'t know which. So what am I supposed to do?',
+              // after p. 54, Question (skilful): "If the next two weeks went a bit better, what woul..."
+              'r1-06b:q-s': 'Homework without the drama. But how? What am I supposed to do?',
+              // after p. 58, Question (skilful): "What would you want the next two weeks to look lik..."
+              'r1-06c:q-s': 'Actually starting things. But I don\'t know how. What am I supposed to do?',
+              // after p. 62, Challenge (skilful): "I think you already have one idea. You don't trust..."
+              'r1-06d:c-s': 'The phone thing, maybe. But then what? What am I supposed to do?',
+              // after p. 62, Question (skilful): "If it were two weeks from now and things were slig..."
+              'r1-06d:q-s': 'Chemistry before my phone. Is that even a plan? What am I supposed to do?'
+            }
+          },
           cue: 'She glances at the clock. The bell will ring soon.',
           next: null, // last page: the round ends after this choice
           options: [
@@ -3390,15 +3556,144 @@ const MAYA = {
         }
       },
       // How the round can end (SPEC.md 7.7). `text` is shown on the ending
-      // page; `summary` is the one line on the debrief's ending card.
+      // page; `summary` is the one line on the debrief's ending card. Where
+      // `text` has a `from` list, that text replaces the default when the
+      // round ends straight after that page and option (SPEC.md 9.5).
       endings: {
-        breakthrough: { title: 'Breakthrough', summary: 'Maya proposed a next step of her own, and asked to come back.', text: 'Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"' },
-        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to the step you suggested. The plan stayed yours.', text: 'Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.' },
+        breakthrough: { title: 'Breakthrough', summary: 'Maya proposed a next step of her own, and asked to come back.',
+          text: {
+            default: 'Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"',
+            from: {
+              // after p. 70, Challenge (clumsy): "I could give you a plan, but you'd need to stick t..."
+              'r1-07:c-c': 'She gets as far as the door, then turns back. "Fine. But I\'ll pick it." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. "Same time in two weeks?"',
+              // after p. 70, Challenge (plausible): "I could give you a plan, but plans from me don't u..."
+              'r1-07:c-p': 'Then, before you start: "Actually... I\'ve got an idea." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"',
+              // after p. 70, Observe (clumsy): "You've talked about the work in a lot of detail. I..."
+              'r1-07:o-c': 'Then she thinks again. "Well. Maybe one thing." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"',
+              // after p. 70, Question (clumsy): "Could you try handing in the next piece of homewor..."
+              'r1-07:q-c': 'Then she looks back from the clock. "Or... could I try something I picked?" Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"',
+              // after p. 70, Question (plausible): "What do you think would help most with the homewor..."
+              'r1-07:q-p': 'Then she shakes her head. "That\'s what everyone says. What I\'d actually try is..." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"',
+              // after p. 70, Support (clumsy): "You don't have to fix everything this week. I'll h..."
+              'r1-07:s-c': 'Then she shakes her head. "Actually, don\'t. I want to sort it myself." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"',
+              // after p. 70, Support (plausible): "You don't have to fix everything this week. Even o..."
+              'r1-07:s-p': 'Then she stops nodding. "Actually... can I choose the thing?" Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"'
+            }
+          }
+        },
+        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to the step you suggested. The plan stayed yours.',
+          text: {
+            default: 'Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.',
+            from: {
+              // after p. 70, Challenge (skilful): "I could give you a plan, but it would be my plan. ..."
+              'r1-07:c-s': 'She thinks, but nothing comes, and in the end you offer a step after all. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.',
+              // after p. 70, Observe (plausible): "You've talked about your phone a few times. That s..."
+              'r1-07:o-p': '"Or... I don\'t know. What would you do?" Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.',
+              // after p. 70, Question (skilful): "What's one small thing you'd want to try before we..."
+              'r1-07:q-s': 'Then she shakes her head. "Or... I don\'t know. What do you think?" Maya agrees to the step you suggest. "OK. I\'ll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.'
+            }
+          }
+        },
         // ownershipNote: shown in the debrief when a Polite exit ends with high
         // ownership (enough for a Breakthrough) but too little trust.
-        polite: { title: 'Polite exit', summary: 'Maya stayed polite from start to finish and left unmoved.', text: '"Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed.',
+        polite: { title: 'Polite exit', summary: 'Maya stayed polite from start to finish and left unmoved.',
+          text: {
+            default: '"Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed.',
+            from: {
+              // after p. 70, Question (skilful): "What's one small thing you'd want to try before we..."
+              'r1-07:q-s': '"Anyway. Thanks for this." Maya picks up her bag and leaves on time, without saying whether she will really try it. She was polite from start to finish. Nothing much has changed.'
+            }
+          },
           ownershipNote: 'She did a lot of her own thinking: ownership ended high. Trust stayed below the level where she would commit to a step out loud, so the ideas left the room with her.' },
-        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the conversation really began.', text: '"Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began.' }
+        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the conversation really began.',
+          text: {
+            default: '"Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began.',
+            from: {
+              // after p. 26, Challenge (skilful): "I don't think Mr Okafor asked what was wrong to na..."
+              'r1-03c:c-s': 'She thinks about it for a second, then stands, bag on her shoulder. "Can I go now?" The conversation is over before it really began.',
+              // after p. 31, Challenge (skilful): "Pointless is a strong word. You still came in toda..."
+              'r1-03d:c-s': 'A moment later she does get up, bag on her shoulder. "Can I go now?" The conversation is over before it really began.',
+              // after p. 31, Observe (clumsy): "You've folded your arms. It looks like you've deci..."
+              'r1-03d:o-c': 'A moment later she does get up, bag on her shoulder. "Can I go now?" The conversation is over before it really began.',
+              // after p. 40, Challenge (clumsy): "I don't think you can't be bothered. I think you'r..."
+              'r1-04b:c-c': 'Then she stands again, properly this time, bag on her shoulder. "Can I go now?" The conversation is over before it really began.',
+              // after p. 45, Challenge (skilful): "Maybe. But you'd be the one living it, so I'd be i..."
+              'r1-05:c-s': 'She thinks about it for a second, then stands, bag on her shoulder. "Can I go now?" The conversation is over before it really began.',
+              // after p. 51, Challenge (clumsy): "I think it won't stop by itself, though. Something..."
+              'r1-06a:c-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 51, Challenge (plausible): "I think it'll start to feel better once the homewo..."
+              'r1-06a:c-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 51, Challenge (skilful): "I think you have more say over how this feels than..."
+              'r1-06a:c-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 51, Observe (clumsy): "When you said that, you sat up a little. It sounds..."
+              'r1-06a:o-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 51, Observe (plausible): "When you said that, you looked at me. It's the fir..."
+              'r1-06a:o-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 51, Observe (skilful): "When you said that, you sat up a little. It sounds..."
+              'r1-06a:o-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 51, Question (clumsy): "Do you want to feel better about school by the tim..."
+              'r1-06a:q-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 51, Question (plausible): "What do you think is the main thing making it feel..."
+              'r1-06a:q-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 54, Challenge (clumsy): "Not talking about it is one way to cope, but you'l..."
+              'r1-06b:c-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 54, Challenge (plausible): "Not talking about it is one way to cope. It might ..."
+              'r1-06b:c-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 54, Challenge (skilful): "Not talking about it is one way to cope. I'm not s..."
+              'r1-06b:c-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 54, Observe (clumsy): "You said it's a lot. You look as if it's all getti..."
+              'r1-06b:o-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 54, Observe (plausible): "You said you don't really talk about it. That must..."
+              'r1-06b:o-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 58, Challenge (clumsy): "I think you need to work out what you want, then, ..."
+              'r1-06c:c-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 58, Challenge (plausible): "I think you might want something different from wh..."
+              'r1-06c:c-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 58, Challenge (skilful): "I think you might have more of an idea than you're..."
+              'r1-06c:c-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 58, Observe (clumsy): "You laughed, but it sounds like you don't know wha..."
+              'r1-06c:o-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 58, Observe (plausible): "You said that quietly, as if you'd noticed it for ..."
+              'r1-06c:o-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 58, Observe (skilful): "You laughed, but it didn't sound like you found it..."
+              'r1-06c:o-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 58, Question (clumsy): "Do you know what you want, deep down, or not yet?"
+              'r1-06c:q-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 64, Challenge (clumsy): "Maybe I don't. But I think you don't want to hear ..."
+              'r1-06e:c-c': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 64, Challenge (plausible): "Maybe I don't. But it would help if you told me, t..."
+              'r1-06e:c-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 64, Challenge (skilful): "Maybe I don't. But I don't think you've given up, ..."
+              'r1-06e:c-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 64, Observe (clumsy): "You've picked up your bag. You seem quite worked u..."
+              'r1-06e:o-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 64, Observe (plausible): "You've picked up your bag. Do you want to stop for..."
+              'r1-06e:o-p': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 64, Observe (skilful): "You've picked up your bag. I think I pushed too ha..."
+              'r1-06e:o-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 64, Question (clumsy): "You're right. Can you help me get it, then?"
+              'r1-06e:q-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 70, Challenge (clumsy): "I could give you a plan, but you'd need to stick t..."
+              'r1-07:c-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 70, Challenge (plausible): "I could give you a plan, but plans from me don't u..."
+              'r1-07:c-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 70, Challenge (skilful): "I could give you a plan, but it would be my plan. ..."
+              'r1-07:c-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 70, Observe (clumsy): "You've talked about the work in a lot of detail. I..."
+              'r1-07:o-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 70, Observe (plausible): "You've talked about your phone a few times. That s..."
+              'r1-07:o-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 70, Observe (skilful): "You've talked about the moment you sit down and th..."
+              'r1-07:o-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.',
+              // after p. 70, Question (clumsy): "Could you try handing in the next piece of homewor..."
+              'r1-07:q-c': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 70, Question (plausible): "What do you think would help most with the homewor..."
+              'r1-07:q-p': '"Can I go now?" Maya is already standing, bag on her shoulder. Whatever had started to open has closed again.',
+              // after p. 70, Question (skilful): "What's one small thing you'd want to try before we..."
+              'r1-07:q-s': 'A moment later she stands anyway, bag on her shoulder. "Can I go now?" Whatever had started to open has closed again.'
+            }
+          }
+        }
       }
     },
 
@@ -3630,7 +3925,15 @@ const MAYA = {
           page: 93,
           act: 1,
           scene: { pose: { gaze: 'floor', arms: 'lap', props: ['brochure'] } },
-          line: 'The thing is, even when I do the work, it doesn\'t feel like it\'s for anything.',
+          line: {
+            default: 'The thing is, even when I do the work, it doesn\'t feel like it\'s for anything.',
+            from: {
+              // after p. 89, Challenge: "You're here, though. Part of you must want somethi..."
+              'r2-01d:c': 'Whatever. Even when I do the work, it doesn\'t feel like it\'s for anything.',
+              // after p. 89, Question: "That's fair. What would make it worth staying for ..."
+              'r2-01d:q': 'It\'s not even the grades. Even when I do the work, it doesn\'t feel like it\'s for anything.'
+            }
+          },
           cue: 'She picks up the course brochure from your desk, turns a page, then puts it down quickly.',
           next: [{ to: 'r2-03a', if: { trust: { min: 45 } } }, { to: 'r2-03b', if: { trust: { min: 30 } } }, { to: 'r2-03c' }],
           options: [
@@ -3675,7 +3978,13 @@ const MAYA = {
           page: 98,
           act: 2,
           scene: { pose: { gaze: 'counsellor', arms: 'open', props: ['brochure'] } },
-          line: 'My mum brought one of these home. Medicine. It\'s kind of... already the plan.',
+          line: {
+            default: 'My mum brought one of these home. Medicine. It\'s kind of... already the plan.',
+            from: {
+              // after p. 93, Observe: "You picked up that brochure and put it down very f..."
+              'r2-02:o': 'Medicine. That\'s what hers is for. It\'s kind of... already the plan.'
+            }
+          },
           cue: 'She taps the cover of the brochure. She does not sound unhappy. She does not sound happy, either.',
           next: [{ to: 'r2-04a', if: { trust: { min: 45 } } }, { to: 'r2-04b' }],
           options: [
@@ -3866,8 +4175,20 @@ const MAYA = {
           page: 114,
           act: 2,
           scene: { pose: { gaze: 'floor', arms: 'lap', props: ['brochure'] } },
-          line: 'I used to draw a lot. Design stuff. There\'s no point even thinking about it now.',
-          cue: 'She is turning the brochure over and over in her hands.',
+          line: {
+            default: 'I used to draw a lot. Design stuff. There\'s no point even thinking about it now.',
+            from: {
+              // after p. 105, Challenge: "I'm not sure it's as worked out as you're making i..."
+              'r2-03c:c': 'They\'re not like that. ...I used to draw a lot, though. Design stuff. There\'s no point even thinking about it now.'
+            }
+          },
+          cue: {
+            default: 'She is turning the brochure over and over in her hands.',
+            from: {
+              // after p. 98, Challenge: "Is it the plan, though? You're the one who'd be st..."
+              'r2-03a:c': 'She picks the brochure up again and turns it over and over in her hands.'
+            }
+          },
           next: 'r2-05',
           options: [
             {
@@ -3913,7 +4234,13 @@ const MAYA = {
           page: 119,
           act: 2,
           scene: { pose: { gaze: 'floor', head: 'down', props: ['brochure'] } },
-          line: 'They\'d never listen anyway. They\'ve wanted this since I was little. They work so hard for me.',
+          line: {
+            default: 'They\'d never listen anyway. They\'ve wanted this since I was little. They work so hard for me.',
+            from: {
+              // after p. 114, Observe: "You're turning the brochure over and over while yo..."
+              'r2-04b:o': 'Doesn\'t matter anyway. They\'d never listen. They\'ve wanted this since I was little. They work so hard for me.'
+            }
+          },
           cue: 'She looks at the floor. Her voice goes quiet on "so hard".',
           next: { question: 'r2-06a', observe: 'r2-06a', support: 'r2-06b', challenge: [{ to: 'r2-06c', if: { trust: { min: 50 } } }, { to: 'r2-06d' }], default: 'r2-06a' },
           options: [
@@ -4143,8 +4470,32 @@ const MAYA = {
           page: 138,
           act: 3,
           scene: { pose: { gaze: 'counsellor', props: ['brochure'] } },
-          line: 'So what do I do? I can\'t just walk in and say "I don\'t want to be a doctor".',
-          cue: 'She is looking straight at you.',
+          line: {
+            default: 'So what do I do? I can\'t just walk in and say "I don\'t want to be a doctor".',
+            from: {
+              // after p. 124, Observe: "You leaned forward when you said that."
+              'r2-06a:o': 'And then what? Even if I found out everything, I can\'t just walk in and say "I don\'t want to be a doctor".',
+              // after p. 124, Question: "What would you want to find out?"
+              'r2-06a:q': 'And then what? Even if I found out everything, I can\'t just walk in and say "I don\'t want to be a doctor".',
+              // after p. 124, Support: "That sounds like a sensible place to start."
+              'r2-06a:s': 'And then what? Even if I found out everything, I can\'t just walk in and say "I don\'t want to be a doctor".',
+              // after p. 127, Support: "It is a lot. Go easy on yourself."
+              'r2-06b:s': 'I don\'t even know what I\'d do. I can\'t just walk in and say "I don\'t want to be a doctor".',
+              // after p. 133, Challenge: "I don't know them. But I'm not sure you know what ..."
+              'r2-06d:c': 'Anyway. Even if you were right, I can\'t just walk in and say "I don\'t want to be a doctor".',
+              // after p. 133, Observe: "You pushed the brochure away when I said that."
+              'r2-06d:o': '...Fine. So what would I even do? I can\'t just walk in and say "I don\'t want to be a doctor".'
+            }
+          },
+          cue: {
+            default: 'She is looking straight at you.',
+            from: {
+              // after p. 127, Support: "It is a lot. Go easy on yourself."
+              'r2-06b:s': 'She looks up from the brochure, as if she has only just thought of it.',
+              // after p. 133, Challenge: "I don't know them. But I'm not sure you know what ..."
+              'r2-06d:c': 'She looks back from the clock, straight at you.'
+            }
+          },
           next: null, // last page: the round ends after this choice
           options: [
             {
@@ -4190,14 +4541,55 @@ const MAYA = {
         }
       },
       // How the round can end (SPEC.md 7.7). `text` is shown on the ending
-      // page; `summary` is the one line on the debrief's ending card.
+      // page; `summary` is the one line on the debrief's ending card. Where
+      // `text` has a `from` list, that text replaces the default when the
+      // round ends straight after that page and option (SPEC.md 9.5).
       endings: {
-        breakthrough: { title: 'Breakthrough', summary: 'Maya chose her own next step, and how she wants to raise it at home.', text: 'Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."' },
-        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to look at the course you suggested. The step stayed yours.', text: 'Maya agrees to the step you suggest. "OK. I\'ll look at the website." She takes the brochure with her. You are not sure she will open it.' },
+        breakthrough: { title: 'Breakthrough', summary: 'Maya chose her own next step, and how she wants to raise it at home.',
+          text: {
+            default: 'Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."',
+            from: {
+              // after p. 138, Question: "If you did want to raise it at home, how would you..."
+              'r2-07:q': 'She thinks a little longer. "Actually... maybe I could do it soon." Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."',
+              // after p. 138, Support: "Whatever you decide, I'm here to help you think it..."
+              'r2-07:s': 'You wait too. After a moment she fills the silence herself. Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."'
+            }
+          }
+        },
+        partial: { title: 'Agreement without ownership', summary: 'Maya agreed to look at the course you suggested. The step stayed yours.',
+          text: {
+            default: 'Maya agrees to the step you suggest. "OK. I\'ll look at the website." She takes the brochure with her. You are not sure she will open it.',
+            from: {
+              // after p. 138, Question: "If you did want to raise it at home, how would you..."
+              'r2-07:q': '"But I don\'t know. What do you think I should do first?" Maya agrees to the step you suggest. "OK. I\'ll look at the website." She takes the brochure with her. You are not sure she will open it.'
+            }
+          }
+        },
         // ownershipNote: as in Round 1, for a Polite exit with high ownership and too little trust.
-        polite: { title: 'Polite exit', summary: 'A pleasant conversation. The brochure stayed on the desk.', text: '"Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.',
+        polite: { title: 'Polite exit', summary: 'A pleasant conversation. The brochure stayed on the desk.',
+          text: {
+            default: '"Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.',
+            from: {
+              // after p. 138, Challenge: "You don't have to make a speech. But I don't think..."
+              'r2-07:c': 'She does not say what the "OK" was for. "Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.',
+              // after p. 138, Question: "If you did want to raise it at home, how would you..."
+              'r2-07:q': '"Anyway. Thanks. I\'ll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Whatever she was picturing, she keeps it to herself.'
+            }
+          },
           ownershipNote: 'Ownership ended high: the thinking was hers. Trust stayed below the level where she would say a next step out loud, so it went home unspoken.' },
-        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the real issue came up.', text: '"Can I go now?" She is out of the door before you can answer.' }
+        early: { title: 'Early exit', summary: 'Trust ran out, and Maya left before the real issue came up.',
+          text: {
+            default: '"Can I go now?" She is out of the door before you can answer.',
+            from: {
+              // after p. 119, Observe: "You said they'd never listen, and then straight aw..."
+              'r2-05:o': 'The almost-laugh goes. She stands. "Can I go now?" She is out of the door before you can answer.',
+              // after p. 124, Challenge: "Finding out is a good start. I wonder if it might ..."
+              'r2-06a:c': 'She thinks about it a moment longer. Then she stands. "Can I go now?" She is out of the door before you can answer.',
+              // after p. 138, Challenge: "You don't have to make a speech. But I don't think..."
+              'r2-07:c': 'Then the breath goes out of her. She stands. "Can I go now?" She is out of the door before you can answer.'
+            }
+          }
+        }
       }
     }
   },
@@ -4459,6 +4851,22 @@ document.body.appendChild(live);
 
 const view = { screen: 'cover', state: null, r1: null, lever: null, picked: null, seed: null };
 let resumeData = null;
+// Bridging lines (SPEC.md 9.5) are chosen by the choice just made in this
+// sitting. False after a reload or Resume and at a round start, so the page
+// then shows its default line, cue or ending text. Never saved.
+let bridgeLive = false;
+
+// The text to show for a page's line or cue, or an ending's text: a string,
+// or { default, from: { 'previousNodeId:optionId': text } }.
+function bridged(x, st) {
+  if (!x || typeof x === 'string') return x || '';
+  const last = st && st.history[st.history.length - 1];
+  if (bridgeLive && last && x.from) {
+    const v = x.from[last.nodeId + ':' + last.optionId];
+    if (v) return v;
+  }
+  return x.default;
+}
 (function () {
   const d = store.load();
   if (validSave(d)) resumeData = d;
@@ -4654,8 +5062,8 @@ function tweenScene(holder, from, to) {
 function storyHead(node) {
   return [
     h('p', { class: 'speaker', text: MAYA.profile.name }),
-    h('p', { class: 'maya-line', text: quoted(node.line) }),
-    node.cue ? h('p', { class: 'cue', text: node.cue }) : null
+    h('p', { class: 'maya-line', text: quoted(bridged(node.line, view.state)) }),
+    node.cue ? h('p', { class: 'cue', text: bridged(node.cue, view.state) }) : null
   ];
 }
 
@@ -4744,6 +5152,7 @@ function screenReferral() {
 function startRound1() {
   view.seed = newSeed();
   view.state = createRound(MAYA, 'r1', null, view.seed);
+  bridgeLive = false;
   view.r1 = null;
   view.lever = null;
   view.picked = null;
@@ -4753,6 +5162,7 @@ function startRound1() {
 function startRound2() {
   view.seed = newSeed();
   view.state = createRound(MAYA, 'r2', carryOver(view.r1), view.seed);
+  bridgeLive = false;
   view.lever = null;
   view.picked = null;
   go(view.state.ending ? 'ending' : 'scene');
@@ -4840,6 +5250,7 @@ function choicePanel(st, node) {
 
 function commit(optionId, guess) {
   view.state = applyChoice(view.state, optionId, guess);
+  bridgeLive = true;
   view.lever = null;
   view.picked = null;
   if (view.state.ending && view.state.round === 'r1') view.r1 = view.state;
@@ -4952,7 +5363,7 @@ function screenEnding() {
       h('div', {}, [
         h('p', { class: 'eyebrow', text: ROUND_LABELS[st.round] + ' ends' }),
         h('h1', { class: 'ending-title', text: ending.title }),
-        h('p', { class: 'ending-text', text: ending.text }),
+        h('p', { class: 'ending-text', text: bridged(ending.text, st) }),
         h('div', { class: 'actions' }, [button('See your path', function () { go('debrief'); }, { primary: true })])
       ])
     ])
@@ -5189,7 +5600,7 @@ function roadNotTakenView(st) {
     const others = RULES.levers.filter(function (l) { return lines[l] && (!entry || entry.lever !== l); });
     return h('article', { class: 'road', 'data-road': id }, [
       h('p', { class: 'road-head' }, [h('span', { class: 'pageno', text: 'p. ' + node.page }), h('span', { text: entry ? 'You used ' : 'You did not reach this page.' }), entry ? leverTag(entry.lever) : null]),
-      h('p', { class: 'road-line', text: quoted(node.line) }),
+      h('p', { class: 'road-line', text: quoted(bridged(node.line, null)) }),
       h('ul', {}, others.map(function (l) { return h('li', {}, [leverTag(l), h('span', { text: lines[l] })]); }))
     ]);
   }));

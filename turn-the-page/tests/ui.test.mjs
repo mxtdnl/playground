@@ -14,7 +14,7 @@ import { createRequire } from 'node:module';
 import { mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { RULES, createRound, applyChoice, carryOver, getNode } from '../src/engine.js';
+import { RULES, createRound, applyChoice, carryOver, getNode, futureKey } from '../src/engine.js';
 import { MAYA } from '../src/content/maya.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -461,4 +461,156 @@ for (const target of ['breakthrough', 'early']) {
       await page.context().close();
     });
   }
+}
+
+// ---------------------------------------------------------------------------
+// Bridging lines (SPEC.md 9.5).
+
+// Compare text ignoring quote style (quoted() turns inner double quotes into single).
+const same = (a, b) => assert.equal(plain(a).replace(/'/g, '"'), String(b).replace(/'/g, '"'));
+const textOf = (x) => (x && typeof x === 'object' ? x.default : x);
+const fromOf = (x, key) => x && typeof x === 'object' && x.from ? x.from[key] : undefined;
+
+// A path that takes the given option at each named page ({ 'r1-03d': 'o-s' })
+// and ends as `endOk(state)` says. Depth-first, preferring the session's
+// quality pattern; dead ends are remembered by futureKey.
+function findPathVia(start, wants, endOk) {
+  const dead = new Set();
+  return (function go(state) {
+    if (state.ending) return endOk(state) ? [] : null;
+    const key = futureKey(state);
+    if (dead.has(key)) return null;
+    const opts = getNode(state).options;
+    const forced = wants[state.nodeId];
+    const order = forced ? opts.filter((o) => o.id === forced) : orderFor(opts, 'any', state.history.length);
+    for (const o of order) {
+      const rest = go(applyChoice(state, o.id));
+      if (rest) return [o.id].concat(rest);
+    }
+    dead.add(key);
+    return null;
+  })(start);
+}
+
+// Make one choice on the current scene page (either format), then Continue,
+// passing any act banner.
+async function choose(page, state, optionId, i) {
+  const option = getNode(state).options.find((o) => o.id === optionId);
+  if (state.round === 'r2') {
+    await page.click('[data-option="' + optionId + '"]');
+    await page.click('[data-guess="' + guessFor(option.lever, i) + '"]');
+  } else {
+    await page.click('[data-lever="' + option.lever + '"]');
+    await page.click('[data-option="' + optionId + '"]');
+  }
+  assert.equal(await screenOf(page), 'consequence');
+}
+async function onward(page) {
+  await page.click('[data-primary]');
+  if ((await screenOf(page)) === 'act') await page.click('[data-primary]');
+}
+
+test('bridging lines: variant after that option, default after a reload (page line, cue and ending text)', { skip, timeout: 120000 }, async () => {
+  const r1 = MAYA.rounds.r1;
+  const page = await newPage();
+  await begin(page);
+  // p. 7 Support (skilful) leads to p. 12, which has a bridging line for it.
+  await choose(page, createRound(MAYA, 'r1', null, 1), 's-s', 0);
+  await onward(page);
+  assert.equal(await page.getAttribute('.spread', 'data-node'), 'r1-02');
+  same(await page.textContent('.maya-line'), '"' + fromOf(r1.nodes['r1-02'].line, 'r1-01:s-s') + '"');
+  same(await page.textContent('.cue'), textOf(r1.nodes['r1-02'].cue));
+  await page.reload();
+  await page.click('[data-action="resume"]');
+  assert.equal(await page.getAttribute('.spread', 'data-node'), 'r1-02');
+  same(await page.textContent('.maya-line'), '"' + textOf(r1.nodes['r1-02'].line) + '"');
+  await page.context().close();
+
+  // A cue variant, and a reload on the consequence page before turning.
+  const p2 = await newPage();
+  await begin(p2);
+  await choose(p2, createRound(MAYA, 'r1', null, 1), 'c-c', 0);
+  await onward(p2);
+  same(await p2.textContent('.cue'), fromOf(r1.nodes['r1-02'].cue, 'r1-01:c-c'));
+  same(await p2.textContent('.maya-line'), '"' + textOf(r1.nodes['r1-02'].line) + '"');
+  await p2.context().close();
+  const p3 = await newPage();
+  await begin(p3);
+  await choose(p3, createRound(MAYA, 'r1', null, 1), 's-s', 0);
+  await p3.reload();
+  await p3.click('[data-action="resume"]');
+  assert.equal(await screenOf(p3), 'consequence');
+  await onward(p3);
+  same(await p3.textContent('.maya-line'), '"' + textOf(r1.nodes['r1-02'].line) + '"');
+  await p3.context().close();
+
+  // Ending text: a Polite exit straight after p. 70 Question (skilful).
+  const start = createRound(MAYA, 'r1', null, 1);
+  const path = findPathVia(start, { 'r1-07': 'q-s' }, (s) => s.ending === 'polite');
+  assert.ok(path, 'no path to a Polite exit through r1-07:q-s');
+  const p4 = await newPage();
+  await begin(p4);
+  let st = start;
+  for (let i = 0; i < path.length; i++) { await choose(p4, st, path[i], i); st = applyChoice(st, path[i]); await p4.click('[data-primary]'); if ((await screenOf(p4)) === 'act') await p4.click('[data-primary]'); }
+  assert.equal(await screenOf(p4), 'ending');
+  same(await p4.textContent('.ending-text'), fromOf(r1.endings.polite.text, 'r1-07:q-s'));
+  await p4.reload();
+  await p4.click('[data-action="resume"]');
+  assert.equal(await screenOf(p4), 'ending');
+  same(await p4.textContent('.ending-text'), textOf(r1.endings.polite.text));
+  assert.deepEqual(p4.errors, []);
+  await p4.context().close();
+});
+
+// Three paths that use bridges, screenshotted on every bridged page at both
+// sizes into tests/screenshots/bridges/ (read them after content changes).
+const BRIDGE_PATHS = [
+  { name: 'A', round: 'r1', wants: { 'r1-01': 's-s', 'r1-02': 'c-s', 'r1-03d': 'o-s' }, end: () => true },
+  { name: 'B', round: 'r1', wants: { 'r1-01': 'c-s', 'r1-02': 'o-s', 'r1-05': 'c-c', 'r1-06d': 'q-s', 'r1-07': 'q-s' }, end: () => true },
+  { name: 'C', round: 'r2', wants: { 'r2-02': 'o', 'r2-03a': 'c', 'r2-05': 'c', 'r2-06d': 'c' }, end: () => true }
+];
+for (const size of SIZES) {
+  test('bridged paths read through at ' + size.width + 'x' + size.height, { skip, timeout: 180000 }, async () => {
+    const dir = join(SHOTS, 'bridges');
+    mkdirSync(dir, { recursive: true });
+    for (const bp of BRIDGE_PATHS) {
+      const page = await newPage({ viewport: size });
+      await begin(page);
+      let st = createRound(MAYA, 'r1', null, 1);
+      if (bp.round === 'r2') {
+        // Round 1 to a Breakthrough first, so Round 2 is played live.
+        const r1Path = findPath(st, 'breakthrough');
+        st = await playRound(page, st, r1Path);
+        await page.click('[data-primary]');
+        await page.click('[data-primary]');
+        await page.click('[data-primary]');
+        st = createRound(MAYA, 'r2', carryOver(st), 1);
+      }
+      const path = findPathVia(st, bp.wants, bp.end);
+      assert.ok(path, 'no path for bridged path ' + bp.name);
+      let bridges = 0;
+      for (let i = 0; i < path.length; i++) {
+        await choose(page, st, path[i], i);
+        const key = st.nodeId + ':' + path[i];
+        st = applyChoice(st, path[i], st.round === 'r2' ? guessFor(getNode(st).options.find((o) => o.id === path[i]).lever, i) : undefined);
+        await onward(page);
+        const round = MAYA.rounds[st.round];
+        const target = st.ending ? round.endings[st.ending].text : round.nodes[st.nodeId].line;
+        const cue = st.ending ? null : round.nodes[st.nodeId].cue;
+        const v = fromOf(target, key), vc = fromOf(cue, key);
+        if (v || vc) {
+          bridges++;
+          if (st.ending) same(await page.textContent('.ending-text'), v);
+          else {
+            if (v) same(await page.textContent('.maya-line'), '"' + v + '"');
+            if (vc) same(await page.textContent('.cue'), vc);
+          }
+          await page.screenshot({ path: join(dir, size.width + 'x' + size.height + '-' + bp.name + '-' + String(i + 1).padStart(2, '0') + '-' + (st.ending ? 'ending-' + st.ending : st.nodeId) + '.png'), fullPage: true });
+        }
+      }
+      assert.ok(bridges >= 2, 'path ' + bp.name + ' shows only ' + bridges + ' bridge(s)');
+      assert.deepEqual(page.errors, []);
+      await page.context().close();
+    }
+  });
 }

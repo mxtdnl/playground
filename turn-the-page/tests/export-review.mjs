@@ -42,6 +42,19 @@ function describeRoute(r) {
   return Object.entries(r).map(([k, v]) => k + ' → ' + describeRoute(v)).join('; ');
 }
 
+// Bridged texts (SPEC.md 9.5): a string, or { default, from }.
+const plain = (x) => (x && typeof x === 'object' ? x.default : x) || '';
+const bridges = []; // { round, dest, field, key, text }
+function collect(rid, dest, field, x) {
+  if (x && typeof x === 'object') for (const [key, text] of Object.entries(x.from)) bridges.push({ rid, dest, field, key, text });
+}
+function fromLabel(rid, key) {
+  const [nid, oid] = key.split(':');
+  const n = C.rounds[rid].nodes[nid];
+  const o = n.options.find((x) => x.id === oid);
+  return 'p. ' + n.page + ' `' + key + '` ' + LEVER_NAME[o.lever] + (o.quality ? ' (' + o.quality + ')' : '');
+}
+
 function strings(x, acc) {
   if (typeof x === 'string') acc.push(x);
   else if (x && typeof x === 'object') for (const v of Object.values(x)) strings(v, acc);
@@ -57,7 +70,7 @@ w('This document is for review by a developmental-coaching expert. It contains t
 w();
 w('How to read the scripts: each page shows what Maya says, what the counsellor can see, and the options. For each option: the lever, the wording quality (Round 1 only), Maya\'s reaction, any override, the meter change it causes in two reference states, and the debrief note. The reference states have no previous choices; in play, repetition and the meters at that moment change the numbers. **Round 1 reference:** Maya\'s starting meters (Trust ' + C.profile.start.trust + ', Confidence ' + C.profile.start.confidence + ', Ownership ' + C.profile.start.ownership + '), and the same with Trust 55. **Round 2 reference:** the "after Polite exit" start (Trust ' + R2_REF.meters.trust + ', Confidence ' + R2_REF.meters.confidence + ', Ownership ' + R2_REF.meters.ownership + ', readiness low), and the same with Trust 55. T = Trust, C = Confidence, O = Ownership.');
 w();
-w('Contents: [Maya](#maya) · [Round 1](#round-1-just-lazy) · [Round 2](#round-2-two-weeks-later) · [Turning points](#turning-points-and-road-not-taken) · [Overrides](#every-override) · [Rules](#rules-table) · [Calibration](#calibration-report) · [Placeholders](#placeholder-strings)');
+w('Contents: [Maya](#maya) · [Round 1](#round-1-just-lazy) · [Round 2](#round-2-two-weeks-later) · [Bridges](#bridging-lines-and-branch-pages) · [Turning points](#turning-points-and-road-not-taken) · [Overrides](#every-override) · [Rules](#rules-table) · [Calibration](#calibration-report) · [Placeholders](#placeholder-strings)');
 w();
 
 // --- Maya ------------------------------------------------------------------
@@ -163,9 +176,11 @@ for (const [rid, round] of Object.entries(C.rounds)) {
   for (const [nid, n] of Object.entries(nodes)) {
     w('#### ' + nid + ' · p. ' + n.page + ' · Act ' + n.act);
     w();
-    w('**Maya:** "' + n.line + '"');
+    collect(rid, nid, 'line', n.line);
+    collect(rid, nid, 'cue', n.cue);
+    w('**Maya:** "' + plain(n.line) + '"' + (typeof n.line === 'object' ? ' *(+ ' + Object.keys(n.line.from).length + ' bridging line(s); see [Bridges](#bridging-lines-and-branch-pages))*' : ''));
     w();
-    w('**Cue:** ' + n.cue + (n.scene && n.scene.pose ? ' *(pose: ' + Object.entries(n.scene.pose).map(([k, v]) => k + ' ' + (Array.isArray(v) ? v.join('+') : v)).join(', ') + ')*' : ''));
+    w('**Cue:** ' + plain(n.cue) + (typeof n.cue === 'object' ? ' *(+ ' + Object.keys(n.cue.from).length + ' bridging cue(s))*' : '') + (n.scene && n.scene.pose ? ' *(pose: ' + Object.entries(n.scene.pose).map(([k, v]) => k + ' ' + (Array.isArray(v) ? v.join('+') : v)).join(', ') + ')*' : ''));
     w();
     w('**Next:** ' + describeRoute(n.next));
     w();
@@ -187,7 +202,28 @@ for (const [rid, round] of Object.entries(C.rounds)) {
   w();
   w('| Ending | Title | Text | Debrief summary |');
   w('|---|---|---|---|');
-  for (const [e, x] of Object.entries(round.endings)) w('| ' + e + ' | ' + x.title + ' | ' + esc(x.text) + ' | ' + esc(x.summary) + (x.ownershipNote ? ' *If ownership ended high:* ' + esc(x.ownershipNote) : '') + ' |');
+  for (const [e, x] of Object.entries(round.endings)) collect(rid, 'end:' + e, 'text', x.text);
+  for (const [e, x] of Object.entries(round.endings)) w('| ' + e + ' | ' + x.title + ' | ' + esc(plain(x.text)) + (typeof x.text === 'object' ? ' *(+ ' + Object.keys(x.text.from).length + ' bridging text(s))*' : '') + ' | ' + esc(x.summary) + (x.ownershipNote ? ' *If ownership ended high:* ' + esc(x.ownershipNote) : '') + ' |');
+  w();
+}
+
+// --- Bridges -------------------------------------------------------------------
+w('## Bridging lines and branch pages');
+w();
+w('Session 7 (SPEC.md 9.5). A bridging line replaces a page\'s opening line or cue, or an ending\'s text, when the page is reached straight from the page and option named; every other way in, and the page after a reload, shows the default. Presentation only: scores and routes do not change. Each bridge answers a pair rated "bridge" in `docs/FLOW-AUDIT.md`, which gives the reason. **Branch pages:** none; the audit found no jump that a bridge could not fix.');
+w();
+for (const rid of Object.keys(C.rounds)) {
+  const list = bridges.filter((b) => b.rid === rid);
+  w('### ' + (rid === 'r1' ? 'Round 1' : 'Round 2') + ' (' + list.length + ' bridging texts)');
+  w();
+  w('| Into | Replaces | After | Default | Bridging text |');
+  w('|---|---|---|---|---|');
+  for (const b of list) {
+    const round = C.rounds[rid];
+    const into = b.dest.startsWith('end:') ? 'Ending: ' + round.endings[b.dest.slice(4)].title : 'p. ' + round.nodes[b.dest].page + ' `' + b.dest + '`';
+    const def = b.dest.startsWith('end:') ? plain(round.endings[b.dest.slice(4)].text) : plain(round.nodes[b.dest][b.field]);
+    w('| ' + into + ' | ' + b.field + ' | ' + fromLabel(rid, b.key) + ' | ' + esc(def) + ' | ' + esc(b.text) + ' |');
+  }
   w();
 }
 
@@ -198,7 +234,7 @@ w('Highlighted in the debrief. The debrief shows the road-not-taken lines for th
 w();
 for (const [rid, ids] of Object.entries(C.turningPoints)) {
   for (const nid of ids) {
-    w('**' + rid + ' / ' + nid + '** — "' + C.rounds[rid].nodes[nid].line + '"');
+    w('**' + rid + ' / ' + nid + '** — "' + plain(C.rounds[rid].nodes[nid].line) + '"');
     w();
     for (const [l, t] of Object.entries(C.roadNotTaken[nid] || {})) w('- ' + LEVER_NAME[l] + ': ' + t);
     w();

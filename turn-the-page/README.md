@@ -90,6 +90,8 @@ node tests/calibrate.mjs
 node tests/export-review.mjs
 ```
 
+If you change a reaction, an opening line or a route, run `node tests/flow-audit.mjs` and rate any new pair in `docs/FLOW-AUDIT.md`. Some pages and endings have bridging lines (`from` lists in `src/content/maya.js`): an alternative opening shown only straight after the option named, so it follows on from what Maya has just said.
+
 If you change a Round 1 wording, also run `node tests/wording-tells.mjs`: it flags a lever where one quality is always the longest, the only question or the only one with a word like "really" or "just", and any page where the three wordings differ in length by more than 25%.
 
 The build writes `index.html` (never edit it by hand). The tests check that every page links up, every option has a reaction and a debrief note, and that debrief text avoids "correct", "wrong", "optimal" and "should have". The calibrator confirms that every ending can still be reached; it matters when you change an `override` or a `next`, because those change the numbers. Changing words alone does not affect it. The last command regenerates the review document.
@@ -128,6 +130,7 @@ node tests/art-gallery.mjs
 
 ```bash
 node tests/wording-tells.mjs
+node tests/flow-audit.mjs
 ```
 
 - `node --test`: engine, content, interface (`tests/ui.test.mjs`) and accessibility (`tests/a11y.test.mjs`) tests. The accessibility tests cover every screen state at 1440, 390 and 360px wide: focus order and visible focus, 44px targets, headings, labelled images, decorative geometry, the narrow single-column layout with its sticky meter strip, a keyboard-only playthrough, reduced motion, alt text on all 31 pages and the print stylesheet. They write screenshots of every state to `tests/screenshots/states/` (not committed). The browser tests use the Playwright and Chromium preinstalled in cloud sessions and are skipped where Playwright is not available.
@@ -135,6 +138,7 @@ node tests/wording-tells.mjs
 - `tests/contrast.mjs`: WCAG AA contrast for every visible text node and meaningful graphic in 60 screen states at two sizes; exits 1 on any failure.
 - `tests/art-gallery.mjs`: the art gallery images in `tests/screenshots/art/`; exits 1 if a geometry check fails.
 - `tests/wording-tells.mjs`: length, punctuation and opening word of every Round 1 wording, with surface tells flagged (SPEC.md 9.4, 14.3); exits 1 on any flag.
+- `tests/flow-audit.mjs`: every way from Maya's reaction into the next page or ending, rated by hand in `docs/FLOW-AUDIT.md` (SPEC.md 9.5); regenerates the file keeping the ratings, and exits 1 if a pair has no rating or a pair rated "bridge" has no bridging line in the content.
 
 ## Notes
 

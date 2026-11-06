@@ -111,6 +111,13 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - Calibrator: memoised on `futureKey(state)` from the engine (node, meters, last lever and its run capped at streakLength - 1). If a rule starts reading more of the history, extend `futureKey`. A unit test compares it with brute force. Round 1's random-play Breakthrough floor is 2% (SPEC.md Calibration log, session 6).
 - Test fixtures (`tests/states.mjs`, `tests/ui.test.mjs`) pick Round 1 paths with a fixed quality pattern so the debriefs show all three wordings.
 
+## Flow audit and bridging lines (session 7)
+
+- A page's `line`/`cue` or an ending's `text` may be `{ default, from: { 'previousNodeId:optionId': text } }` (SPEC.md 9.5). `bridged(x, st)` in ui.js picks the variant from the last history entry while `bridgeLive` is true: set by a choice, cleared at a round start; false after a reload or Resume (never saved), so the default shows. The debrief's road-not-taken line always shows the default. Engine, scores and routes are untouched.
+- `docs/FLOW-AUDIT.md` rates every reachable pair. Only the last three columns of each row and the Notes block are hand-written; `node tests/flow-audit.mjs` keeps them, fails on an unrated pair or a `bridge` pair with no variant in the content. Edit a reaction, line or route → re-run it and rate any new pair. It takes about a minute.
+- Session 7: 470 pairs, 126 bridge (119 bridging texts, since a Round 2 key covers both readiness bands), no branch pages. Keys name the option, not the band, so Round 2 bridges are written to read after either band's reaction.
+- Branch pages, if ever needed: ordinary nodes reached by an option's own `next`, same act, rejoin at the act's bottleneck (content test), unique pages.
+
 ## File map
 
 ```
@@ -129,8 +136,8 @@ turn-the-page/
   src/style.css           Styles from SPEC.md 11: tokens, components, layouts, page turn, meters
   src/engine.js           RULES, scoring, routing, endings, carry-over, seeded shuffle
   src/art.js              SVG office and Maya (SPEC.md 12): postures, pose parameters, interpolation vectors, alt text
-  src/content/maya.js     MAYA: profile, referral, Round 1 (15 nodes), Round 2 (16 nodes), interlude and
-                          carry-over notes, ending summaries, reflection prompts
+  src/content/maya.js     MAYA: profile, referral, Round 1 (15 nodes), Round 2 (16 nodes), bridging lines,
+                          interlude and carry-over notes, ending summaries, reflection prompts
   src/ui.js               Every screen in SPEC.md 13 incl. Debrief 1 and 2, pose tweening, keyboard, persistence
   tests/engine.test.mjs   node:test unit tests for every rule in SPEC.md 7 and 9.2
   tests/content.test.mjs  Content integrity checks (SPEC.md 14.3), PLACEHOLDER count
@@ -139,13 +146,18 @@ turn-the-page/
   tests/export-review.mjs Writes docs/CONTENT-REVIEW.md from the content and the calibrator
   docs/CONTENT-REVIEW.md  Generated script and numbers for SME review (do not edit by hand)
   tests/ui.test.mjs       Playwright: both rounds to every ending, resume, storage throwing, keyboard, scene art,
-                          both debriefs (Breakthrough and Early exit paths), screenshots
+                          both debriefs (Breakthrough and Early exit paths), bridging lines (variant after the
+                          option, default after a reload), three bridged paths, screenshots
   tests/art-gallery.mjs   Renders every posture, sample page and consequence hints, every pose value, tweens;
                           geometry checks (limbs attached); not part of `node --test`
   tests/states.mjs        Screen-state catalogue shared by contrast.mjs and a11y.test.mjs (60 states reached
                           by writing a save and pressing Resume), one state per page, browser helpers
   tests/wording-tells.mjs Length, punctuation, opening word of every Round 1 wording; flags surface tells
                           (SPEC.md 9.4, 14.3); exits 1 on a flag; not part of `node --test`
+  tests/flow-audit.mjs    Every reaction-to-next-page pair (session 7); regenerates docs/FLOW-AUDIT.md keeping the
+                          hand-written ratings and notes; exits 1 if a pair has no rating or a `bridge` pair has no
+                          variant in the content; not part of `node --test`
+  docs/FLOW-AUDIT.md      Flow audit: generated pairs plus hand-written ratings (edit only the rating columns and notes)
   tests/wcag.mjs          pageAudit(): in-page WCAG contrast measurement (text, graphics, focus indicator)
   tests/contrast.mjs      WCAG AA walk of every text node in every catalogue state at 1440 and 390; exits 1 on
                           failure; not part of `node --test`
@@ -155,6 +167,7 @@ turn-the-page/
                           contrast self-check, print stylesheet
   .gitignore              Ignores tests/screenshots/states/
   tests/screenshots/      Screenshots from ui.test.mjs at 1440x900 and 390x844 (regenerated on every run)
+  tests/screenshots/bridges/ Every bridged page on three paths at 1440x900 and 390x844, from ui.test.mjs
   tests/screenshots/art/  Images and contact sheets from art-gallery.mjs at 540px and 352px wide
   tests/screenshots/states/ Every catalogue state at 1440x900 and 390x844 and the debrief print PDFs, from
                           a11y.test.mjs (not committed)
@@ -170,6 +183,7 @@ node tests/export-review.mjs  # regenerates docs/CONTENT-REVIEW.md (run after an
 node tests/art-gallery.mjs    # renders the art gallery; exits 1 if a geometry check fails
 node tests/contrast.mjs   # WCAG AA contrast walk of every screen state; exits 1 on any failure
 node tests/wording-tells.mjs  # surface tells in Round 1 wordings; exits 1 on any flag
+node tests/flow-audit.mjs     # regenerates docs/FLOW-AUDIT.md (about a minute); exits 1 if a pair has no rating
 ```
 
 `node --test tests/` does not work on Node 22 (it treats the directory as a file); use `node --test` with no arguments. Before committing, also run `scripts/check-boundaries.sh` from the repository root. Playwright and Chromium are preinstalled in cloud sessions; do not install another version.
