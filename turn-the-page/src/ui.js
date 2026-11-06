@@ -213,6 +213,22 @@ document.body.appendChild(live);
 
 const view = { screen: 'cover', state: null, r1: null, lever: null, picked: null, seed: null };
 let resumeData = null;
+// Bridging lines (SPEC.md 9.5) are chosen by the choice just made in this
+// sitting. False after a reload or Resume and at a round start, so the page
+// then shows its default line, cue or ending text. Never saved.
+let bridgeLive = false;
+
+// The text to show for a page's line or cue, or an ending's text: a string,
+// or { default, from: { 'previousNodeId:optionId': text } }.
+function bridged(x, st) {
+  if (!x || typeof x === 'string') return x || '';
+  const last = st && st.history[st.history.length - 1];
+  if (bridgeLive && last && x.from) {
+    const v = x.from[last.nodeId + ':' + last.optionId];
+    if (v) return v;
+  }
+  return x.default;
+}
 (function () {
   const d = store.load();
   if (validSave(d)) resumeData = d;
@@ -408,8 +424,8 @@ function tweenScene(holder, from, to) {
 function storyHead(node) {
   return [
     h('p', { class: 'speaker', text: MAYA.profile.name }),
-    h('p', { class: 'maya-line', text: quoted(node.line) }),
-    node.cue ? h('p', { class: 'cue', text: node.cue }) : null
+    h('p', { class: 'maya-line', text: quoted(bridged(node.line, view.state)) }),
+    node.cue ? h('p', { class: 'cue', text: bridged(node.cue, view.state) }) : null
   ];
 }
 
@@ -498,6 +514,7 @@ function screenReferral() {
 function startRound1() {
   view.seed = newSeed();
   view.state = createRound(MAYA, 'r1', null, view.seed);
+  bridgeLive = false;
   view.r1 = null;
   view.lever = null;
   view.picked = null;
@@ -507,6 +524,7 @@ function startRound1() {
 function startRound2() {
   view.seed = newSeed();
   view.state = createRound(MAYA, 'r2', carryOver(view.r1), view.seed);
+  bridgeLive = false;
   view.lever = null;
   view.picked = null;
   go(view.state.ending ? 'ending' : 'scene');
@@ -594,6 +612,7 @@ function choicePanel(st, node) {
 
 function commit(optionId, guess) {
   view.state = applyChoice(view.state, optionId, guess);
+  bridgeLive = true;
   view.lever = null;
   view.picked = null;
   if (view.state.ending && view.state.round === 'r1') view.r1 = view.state;
@@ -706,7 +725,7 @@ function screenEnding() {
       h('div', {}, [
         h('p', { class: 'eyebrow', text: ROUND_LABELS[st.round] + ' ends' }),
         h('h1', { class: 'ending-title', text: ending.title }),
-        h('p', { class: 'ending-text', text: ending.text }),
+        h('p', { class: 'ending-text', text: bridged(ending.text, st) }),
         h('div', { class: 'actions' }, [button('See your path', function () { go('debrief'); }, { primary: true })])
       ])
     ])
@@ -943,7 +962,7 @@ function roadNotTakenView(st) {
     const others = RULES.levers.filter(function (l) { return lines[l] && (!entry || entry.lever !== l); });
     return h('article', { class: 'road', 'data-road': id }, [
       h('p', { class: 'road-head' }, [h('span', { class: 'pageno', text: 'p. ' + node.page }), h('span', { text: entry ? 'You used ' : 'You did not reach this page.' }), entry ? leverTag(entry.lever) : null]),
-      h('p', { class: 'road-line', text: quoted(node.line) }),
+      h('p', { class: 'road-line', text: quoted(bridged(node.line, null)) }),
       h('ul', {}, others.map(function (l) { return h('li', {}, [leverTag(l), h('span', { text: lines[l] })]); }))
     ]);
   }));

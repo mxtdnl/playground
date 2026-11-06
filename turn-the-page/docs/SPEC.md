@@ -209,7 +209,7 @@ Round 2 has no wording-quality split; all four lines are competent. The difficul
 
 ## 9. Case content
 
-Branch-and-bottleneck structure: three acts per round, and every act ends at a shared node. Within an act, the next node is chosen by the lever used (and, optionally, by a meter condition), so paths split for one or two scenes and then rejoin. Target: 14–18 nodes per round.
+Branch-and-bottleneck structure: three acts per round, and every act ends at a shared node. Within an act, the next node is chosen by the lever used (and, optionally, by a meter condition), so paths split for one or two scenes and then rejoin. Target: 14–18 nodes per round. Opening lines, cues and ending texts can vary with the way in (9.5).
 
 Every option carries: text, lever, quality (Round 1: `skilful`, `plausible` or `clumsy`), a unique reply page, reaction lines (with variants by trait band where relevant), next node, any override, and a **debrief note** written as a trade-off.
 
@@ -257,6 +257,17 @@ The point is that a counsellor cannot sort the three wordings without thinking a
 - Every option has a unique reply page, pose hints where the reaction describes something visible, and overrides only within ±5 (7.6). Section 9.3 applies in full.
 
 `tests/wording-tells.mjs` checks the surface rules (14.3).
+
+### 9.5 Flow between pages: bridging lines and branch pages (session 7)
+
+Maya's reaction on a consequence page should lead naturally into the next page's opening line. Where it does not, the fix is, in order of preference:
+
+1. **Bridging line.** A page's `line` and `cue` may each be an object `{ default, from }`, where `from` maps `'previousNodeId:optionId'` to an alternative text. The interface shows the `from` text when the page is reached straight from that page and option (the last history entry), and the `default` for every other way in, after a reload or Resume, and at a round start. An ending's `text` works the same way, keyed by the option chosen on the round's last decision (or on the decision that caused an Early exit). This is presentation only: the engine, scores, routes, history and saves do not change, and nothing about the bridge is stored. Bridging texts follow 9.3 and Maya's voice, and keep whatever the page's options respond to (for example, a variant of a line that the options answer as "can't be bothered" still says it).
+2. **Branch page**, only where no line on the existing page can follow the reaction. A branch page is an ordinary node reached by an option's own `next`. It belongs to the same act, rejoins at the act's bottleneck page, keeps the branch-and-bottleneck shape above, and has a unique page number; its options follow 9.4 (reaction, trade-off debrief note, unique reply page, pose hints where visible). If branch pages take a round above the 14–18 target, the target here is updated.
+
+Keys name the option, not the trait band, so a bridge for a Round 2 option must read naturally after that option's reaction in either readiness band.
+
+`tests/flow-audit.mjs` lists every reachable pair (page, option, reaction in the round's trait bands, destination page or ending) in `docs/FLOW-AUDIT.md` with a hand-written rating: `fits`, `bridge` or `branch`. Session 7 rated 470 pairs: 126 bridge (65 of them into endings), no branch, so no branch pages were added and both rounds keep 15 and 16 nodes.
 
 ## 10. Debrief
 
@@ -352,6 +363,7 @@ All art is inline SVG generated from code (`src/art.js`). No image files.
 - **The counsellor:** a dark over-the-shoulder silhouette at the frame edge, so the user sees from the counsellor's position.
 - **Transitions:** poses interpolate over 0.4s between states (instantly under reduced motion).
 - **Alt text:** generated from the pose, for example "Maya sits on the edge of the chair, arms crossed, looking at the door."
+- **Bridging cues (9.5)** change the words only. The picture on a scene page still comes from the node's `scene.pose` and the meters, so a bridging cue must not describe a pose the picture cannot show; it describes what carries over from the reaction (arms still folded, looking at the clock).
 
 ## 13. Screens
 
@@ -393,6 +405,7 @@ turn-the-page/
   tests/states.mjs        Screen-state catalogue shared by the two above
   tests/wording-tells.mjs Surface tells in Round 1 wordings (section 9.4; session 6)
   tests/export-review.mjs Writes docs/CONTENT-REVIEW.md from the content files
+  tests/flow-audit.mjs    Every reaction-to-next-page pair; writes docs/FLOW-AUDIT.md (section 9.5; session 7)
 ```
 
 ### 14.1 Conventions
@@ -426,6 +439,8 @@ const CASE = {
           page: 1, act: 1, scene: { pose: { gaze: 'door' } },
           line: 'Mr Okafor sent me. I know — my grades. I\'m just being lazy.',
           cue: 'She sits on the edge of the chair, bag still on her shoulder.',
+          // or, with bridging lines (9.5):
+          // line: { default: '...', from: { 'r1-01:s-s': 'line shown after that option' } }
           options: [
             { id: 'q-s', page: 46, lever: 'question', quality: 'skilful', text: '...',   // quality: skilful | plausible | clumsy
               reaction: { default: '...', 'extraversion:low': '...' },
@@ -435,7 +450,8 @@ const CASE = {
           next: { question: 'r1-02a', default: 'r1-02' } // optional lever routing
         }
       },
-      endings: { breakthrough: {...}, partial: {...}, polite: {...}, early: {...} }
+      endings: { breakthrough: { title, summary, text }, partial: {...}, polite: {...}, early: {...} }
+      // an ending's text may also be { default, from: { 'r1-07:q-s': '...' } } (9.5)
     },
     r2: { format: 'C', starts: { breakthrough: 'r2-01a', partial: 'r2-01b', polite: 'r2-01c', early: 'r2-01d' }, carry: {...}, nodes: {...} }
   },
@@ -454,6 +470,9 @@ const CASE = {
 - Every option has reaction text, a debrief note and a lever.
 - Page numbers are unique.
 - Debrief notes do not contain "correct", "wrong", "optimal" or "should have".
+- Bridging texts (9.5): a `line`, `cue` or ending `text` is a string or `{ default, from }` with a non-empty default and at least one variant, each different from the default. Every `from` key names a page and option in the same round that can route to this page on some meters (an ending key: an option whose route ends the round; any option for Early exit, which depends only on Trust).
+- Every page can reach its act's bottleneck page (so branch pages rejoin).
+- `tests/flow-audit.mjs` (separate script) regenerates `docs/FLOW-AUDIT.md`, keeping the hand-written ratings and notes, and exits 1 if a pair has no rating or a pair rated `bridge` has no variant in the content.
 - A count of `PLACEHOLDER:` strings is printed.
 
 ### 14.4 State and persistence

@@ -4,8 +4,9 @@
 // meter-conditioned route that some path reaches, and the end of the round,
 // including an Early exit). Writes docs/FLOW-AUDIT.md grouped by destination
 // page, keeping the ratings already written there. Run from turn-the-page/:
-//   node tests/flow-audit.mjs                 regenerate; exit 1 if a pair has no rating
-//   node tests/flow-audit.mjs --allow-unrated regenerate without failing
+//   node tests/flow-audit.mjs                 regenerate; exit 1 if a pair has no rating,
+//                                             or a "bridge" pair has no variant in the content
+//   node tests/flow-audit.mjs --allow-unrated regenerate without failing on unrated pairs
 //
 // Ratings are written by hand in the last three columns of each table row:
 //   fits    the next line follows naturally (reason optional)
@@ -164,7 +165,12 @@ export function buildAudit(caseData, ratings, notes) {
     w();
     let destNode = null;
     if (dest.startsWith('end:')) {
-      w('**Ending text:** ' + round.endings[dest.slice(4)].text);
+      const text = round.endings[dest.slice(4)].text;
+      w('**Ending text:** ' + plain(text));
+      if (typeof text === 'object') {
+        w();
+        w('**Bridges written:** ' + Object.keys(text.from).map((k) => '`' + k + '`').join(', '));
+      }
     } else {
       destNode = round.nodes[dest];
       w('**Opening line:** "' + plain(destNode.line) + '"');
@@ -181,16 +187,15 @@ export function buildAudit(caseData, ratings, notes) {
       }
     }
     w();
-    w('| Pair | From | Option | Lever | Quality | Counsellor | Maya\'s reaction | Rating | Reason | Variant or proposed page |');
+    w('| Pair | From | Option | Lever | Quality | Counsellor | Maya\'s reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |');
     w('|---|---|---|---|---|---|---|---|---|---|');
     list.sort((a, b) => a.fromPage - b.fromPage || a.option.page - b.option.page || a.id.localeCompare(b.id));
     for (const p of list) {
       const r = ratings.get(p.id) || { rating: '', reason: '', detail: '' };
       const band = p.round === 'r2' ? ' *(readiness ' + p.readiness + '; after R1 ' + [...p.after].sort((a, b) => ENDINGS.indexOf(a) - ENDINGS.indexOf(b)).map((e) => ENDING_NAME[e]).join(', ') + ')*' : '';
-      if (r.rating === 'bridge' && destNode) {
-        const k = p.from + ':' + p.option.id;
-        if (!variant(destNode.line, k) && !variant(destNode.cue, k)) missingVariant.push(p.id);
-      }
+      const k = p.from + ':' + p.option.id;
+      const written = destNode ? variant(destNode.line, k) || variant(destNode.cue, k) : variant(round.endings[dest.slice(4)].text, k);
+      if (r.rating === 'bridge' && !written) missingVariant.push(p.id);
       w('| `' + p.id + '` | p. ' + p.fromPage + ' `' + p.from + '` | `' + p.option.id + '` p. ' + p.option.page + ' | ' + NAME[p.option.lever] + ' | ' + (p.option.quality || '—') + ' | ' + esc(p.option.text) + ' | ' + esc(p.reaction) + band + ' | ' + r.rating + ' | ' + esc(r.reason) + ' | ' + esc(r.detail) + ' |');
     }
     w();
@@ -213,7 +218,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     console.log('FAIL: ' + audit.unrated.length + ' pair(s) have no rating, e.g. ' + audit.unrated.slice(0, 5).join(', '));
     process.exitCode = 1;
   }
-  if (audit.missingVariant.length && process.argv.includes('--require-variants')) {
+  if (audit.missingVariant.length) {
     console.log('FAIL: ' + audit.missingVariant.length + ' bridge pair(s) have no variant in the content, e.g. ' + audit.missingVariant.slice(0, 5).join(', '));
     process.exitCode = 1;
   }

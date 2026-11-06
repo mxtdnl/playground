@@ -40,7 +40,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** The bag is off her shoulder now, but it is on her lap, both hands on it.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-01:c-p`, `r1-01:c-s`, `r1-01:s-s`, `r1-01:c-c`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-01:o-s>r1-02` | p. 7 `r1-01` | `o-s` p. 41 | Observe | skilful | You said that very quickly, before I'd asked anything. It sounds like you've had that conversation a few times already. | She blinks. "I mean... yeah. Everyone keeps saying it." She lets go of the bag strap. | fits | She has dropped the guard and moves on to what the meeting is for; "both hands on it" is the bag, not the strap. |  |
 | `r1-01:q-s>r1-02` | p. 7 `r1-01` | `q-s` p. 46 | Question | skilful | Thanks for coming. Before we get to grades, how has this term been for you? | She shrugs. "Fine. Busy. I don't know." But she sits back a little. | fits |  |  |
@@ -48,8 +50,8 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 | `r1-01:q-c>r1-02` | p. 7 `r1-01` | `q-c` p. 112 | Question | clumsy | Thanks for coming. Is it mainly the homework, or are lessons harder too? | "Both, I guess." She looks at the floor. | fits |  |  |
 | `r1-01:s-s>r1-02` | p. 7 `r1-01` | `s-s` p. 166 | Support | skilful | Thanks for coming in. You're not in trouble. I'd just like to hear how things are from your side. | "OK." Her shoulders come down a little. She looks at you properly for the first time. | bridge | You have just said she is not in trouble, so asking whether it is a warning ignores you. | Line: "So if it's not about trouble... what is it, then? What happens now?" |
 | `r1-01:s-c>r1-02` | p. 7 `r1-01` | `s-c` p. 169 | Support | clumsy | Thanks for coming in. I don't think you're lazy at all, from what Mr Okafor has told me. | "He doesn't know either." A half-smile, as if you have missed the point. | fits |  |  |
-| `r1-01:c-c>r1-02` | p. 7 `r1-01` | `c-c` p. 180 | Challenge | clumsy | "Lazy" is one explanation. It doesn't sound like the real one to me. | She folds her arms. "Well, it is." The room goes quiet. | bridge | Her arms are folded, but the cue has both hands on the bag. | Cue: "Her arms are still folded, the bag on her lap between them." |
-| `r1-01:c-s>r1-02` | p. 7 `r1-01` | `c-s` p. 191 | Challenge | skilful | "Lazy" is one explanation. I'm not sure it's the whole one. | She frowns. "What else would it be?" Her arms fold. | bridge | She asked "What else would it be?" and then opens with a new question as if she had not; her arms are folded, not on the bag. | Line: "You don't know either, then. So what is this? Like, a warning?" Cue: "Her arms are folded across the bag on her lap." |
+| `r1-01:c-c>r1-02` | p. 7 `r1-01` | `c-c` p. 180 | Challenge | clumsy | "Lazy" is one explanation. It doesn't sound like the real one to me. | She folds her arms. "Well, it is." The room goes quiet. | bridge | Her arms are folded, but the cue has both hands on the bag. | Cue: "She has unfolded her arms, but only to grip the bag on her lap with both hands." |
+| `r1-01:c-s>r1-02` | p. 7 `r1-01` | `c-s` p. 191 | Challenge | skilful | "Lazy" is one explanation. I'm not sure it's the whole one. | She frowns. "What else would it be?" Her arms fold. | bridge | She asked "What else would it be?" and then opens with a new question as if she had not; her arms are folded, not on the bag. | Line: "You don't know either, then. So what is this? Like, a warning?" Cue: "Her arms unfold, and both hands go back to the bag on her lap." |
 | `r1-01:c-p>r1-02` | p. 7 `r1-01` | `c-p` p. 257 | Challenge | plausible | "Lazy" is one explanation. Usually there's something else behind it. | "Like what?" She sounds tired rather than curious. | bridge | She asked "Like what?"; the page opens with a second "like" question that ignores her own. | Line: "See, you don't know either. So what is this, then? A warning?" |
 | `r1-01:o-p>r1-02` | p. 7 `r1-01` | `o-p` p. 259 | Observe | plausible | You're sitting near the door with your bag still in your hand. It looks as if you're not sure how long this will take. | "I've got class after." She sits back a little anyway. | fits |  |  |
 | `r1-01:q-p>r1-02` | p. 7 `r1-01` | `q-p` p. 273 | Question | plausible | Thanks for coming. What do you think has made the grades slip this term? | "I don't know. I just stopped keeping up." She keeps hold of the strap. | fits |  |  |
@@ -63,7 +65,7 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She looked at the door. Then she looked back at you."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-02:q-s>r1-03a` | p. 12 `r1-02` | `q-s` p. 145 | Question | skilful | What would you want to get out of talking today, if anything? | "I don't know. Not being nagged, I guess." She thinks. "Maybe working out why I can't just... do stuff." | fits |  |  |
 | `r1-02:q-c>r1-03a` | p. 12 `r1-02` | `q-c` p. 184 | Question | clumsy | Shall we use today to make a plan for getting the grades back up? | "I guess." She says it as if she has said it many times before. | fits |  |  |
@@ -77,7 +79,7 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She looked at the door. Then she looked back at you."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-02:s-c>r1-03b` | p. 12 `r1-02` | `s-c` p. 163 | Support | clumsy | It's not a warning. We'll work out what's going wrong and get you back on track in no time. | "Right." She does not look convinced. | fits |  |  |
 | `r1-02:s-s>r1-03b` | p. 12 `r1-02` | `s-s` p. 178 | Support | skilful | It's not a warning. It's just a chance to talk about how things are going, at whatever pace suits you. | "OK." She puts the bag down on the floor. | fits |  |  |
@@ -91,7 +93,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She looked at the door. Then she looked back at you."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-02:o-p`, `r1-02:o-s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-02:o-p>r1-03c` | p. 12 `r1-02` | `o-p` p. 16 | Observe | plausible | You're holding on to your bag with both hands. It looks like you're ready to leave. | "I'm fine." She loosens her grip a little. | bridge | You talked about her holding the bag, not about trouble, so "I'm not expecting trouble" answers something nobody said. | Line: "I'm not going anywhere. I'm just tired of everyone asking what's wrong." |
 | `r1-02:o-c>r1-03c` | p. 12 `r1-02` | `o-c` p. 85 | Observe | clumsy | You asked if it's a warning. It sounds like you think you deserve one. | "I didn't say that." Her hands tighten on the bag. | fits |  |  |
@@ -105,7 +109,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She looked at the door. Then she looked back at you."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-02:c-s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-02:c-s>r1-03d` | p. 12 `r1-02` | `c-s` p. 8 | Challenge | skilful | I don't think Mr Okafor sees this as a warning. He told me he doesn't think "lazy" is the full story. | She looks up. "He said that?" She does not seem to know what to do with it. | bridge | She was surprised and softened by Mr Okafor's view; "Whatever" dismisses it with no turn shown. | Line: "Doesn't change anything, though. I'm just not bothered any more. It's pointless anyway." Cue: "She turns it over for a moment, then folds her arms and looks at the clock above the door." |
 | `r1-02:c-p>r1-03d` | p. 12 `r1-02` | `c-p` p. 14 | Challenge | plausible | I don't think Mr Okafor sees this as a warning. He's worried about you and wants to help you catch up. | "Catch up. Right." She looks down at the bag. | fits |  |  |
@@ -117,7 +123,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** When she mentions next year's exams, she takes out her phone and turns it over and over in her hand.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-03c:c-s`, `r1-03c:o-c`, `r1-03c:o-p`, `r1-03c:o-s`, `r1-03c:q-c`, `r1-03c:q-p`, `r1-03c:s-p`, `r1-03c:s-s`, `r1-03d:s-s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-03a:o-s>r1-04a` | p. 19 `r1-03a` | `o-s` p. 10 | Observe | skilful | You said "so I don't". You didn't say "I can't". | She thinks about it. "I suppose. It's easier not to start than to start and be rubbish at it." | fits |  |  |
 | `r1-03a:s-s>r1-04a` | p. 19 `r1-03a` | `s-s` p. 39 | Support | skilful | That sounds exhausting. Tired, and then annoyed with yourself for being tired. | "Yeah. Exactly that." She sighs. | fits |  |  |
@@ -158,7 +166,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** She has her phone out. Each time you mention exams or next year, she looks down at the screen.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-03a:o-s`, `r1-03a:s-s`, `r1-03b:c-s`, `r1-03b:o-c`, `r1-03b:o-s`, `r1-03b:s-s`, `r1-03c:c-s`, `r1-03c:o-s`, `r1-03c:s-s`, `r1-03d:o-s`, `r1-03d:q-c`, `r1-03d:s-s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-03a:o-s>r1-04b` | p. 19 `r1-03a` | `o-s` p. 10 | Observe | skilful | You said "so I don't". You didn't say "I can't". | She thinks about it. "I suppose. It's easier not to start than to start and be rubbish at it." | bridge | She has just put it in her own words; "Dunno" answers a question nobody asked. | Line: "Or I just can't be bothered, I guess. Dunno." |
 | `r1-03a:s-s>r1-04b` | p. 19 `r1-03a` | `s-s` p. 39 | Support | skilful | That sounds exhausting. Tired, and then annoyed with yourself for being tired. | "Yeah. Exactly that." She sighs. | bridge | She agreed warmly ("Exactly that"); "Dunno" answers nothing. | Line: "And then I just can't be bothered, I guess." |
@@ -215,7 +225,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** She says it quietly, to the window. She does not explain, and she does not look at you.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-04a:c-c`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-04a:s-s>r1-05` | p. 36 `r1-04a` | `s-s` p. 21 | Support | skilful | Two hours of avoiding something you're dreading. That's a hard way to spend an evening. | "It's awful, actually. I feel worse after." | fits |  |  |
 | `r1-04a:c-c>r1-05` | p. 36 `r1-04a` | `c-c` p. 25 | Challenge | clumsy | You're calling that lazy. Two hours a night is where the grades have gone. | "Wow. OK." She puts the phone away and looks at the door. | bridge | She has just been stung ("Wow. OK.") and is looking at the door; a quiet confidence straight after needs a bitter turn. | Line: "Doesn't matter anyway. Everyone's already decided what I'm doing after school." |
@@ -250,11 +262,13 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "Everyone had decided. Nobody had asked her."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-05:q-c`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-05:q-s>r1-06a` | p. 45 `r1-05` | `q-s` p. 49 | Question | skilful | What's it like, having that already decided? | "It's fine. It's just... how it is." Her voice is smaller. | fits |  |  |
 | `r1-05:q-p>r1-06a` | p. 45 `r1-05` | `q-p` p. 63 | Question | plausible | What has everyone decided you'll be doing? | "It's... a plan. It's fine." She keeps looking at the window. | fits |  |  |
-| `r1-05:q-c>r1-06a` | p. 45 `r1-05` | `q-c` p. 176 | Question | clumsy | Who's decided that? Is it your family? | "I didn't say that." She closes the subject. | bridge | She has just closed the subject; the page opens with a confiding line and her looking at you. | Line: "Can we not talk about that? I just want it to stop feeling like this." Cue: "She is looking at the window, not at you." |
+| `r1-05:q-c>r1-06a` | p. 45 `r1-05` | `q-c` p. 176 | Question | clumsy | Who's decided that? Is it your family? | "I didn't say that." She closes the subject. | bridge | She has just closed the subject; the page opens with a confiding line and her looking at you. | Line: "Can we not talk about that? I just want it to stop feeling like this." Cue: "She looks straight at you, as if daring you to ask again." |
 
 ## Round 1 → p. 54 (`r1-06b`)
 
@@ -264,7 +278,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "Everyone had decided. Nobody had asked her."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-05:s-c`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-05:s-s>r1-06b` | p. 45 `r1-05` | `s-s` p. 100 | Support | skilful | That sounds like a lot to carry on your own. | She nods, only just. | fits |  |  |
 | `r1-05:s-c>r1-06b` | p. 45 `r1-05` | `s-c` p. 186 | Support | clumsy | There's still plenty of time to work that out. | "Is there?" She looks at the floor. | bridge | You said there is plenty of time, not that it is a lot, so "Yeah. It is a lot" echoes something you did not say. | Line: "Doesn't feel like it. It's a lot. I don't really talk about it." |
@@ -278,7 +294,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "Everyone had decided. Nobody had asked her."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-05:o-p`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-05:o-p>r1-06c` | p. 45 `r1-05` | `o-p` p. 71 | Observe | plausible | You said that to the window. It seems hard to say it while looking at me. | "It's easier." She glances at you, then back at the window. | bridge | You pointed at her talking to the window, not at what she wants, so the realisation comes from nowhere. | Line: "It's easier than saying what I want. ...Which I didn't, did I." |
 | `r1-05:o-s>r1-06c` | p. 45 `r1-05` | `o-s` p. 91 | Observe | skilful | You said "everyone's decided". I noticed you didn't say what you'd decided. | She is quiet for a long moment. "No. I didn't." | fits | She repeats her own realisation after the act banner, with the "what" filled in; a repeat, but a natural one. |  |
@@ -292,10 +310,12 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "Everyone had decided. Nobody had asked her."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-05:c-c`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-05:c-s>r1-06d` | p. 45 `r1-05` | `c-s` p. 156 | Challenge | skilful | Maybe. But you'd be the one living it, so I'd be interested in what you think too. | "What I think doesn't really change anything." But she is looking at you now. | fits |  |  |
-| `r1-05:c-c>r1-06d` | p. 45 `r1-05` | `c-c` p. 158 | Challenge | clumsy | Maybe. But you're the one living it, so they need to hear what you think. | "You don't know them." She looks away. | bridge | She has just said "You don't know them" and looked away; "I suppose" agrees with nothing. | Line: "Sorry. It's me living it, I suppose. I just don't know what I'd change." Cue: "After a moment she looks back at you. She has not looked at the door for a while." |
+| `r1-05:c-c>r1-06d` | p. 45 `r1-05` | `c-c` p. 158 | Challenge | clumsy | Maybe. But you're the one living it, so they need to hear what you think. | "You don't know them." She looks away. | bridge | She has just said "You don't know them" and looked away; "I suppose" agrees with nothing. | Line: "Sorry. It's me living it, I suppose. I just don't know what I'd change." Cue: "After a moment she turns to the window, thinking. She has not looked at the door for a while." |
 | `r1-05:c-p>r1-06d` | p. 45 `r1-05` | `c-p` p. 300 | Challenge | plausible | Maybe. But you'd be the one living it. Is it what you'd choose yourself? | "I don't know. Maybe." She shrugs, still facing the window. | fits |  |  |
 
 ## Round 1 → p. 64 (`r1-06e`)
@@ -306,9 +326,11 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "Everyone had decided. Nobody had asked her."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-05:c-p`, `r1-05:c-s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
-| `r1-05:c-s>r1-06e` | p. 45 `r1-05` | `c-s` p. 156 | Challenge | skilful | Maybe. But you'd be the one living it, so I'd be interested in what you think too. | "What I think doesn't really change anything." But she is looking at you now. | bridge | The reaction ends with her looking at you, engaged; the page opens with her shutting down, with no turn shown. | Line: "It doesn't. You don't get it." Cue: "She holds your look for a moment, then pulls her bag back onto her lap." |
+| `r1-05:c-s>r1-06e` | p. 45 `r1-05` | `c-s` p. 156 | Challenge | skilful | Maybe. But you'd be the one living it, so I'd be interested in what you think too. | "What I think doesn't really change anything." But she is looking at you now. | bridge | The reaction ends with her looking at you, engaged; the page opens with her shutting down, with no turn shown. | Line: "It doesn't. You don't get it." Cue: "She holds your look for a moment, then glances at the door and pulls her bag back onto her lap." |
 | `r1-05:c-c>r1-06e` | p. 45 `r1-05` | `c-c` p. 158 | Challenge | clumsy | Maybe. But you're the one living it, so they need to hear what you think. | "You don't know them." She looks away. | fits |  |  |
 | `r1-05:c-p>r1-06e` | p. 45 `r1-05` | `c-p` p. 300 | Challenge | plausible | Maybe. But you'd be the one living it. Is it what you'd choose yourself? | "I don't know. Maybe." She shrugs, still facing the window. | bridge | A mild shrug ("I don't know. Maybe.") then a sudden "You don't get it" needs a turn. | Line: "It's not that simple, though. You don't get it." |
 
@@ -318,7 +340,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** She glances at the clock. The bell will ring soon.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-06a:q-s`, `r1-06b:q-s`, `r1-06c:q-s`, `r1-06d:c-s`, `r1-06d:q-s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-06a:s-s>r1-07` | p. 51 `r1-06a` | `s-s` p. 15 | Support | skilful | That makes sense. Feeling stuck every evening sounds draining. | "It is." She breathes out. | fits |  |  |
 | `r1-06a:o-c>r1-07` | p. 51 `r1-06a` | `o-c` p. 24 | Observe | clumsy | When you said that, you sat up a little. It sounds like you know what to do about it. | "Do I?" She slumps back in the chair. | fits |  |  |
@@ -385,7 +409,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Ending text:** Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?"
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-07:c-c`, `r1-07:c-p`, `r1-07:o-c`, `r1-07:q-c`, `r1-07:q-p`, `r1-07:s-c`, `r1-07:s-p`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-07:s-p>end:breakthrough` | p. 70 `r1-07` | `s-p` p. 3 | Support | plausible | You don't have to fix everything this week. Even one finished piece of homework would be a good start. | "OK. I'll try." She nods, a bit too quickly. | bridge | She has just agreed to your suggestion, a bit too quickly; the ending says she proposes her own step. | Ending text: Then she stops nodding. "Actually... can I choose the thing?" Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" |
 | `r1-07:o-c>end:breakthrough` | p. 70 `r1-07` | `o-c` p. 42 | Observe | clumsy | You've talked about the work in a lot of detail. It sounds like you already know what to do. | "Not really. That's why I'm here." | bridge | "That's why I'm here" asks you for the answer; the ending has her proposing her own. | Ending text: Then she thinks again. "Well. Maybe one thing." Maya proposes her own next step: one small thing she will try before you meet again. She says it slowly, as if checking that it belongs to her. At the door she turns round. "Same time in two weeks?" |
@@ -404,7 +430,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Ending text:** Maya agrees to the step you suggest. "OK. I'll try." She means it, mostly. But it is your plan, not hers, and you can both feel it.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-07:c-s`, `r1-07:o-p`, `r1-07:q-s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-07:s-p>end:partial` | p. 70 `r1-07` | `s-p` p. 3 | Support | plausible | You don't have to fix everything this week. Even one finished piece of homework would be a good start. | "OK. I'll try." She nods, a bit too quickly. | fits |  |  |
 | `r1-07:o-c>end:partial` | p. 70 `r1-07` | `o-c` p. 42 | Observe | clumsy | You've talked about the work in a lot of detail. It sounds like you already know what to do. | "Not really. That's why I'm here." | fits |  |  |
@@ -423,7 +451,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Ending text:** "Thanks for this." Maya picks up her bag and leaves on time. She was polite from start to finish. Nothing much has changed.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-07:q-s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-07:s-p>end:polite` | p. 70 `r1-07` | `s-p` p. 3 | Support | plausible | You don't have to fix everything this week. Even one finished piece of homework would be a good start. | "OK. I'll try." She nods, a bit too quickly. | fits |  |  |
 | `r1-07:o-c>end:polite` | p. 70 `r1-07` | `o-c` p. 42 | Observe | clumsy | You've talked about the work in a lot of detail. It sounds like you already know what to do. | "Not really. That's why I'm here." | fits |  |  |
@@ -442,7 +472,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Ending text:** "Can I go now?" Maya is already standing, bag on her shoulder. The conversation is over before it really began.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r1-03c:c-s`, `r1-03d:c-s`, `r1-03d:o-c`, `r1-04b:c-c`, `r1-05:c-s`, `r1-06a:c-c`, `r1-06a:c-p`, `r1-06a:c-s`, `r1-06a:o-c`, `r1-06a:o-p`, `r1-06a:o-s`, `r1-06a:q-c`, `r1-06a:q-p`, `r1-06b:c-c`, `r1-06b:c-p`, `r1-06b:c-s`, `r1-06b:o-c`, `r1-06b:o-p`, `r1-06c:c-c`, `r1-06c:c-p`, `r1-06c:c-s`, `r1-06c:o-c`, `r1-06c:o-p`, `r1-06c:o-s`, `r1-06c:q-c`, `r1-06e:c-c`, `r1-06e:c-p`, `r1-06e:c-s`, `r1-06e:o-c`, `r1-06e:o-p`, `r1-06e:o-s`, `r1-06e:q-c`, `r1-07:c-c`, `r1-07:c-p`, `r1-07:c-s`, `r1-07:o-c`, `r1-07:o-p`, `r1-07:o-s`, `r1-07:q-c`, `r1-07:q-p`, `r1-07:q-s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r1-02:c-c>end:early` | p. 12 `r1-02` | `c-c` p. 33 | Challenge | clumsy | I don't think Mr Okafor sees this as a warning yet. But two missed deadlines is a pattern he can't ignore. | "So it is a warning." She looks at the door. | fits |  |  |
 | `r1-03a:c-c>end:early` | p. 19 `r1-03a` | `c-c` p. 75 | Challenge | clumsy | Being that tired is real, but staying up is a choice you are making every night. | "I know." Flat. She looks away. | fits |  |  |
@@ -512,7 +544,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** She picks up the course brochure from your desk, turns a page, then puts it down quickly.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r2-01d:c`, `r2-01d:q`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-01a:s>r2-02@mid` | p. 81 `r2-01a` | `s` p. 95 | Support | — | Well done for trying it. I'm really proud of you. | "Thanks." A small smile that does not quite reach her eyes. "It didn't last, though." *(readiness mid; after R1 Breakthrough)* | fits |  |  |
 | `r2-01a:q>r2-02@mid` | p. 81 `r2-01a` | `q` p. 173 | Question | — | What helped, in the week it worked? | "I just did it before I could think about it." A pause. "Then I got a bad mark in chemistry and sort of stopped." *(readiness mid; after R1 Breakthrough)* | fits |  |  |
@@ -539,7 +573,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She picked up the brochure. Then she put it down again, very carefully."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r2-02:o`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-02:s>r2-03a@low` | p. 93 `r2-02` | `s` p. 177 | Support | — | That sounds really flat. Working hard for something that doesn't feel like yours. | "Yeah. It is." She looks at the brochure again. *(readiness low; after R1 Polite exit)* | fits |  |  |
 | `r2-02:s>r2-03a@mid` | p. 93 `r2-02` | `s` p. 177 | Support | — | That sounds really flat. Working hard for something that doesn't feel like yours. | "Yeah. It is." She looks at the brochure again. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -555,7 +591,7 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She picked up the brochure. Then she put it down again, very carefully."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-02:s>r2-03b@low` | p. 93 `r2-02` | `s` p. 177 | Support | — | That sounds really flat. Working hard for something that doesn't feel like yours. | "Yeah. It is." She looks at the brochure again. *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-02:s>r2-03b@mid` | p. 93 `r2-02` | `s` p. 177 | Support | — | That sounds really flat. Working hard for something that doesn't feel like yours. | "Yeah. It is." She looks at the brochure again. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -573,7 +609,7 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She picked up the brochure. Then she put it down again, very carefully."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-02:s>r2-03c@low` | p. 93 `r2-02` | `s` p. 177 | Support | — | That sounds really flat. Working hard for something that doesn't feel like yours. | "Yeah. It is." She looks at the brochure again. *(readiness low; after R1 Early exit)* | fits |  |  |
 | `r2-02:s>r2-03c@mid` | p. 93 `r2-02` | `s` p. 177 | Support | — | That sounds really flat. Working hard for something that doesn't feel like yours. | "Yeah. It is." She looks at the brochure again. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -590,7 +626,7 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** She smiles when she says "design". Then the smile goes.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-03a:o>r2-04a@low` | p. 98 `r2-03a` | `o` p. 222 | Observe | — | You said "already the plan". Not "my plan". | She is quiet. "Yeah. I noticed that too." *(readiness low; after R1 Polite exit)* | fits |  |  |
 | `r2-03a:o>r2-04a@mid` | p. 98 `r2-03a` | `o` p. 222 | Observe | — | You said "already the plan". Not "my plan". | She is quiet. "Yeah. I noticed that too." *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -610,7 +646,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** She is turning the brochure over and over in her hands.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r2-03c:c`, `r2-03a:c`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-03a:q>r2-04b@mid` | p. 98 `r2-03a` | `q` p. 250 | Question | — | What do you make of the plan? | "It's a good plan. Being a doctor is a good job." A pause. "It's just not me, I don't think." *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
 | `r2-03a:c>r2-04b@low` | p. 98 `r2-03a` | `c` p. 261 | Challenge | — | Is it the plan, though? You're the one who'd be studying it. | "It's not that simple." She puts the brochure down. *(readiness low; after R1 Polite exit)* | bridge | She has just put the brochure down; the cue has her turning it over in her hands. | Cue: "She picks the brochure up again and turns it over and over in her hands." |
@@ -638,7 +676,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** She looks at the floor. Her voice goes quiet on "so hard".
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r2-04b:o`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-04a:q>r2-05@low` | p. 111 `r2-04a` | `q` p. 116 | Question | — | What is it about design that you like? | She talks for longer than she has all term: colours, layouts, the poster she made for the school play. Then she stops. "Anyway." *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-04a:q>r2-05@mid` | p. 111 `r2-04a` | `q` p. 116 | Question | — | What is it about design that you like? | She talks for longer than she has all term: colours, layouts, the poster she made for the school play. "I'd actually love to do that properly." *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -665,7 +705,7 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She had never said it out loud before. Not even to herself."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-05:q>r2-06a@low` | p. 119 `r2-05` | `q` p. 205 | Question | — | What would you want them to hear, if they did listen? | "That I'm not ungrateful. That I just... might want something else." A long breath. *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-05:q>r2-06a@mid` | p. 119 `r2-05` | `q` p. 205 | Question | — | What would you want them to hear, if they did listen? | "That I'm not ungrateful. That I just... might want something else." A long breath. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -680,7 +720,7 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She had never said it out loud before. Not even to herself."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-05:s>r2-06b@low` | p. 119 `r2-05` | `s` p. 203 | Support | — | It's clear how much you love them. Wanting them to be proud of you makes sense. | "I do want that." She nods slowly, and the subject closes. *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-05:s>r2-06b@mid` | p. 119 `r2-05` | `s` p. 203 | Support | — | It's clear how much you love them. Wanting them to be proud of you makes sense. | "I do want that." She nods slowly, and the subject closes. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -693,7 +733,7 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She had never said it out loud before. Not even to herself."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-05:c>r2-06c@low` | p. 119 `r2-05` | `c` p. 216 | Challenge | — | You're sure they'd never listen. Have you ever actually told them? | She goes very still. For a moment she says nothing at all. *(readiness low; after R1 Polite exit, Early exit)* | fits | Her stillness can turn either way, so both pages follow it. |  |
 | `r2-05:c>r2-06c@mid` | p. 119 `r2-05` | `c` p. 216 | Challenge | — | You're sure they'd never listen. Have you ever actually told them? | She goes very still. For a moment she says nothing at all. *(readiness mid; after R1 Breakthrough, Partial)* | fits | Her stillness can turn either way, so both pages follow it. |  |
@@ -706,7 +746,7 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Act banner before this page:** "She had never said it out loud before. Not even to herself."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-05:c>r2-06d@low` | p. 119 `r2-05` | `c` p. 216 | Challenge | — | You're sure they'd never listen. Have you ever actually told them? | She goes very still. For a moment she says nothing at all. *(readiness low; after R1 Polite exit, Early exit)* | fits | Her stillness can turn either way, so both pages follow it. |  |
 | `r2-05:c>r2-06d@mid` | p. 119 `r2-05` | `c` p. 216 | Challenge | — | You're sure they'd never listen. Have you ever actually told them? | She goes very still. For a moment she says nothing at all. *(readiness mid; after R1 Breakthrough, Partial)* | fits | Her stillness can turn either way, so both pages follow it. |  |
@@ -717,7 +757,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Cue:** She is looking straight at you.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r2-06a:o`, `r2-06a:q`, `r2-06a:s`, `r2-06b:s`, `r2-06d:c`, `r2-06d:o`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-06a:c>r2-07@low` | p. 124 `r2-06a` | `c` p. 137 | Challenge | — | Finding out is a good start. I wonder if it might also be a way of putting off the conversation at home. | "...Maybe both." She thinks about it. *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-06a:c>r2-07@mid` | p. 124 `r2-06a` | `c` p. 137 | Challenge | — | Finding out is a good start. I wonder if it might also be a way of putting off the conversation at home. | "...Maybe both." She thinks about it. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -727,8 +769,8 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 | `r2-06a:q>r2-07@mid` | p. 124 `r2-06a` | `q` p. 238 | Question | — | What would you want to find out? | "What you actually do. Where you can study it. If it's a real job." She counts on her fingers. *(readiness mid; after R1 Breakthrough, Partial)* | bridge | They were talking about finding out about courses; the page jumps to telling her parents with no link. | Line: "And then what? Even if I found out everything, I can't just walk in and say "I don't want to be a doctor"." |
 | `r2-06a:s>r2-07@low` | p. 124 `r2-06a` | `s` p. 252 | Support | — | That sounds like a sensible place to start. | "Yeah." She nods, and waits for you to say what comes next. *(readiness low; after R1 Polite exit, Early exit)* | bridge | They were talking about finding out about courses; the page jumps to telling her parents with no link. | Line: "And then what? Even if I found out everything, I can't just walk in and say "I don't want to be a doctor"." |
 | `r2-06a:s>r2-07@mid` | p. 124 `r2-06a` | `s` p. 252 | Support | — | That sounds like a sensible place to start. | "Yeah." She nods, and waits for you to say what comes next. *(readiness mid; after R1 Breakthrough, Partial)* | bridge | They were talking about finding out about courses; the page jumps to telling her parents with no link. | Line: "And then what? Even if I found out everything, I can't just walk in and say "I don't want to be a doctor"." |
-| `r2-06b:s>r2-07@low` | p. 127 `r2-06b` | `s` p. 202 | Support | — | It is a lot. Go easy on yourself. | "Yeah." She puts the brochure down. The conversation drifts. *(readiness low; after R1 Polite exit, Early exit)* | bridge | The reaction says the conversation drifts; the page opens with a direct question and her looking straight at you. | Line: "I don't even know what I'd do. I can't just walk in and say "I don't want to be a doctor"." Cue: "She is looking at the brochure, not at you." |
-| `r2-06b:s>r2-07@mid` | p. 127 `r2-06b` | `s` p. 202 | Support | — | It is a lot. Go easy on yourself. | "Yeah." She puts the brochure down. The conversation drifts. *(readiness mid; after R1 Breakthrough, Partial)* | bridge | The reaction says the conversation drifts; the page opens with a direct question and her looking straight at you. | Line: "I don't even know what I'd do. I can't just walk in and say "I don't want to be a doctor"." Cue: "She is looking at the brochure, not at you." |
+| `r2-06b:s>r2-07@low` | p. 127 `r2-06b` | `s` p. 202 | Support | — | It is a lot. Go easy on yourself. | "Yeah." She puts the brochure down. The conversation drifts. *(readiness low; after R1 Polite exit, Early exit)* | bridge | The reaction says the conversation drifts; the page opens with a direct question and her looking straight at you. | Line: "I don't even know what I'd do. I can't just walk in and say "I don't want to be a doctor"." Cue: "She looks up from the brochure, as if she has only just thought of it." |
+| `r2-06b:s>r2-07@mid` | p. 127 `r2-06b` | `s` p. 202 | Support | — | It is a lot. Go easy on yourself. | "Yeah." She puts the brochure down. The conversation drifts. *(readiness mid; after R1 Breakthrough, Partial)* | bridge | The reaction says the conversation drifts; the page opens with a direct question and her looking straight at you. | Line: "I don't even know what I'd do. I can't just walk in and say "I don't want to be a doctor"." Cue: "She looks up from the brochure, as if she has only just thought of it." |
 | `r2-06b:q>r2-07@low` | p. 127 `r2-06b` | `q` p. 204 | Question | — | If you could change one small thing about it, what would it be? | "I'd want them to know I like design. Even if nothing else changes." *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-06b:q>r2-07@mid` | p. 127 `r2-06b` | `q` p. 204 | Question | — | If you could change one small thing about it, what would it be? | "I'd want them to know I like design. Even if nothing else changes." *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
 | `r2-06b:o>r2-07@low` | p. 127 `r2-06b` | `o` p. 209 | Observe | — | You're still holding the brochure. Part of you hasn't put this down. | "I suppose not." She looks at it. *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
@@ -747,8 +789,8 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 | `r2-06d:q>r2-07@mid` | p. 133 `r2-06d` | `q` p. 190 | Question | — | You're right, I don't. What are they like? | "They're... nice. Strict. They worry a lot." She softens slightly. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
 | `r2-06d:o>r2-07@low` | p. 133 `r2-06d` | `o` p. 217 | Observe | — | You pushed the brochure away when I said that. | "Because you don't get it." But she leaves her hand near it. *(readiness low; after R1 Polite exit, Early exit)* | bridge | She has just said "you don't get it"; asking you what to do needs a turn. | Line: "...Fine. So what would I even do? I can't just walk in and say "I don't want to be a doctor"." |
 | `r2-06d:o>r2-07@mid` | p. 133 `r2-06d` | `o` p. 217 | Observe | — | You pushed the brochure away when I said that. | "Because you don't get it." But she leaves her hand near it. *(readiness mid; after R1 Breakthrough, Partial)* | bridge | She has just said "you don't get it"; asking you what to do needs a turn. | Line: "...Fine. So what would I even do? I can't just walk in and say "I don't want to be a doctor"." |
-| `r2-06d:c>r2-07@low` | p. 133 `r2-06d` | `c` p. 228 | Challenge | — | I don't know them. But I'm not sure you know what they'd say, either. | "Can we not." She looks at the clock. *(readiness low; after R1 Polite exit, Early exit)* | bridge | She has just said "Can we not" and looked at the clock; the page has her ask for help, looking straight at you. | Line: "Anyway. Even if you were right, I can't just walk in and say "I don't want to be a doctor"." Cue: "She is still looking at the clock." |
-| `r2-06d:c>r2-07@mid` | p. 133 `r2-06d` | `c` p. 228 | Challenge | — | I don't know them. But I'm not sure you know what they'd say, either. | "Can we not." She looks at the clock. *(readiness mid; after R1 Breakthrough, Partial)* | bridge | She has just said "Can we not" and looked at the clock; the page has her ask for help, looking straight at you. | Line: "Anyway. Even if you were right, I can't just walk in and say "I don't want to be a doctor"." Cue: "She is still looking at the clock." |
+| `r2-06d:c>r2-07@low` | p. 133 `r2-06d` | `c` p. 228 | Challenge | — | I don't know them. But I'm not sure you know what they'd say, either. | "Can we not." She looks at the clock. *(readiness low; after R1 Polite exit, Early exit)* | bridge | She has just said "Can we not" and looked at the clock; the page has her ask for help, looking straight at you. | Line: "Anyway. Even if you were right, I can't just walk in and say "I don't want to be a doctor"." Cue: "She looks back from the clock, straight at you." |
+| `r2-06d:c>r2-07@mid` | p. 133 `r2-06d` | `c` p. 228 | Challenge | — | I don't know them. But I'm not sure you know what they'd say, either. | "Can we not." She looks at the clock. *(readiness mid; after R1 Breakthrough, Partial)* | bridge | She has just said "Can we not" and looked at the clock; the page has her ask for help, looking straight at you. | Line: "Anyway. Even if you were right, I can't just walk in and say "I don't want to be a doctor"." Cue: "She looks back from the clock, straight at you." |
 | `r2-06d:s>r2-07@low` | p. 133 `r2-06d` | `s` p. 253 | Support | — | You're right. I don't, and I shouldn't have assumed. I'm sorry. | She pauses. "They're not bad people. They just want me to be OK." *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-06d:s>r2-07@mid` | p. 133 `r2-06d` | `s` p. 253 | Support | — | You're right. I don't, and I shouldn't have assumed. I'm sorry. | She pauses. "They're not bad people. They just want me to be OK." *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
 
@@ -756,11 +798,13 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Ending text:** Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there."
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r2-07:q`, `r2-07:s`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-07:o>end:breakthrough@low` | p. 138 `r2-07` | `o` p. 107 | Observe | — | You said "I can't just walk in". It sounds like you've already started picturing it. | "...I have, kind of." A nervous laugh. *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-07:o>end:breakthrough@mid` | p. 138 `r2-07` | `o` p. 107 | Observe | — | You said "I can't just walk in". It sounds like you've already started picturing it. | "...I have, kind of." A nervous laugh. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
-| `r2-07:q>end:breakthrough@low` | p. 138 `r2-07` | `q` p. 236 | Question | — | If you did want to raise it at home, how would you want that conversation to go? | "I don't know. Calmly, I suppose." She thinks. "Not yet, anyway." *(readiness low; after R1 Polite exit, Early exit)* | bridge | She has just said "Not yet, anyway"; the ending has her planning to talk to her mum this weekend. | Ending text: She thinks a little longer. "Actually... maybe not 'not yet'." Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." |
+| `r2-07:q>end:breakthrough@low` | p. 138 `r2-07` | `q` p. 236 | Question | — | If you did want to raise it at home, how would you want that conversation to go? | "I don't know. Calmly, I suppose." She thinks. "Not yet, anyway." *(readiness low; after R1 Polite exit, Early exit)* | bridge | She has just said "Not yet, anyway"; the ending has her planning to talk to her mum this weekend. | Ending text: She thinks a little longer. "Actually... maybe I could do it soon." Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." |
 | `r2-07:q>end:breakthrough@mid` | p. 138 `r2-07` | `q` p. 236 | Question | — | If you did want to raise it at home, how would you want that conversation to go? | "Calmly. Not at dinner." She thinks. "Maybe if I had some stuff to show them first. Or if you were there." *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
 | `r2-07:s>end:breakthrough@low` | p. 138 `r2-07` | `s` p. 240 | Support | — | Whatever you decide, I'm here to help you think it through. | "Thanks." She nods, and waits. *(readiness low; after R1 Polite exit, Early exit)* | bridge | She is waiting for you to say what comes next; the ending says she proposes her own step. | Ending text: You wait too. After a moment she fills the silence herself. Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." |
 | `r2-07:s>end:breakthrough@mid` | p. 138 `r2-07` | `s` p. 240 | Support | — | Whatever you decide, I'm here to help you think it through. | "Thanks." She nods, and waits. *(readiness mid; after R1 Breakthrough, Partial)* | bridge | She is waiting for you to say what comes next; the ending says she proposes her own step. | Ending text: You wait too. After a moment she fills the silence herself. Maya proposes her own next step. This week she will look up two design courses, properly, and write down what she finds. Then she wants to talk to her mum, at the weekend and not over dinner. "Could you be there? Not to talk for me. Just... there." |
@@ -771,7 +815,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Ending text:** Maya agrees to the step you suggest. "OK. I'll look at the website." She takes the brochure with her. You are not sure she will open it.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r2-07:q`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-07:o>end:partial@low` | p. 138 `r2-07` | `o` p. 107 | Observe | — | You said "I can't just walk in". It sounds like you've already started picturing it. | "...I have, kind of." A nervous laugh. *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-07:o>end:partial@mid` | p. 138 `r2-07` | `o` p. 107 | Observe | — | You said "I can't just walk in". It sounds like you've already started picturing it. | "...I have, kind of." A nervous laugh. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -786,7 +832,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Ending text:** "Thanks. I'll think about it." She leaves the brochure on the desk. It was a pleasant conversation. Nothing moved.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r2-07:c`, `r2-07:q`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-07:o>end:polite@low` | p. 138 `r2-07` | `o` p. 107 | Observe | — | You said "I can't just walk in". It sounds like you've already started picturing it. | "...I have, kind of." A nervous laugh. *(readiness low; after R1 Polite exit, Early exit)* | fits |  |  |
 | `r2-07:o>end:polite@mid` | p. 138 `r2-07` | `o` p. 107 | Observe | — | You said "I can't just walk in". It sounds like you've already started picturing it. | "...I have, kind of." A nervous laugh. *(readiness mid; after R1 Breakthrough, Partial)* | fits |  |  |
@@ -801,7 +849,9 @@ Session 7 audit, Part 1 (no content changed). Rated by reading every row.
 
 **Ending text:** "Can I go now?" She is out of the door before you can answer.
 
-| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Variant or proposed page |
+**Bridges written:** `r2-05:o`, `r2-06a:c`, `r2-07:c`
+
+| Pair | From | Option | Lever | Quality | Counsellor | Maya's reaction | Rating | Reason | Drafted variant (what plays is in maya.js) or proposed page |
 |---|---|---|---|---|---|---|---|---|---|
 | `r2-01a:c>end:early@mid` | p. 81 `r2-01a` | `c` p. 258 | Challenge | — | You say it didn't work. I think you might have given up on it a bit early. | "Maybe." Her smile fades. "I knew you'd say that." *(readiness mid; after R1 Breakthrough)* | fits |  |  |
 | `r2-02:c>end:early@low` | p. 93 `r2-02` | `c` p. 212 | Challenge | — | I'm not sure it's for nothing. You're still doing some of it, so something must matter to you. | "Maybe." She does not sound convinced. *(readiness low; after R1 Early exit)* | fits |  |  |
