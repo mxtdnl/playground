@@ -81,6 +81,75 @@ function h(tag, props, kids) {
   return e;
 }
 
+// The published address and its QR code, shown on the cover so a group can
+// open the game on their phones. PLAY_QR is the module grid of a version 4-M
+// QR code for PLAY_URL (33 x 33, no quiet zone), one hex string per row, most
+// significant bit on the left. It was generated once offline; if PLAY_URL
+// changes, regenerate it with any QR encoder and check it scans.
+const PLAY_URL = 'https://mxtdnl.github.io/playground/turn-the-page/';
+const PLAY_QR = [
+  '1fcc4547f',
+  '105cd8541',
+  '175baee5d',
+  '175e20b5d',
+  '17402c75d',
+  '104dd9441',
+  '1fd55557f',
+  '001244000',
+  '105af81ce',
+  '1f1c2661c',
+  '12cf35916',
+  '1f114107e',
+  '1d5bff341',
+  '0d3359a6b',
+  '15e6465c2',
+  '0fbe625bd',
+  '1af48b7b1',
+  '1805ff24f',
+  '106133f2d',
+  '10221c45f',
+  '09d51251b',
+  '1c2e9d63c',
+  '13ef395e6',
+  '12a9c34a5',
+  '1ec3353fb',
+  '001bf7315',
+  '1fc0a4756',
+  '104bd031c',
+  '1747645f8',
+  '17471a9bb',
+  '174ed2e33',
+  '1041f16fc',
+  '1fd7197aa'
+
+];
+
+function qrSvg(rows, size) {
+  const quiet = 4; // the quiet zone scanners need, in modules
+  const n = size + quiet * 2;
+  let d = '';
+  rows.forEach(function (hex, y) {
+    const bits = parseInt(hex, 16);
+    for (let x = 0; x < size; x++) {
+      if (Math.floor(bits / Math.pow(2, size - 1 - x)) % 2) d += 'M' + (x + quiet) + ' ' + (y + quiet) + 'h1v1h-1z';
+    }
+  });
+  return '<svg viewBox="0 0 ' + n + ' ' + n + '" focusable="false" shape-rendering="crispEdges"><rect width="' + n + '" height="' + n + '" fill="#FFFFFF"/><path d="' + d + '" fill="#1C1F33"/></svg>';
+}
+
+function playQr() {
+  return h('figure', { class: 'cover-qr' }, [
+    h('div', { class: 'qr-code', role: 'img', 'aria-label': 'QR code linking to ' + PLAY_URL, html: qrSvg(PLAY_QR, 33) }),
+    h('figcaption', {}, [
+      h('span', { class: 'qr-label', text: 'Play on your phone' }),
+      h('span', { class: 'qr-url' }, [
+        h('span', { text: PLAY_URL.replace(/^https:\/\/([^/]+).*$/, '$1') }),
+        h('span', { text: PLAY_URL.replace(/^https:\/\/[^/]+/, '') })
+      ])
+    ])
+  ]);
+}
+
 function glyph(lever) {
   return h('span', { class: 'glyph', 'aria-hidden': 'true', html: '<svg viewBox="0 0 16 16" focusable="false">' + LEVER_GLYPHS[lever] + '</svg>' });
 }
@@ -453,7 +522,8 @@ function screenCover() {
       ]),
       h('p', { class: 'premise', text: 'Maya, 16, says she is "just being lazy". You are her counsellor. Two conversations, four levers, and no single right path.' }),
       resume ? h('p', { class: 'eyebrow', text: 'You have a conversation in progress.' }) : null,
-      h('div', { class: 'actions' }, actions)
+      h('div', { class: 'actions' }, actions),
+      playQr()
     ])
   ]);
 }

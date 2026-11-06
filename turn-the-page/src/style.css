@@ -371,6 +371,18 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
 }
 .premise { font: 400 clamp(1.15rem, 1rem + 0.6vw, 1.45rem)/1.55 var(--story); max-width: 38rem; }
 
+/* QR code to the published game, on the right of the cover. White tile and
+   quiet zone so phone cameras read it on the night background. */
+.cover-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 48px; align-items: start; }
+.cover-inner > * { grid-column: 1; }
+.cover-inner > .cover-qr { grid-column: 2; grid-row: 1 / span 4; align-self: center; }
+.cover-qr { margin: 0; width: 260px; background: var(--paper-card); color: var(--ink); border: 3px solid var(--paper); padding: 12px 12px 14px; }
+.qr-code svg { display: block; width: 100%; height: auto; }
+.cover-qr figcaption { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
+.qr-label { font: 800 0.78rem/1.2 var(--ui); letter-spacing: 0.14em; text-transform: uppercase; }
+.qr-url { font: 400 0.92rem/1.35 var(--ui); overflow-wrap: anywhere; }
+.qr-url span { display: block; }
+
 /* ---- Referral note ----------------------------------------------------- */
 
 .referral {
@@ -584,6 +596,8 @@ button.lever-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-
   .meter .segs { grid-column: 1 / -1; grid-row: 2; height: 12px; gap: 2px; }
   .mark { grid-column: 2; grid-row: 1; }
   .how-levers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cover-inner { grid-template-columns: minmax(0, 1fr); }
+  .cover-inner > .cover-qr { grid-column: 1; grid-row: auto; align-self: start; margin-top: 32px; width: 220px; }
   .ending-inner { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .emblem svg { max-width: 200px; }
   .referral { padding: 40px 20px 24px; transform: rotate(-0.6deg); }

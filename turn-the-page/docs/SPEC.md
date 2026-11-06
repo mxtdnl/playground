@@ -367,7 +367,7 @@ All art is inline SVG generated from code (`src/art.js`). No image files.
 
 ## 13. Screens
 
-1. **Cover:** title lockup, a one-line premise, Start (or Resume and Start again).
+1. **Cover:** title lockup, a one-line premise, Start (or Resume and Start again), and on the right a QR code with the published address (`https://mxtdnl.github.io/playground/turn-the-page/`) so a group can open it on their phones; below the actions on narrow screens.
 2. **How it works:** the four lever cards with definitions, the three meters, and "There is no single right path."
 3. **Referral note.**
 4. **Scene:** illustration, page number, Maya's line, the cue, the meters, then the choice panel (B or C).
