@@ -102,6 +102,7 @@ Where SPEC.md 7 and 9.2 left room, the engine does this. Change only with a SPEC
 - In Debrief 2's two-session traces the threshold lines are named in a note under the charts, not on the chart (the labels collided with the markers at 390px).
 - Print: only the debriefs print (white paper, no decoration or buttons, three traces in a row, cards kept whole); any other screen prints a one-line note. Each debrief has a Print this debrief button.
 - Hosting: GitHub Pages is enabled for the repository and deploys `main` (checked in session 5 through the public deployments API), so the page is at `https://mxtdnl.github.io/playground/turn-the-page/` once merged.
+- Cover QR code: `PLAY_URL` and `PLAY_QR` in ui.js. `PLAY_QR` is a precomputed version 4-M module grid (hex rows), drawn as SVG on a white tile with a 4-module quiet zone; no encoder ships with the page. If the address changes, regenerate the grid offline and check it decodes.
 
 ## Three wordings (session 6)
 
