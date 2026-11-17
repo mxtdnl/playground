@@ -1,0 +1,15 @@
+{
+  "name": "name-pseudonymiser",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Replace names in Excel workbooks with pseudonyms, scrambles or initials, in the browser.",
+  "scripts": {
+    "test": "node --test",
+    "sample": "node tools/make-sample.js",
+    "vendor": "node tools/vendor.js"
+  },
+  "devDependencies": {
+    "exceljs": "4.4.0",
+    "jszip": "3.10.2"
+  }
+}

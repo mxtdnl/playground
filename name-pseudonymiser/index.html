@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Name Pseudonymiser</title>
+<style>
+  :root {
+    --bg: #f6f6f3;
+    --panel: #ffffff;
+    --text: #1c1c1a;
+    --muted: #5d5d57;
+    --line: #dcdcd5;
+    --accent: #2453c9;
+    --accent-hover: #1b43a8;
+    --accent-text: #ffffff;
+    --soft: #eef2fc;
+    --warn: #8a5300;
+    --warn-bg: #fff3dc;
+    --error: #b42318;
+    --error-bg: #fdecea;
+    --ok: #1d6f45;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141413;
+      --panel: #1e1e1c;
+      --text: #ecece6;
+      --muted: #a4a49c;
+      --line: #383834;
+      --accent: #85a6ff;
+      --accent-hover: #a3bcff;
+      --accent-text: #0c1324;
+      --soft: #1d2539;
+      --warn: #f2b65c;
+      --warn-bg: #2f2410;
+      --error: #ff8a80;
+      --error-bg: #3a1714;
+      --ok: #6fd3a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 980px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.75rem; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 1.15rem; margin: 0 0 4px; }
+  h3 { font-size: 1rem; margin: 0; }
+  p { margin: 0 0 12px; }
+  .lede { color: var(--muted); margin-bottom: 8px; }
+  .privacy { display: inline-block; font-size: 0.85rem; color: var(--ok); }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .step { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+  .muted { color: var(--muted); }
+  .drop {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    border: 2px dashed var(--line); border-radius: var(--radius);
+    padding: 28px 16px; text-align: center; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .drop:hover, .drop.over { border-color: var(--accent); background: var(--soft); }
+  .drop:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .drop strong { color: var(--accent); }
+  .file-name { margin-top: 10px; font-weight: 600; word-break: break-all; }
+  .alert { border-radius: 8px; padding: 10px 12px; margin: 12px 0 0; }
+  .alert.error { background: var(--error-bg); color: var(--error); }
+  .alert.warn { background: var(--warn-bg); color: var(--warn); }
+  .sheet { border-top: 1px solid var(--line); padding-top: 16px; margin-top: 16px; }
+  .sheet:first-of-type { border-top: 0; padding-top: 0; }
+  .sheet-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 10px; }
+  .tag { font-size: 0.75rem; font-weight: 500; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: 2px; }
+  .header-row { font-size: 0.9rem; color: var(--muted); }
+  .header-row input { width: 4.5em; margin-left: 6px; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-weight: 600; color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  td.col { width: 4em; color: var(--muted); font-variant-numeric: tabular-nums; }
+  td.header { font-weight: 600; max-width: 16em; overflow-wrap: break-word; }
+  td.examples { color: var(--muted); max-width: 22em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.action { width: 11em; }
+  tr.changed td.header::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 1px; }
+  select, input[type="number"] {
+    font: inherit; color: var(--text); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px;
+  }
+  select { width: 100%; }
+  details { margin-top: 10px; }
+  summary { cursor: pointer; color: var(--accent); font-size: 0.92rem; }
+  .none { color: var(--muted); font-size: 0.92rem; margin: 4px 0 0; }
+  button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    border-radius: 8px; padding: 10px 18px; border: 1px solid var(--accent);
+    background: var(--accent); color: var(--accent-text);
+  }
+  button:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  button.secondary { background: transparent; color: var(--accent); }
+  button.secondary:hover { background: var(--soft); }
+  button:disabled { opacity: 0.55; cursor: default; }
+  button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px; }
+  .legend { font-size: 0.88rem; color: var(--muted); margin: 0 0 12px; }
+  .legend b { color: var(--text); font-weight: 600; }
+  ul.summary { margin: 8px 0 0; padding-left: 20px; }
+  ul.summary li { margin: 2px 0; }
+  table.preview { width: auto; min-width: 60%; }
+  .preview td { white-space: nowrap; }
+  .preview td.arrow { color: var(--muted); width: 1.5em; padding: 8px 4px; }
+  /* Narrow screens: each column becomes a small card with its dropdown underneath. */
+  @media (max-width: 640px) {
+    table.cols thead { display: none; }
+    table.cols, table.cols tbody { display: block; }
+    table.cols tr {
+      display: grid; grid-template-columns: 2.25em 1fr;
+      grid-template-areas: "col header" "col examples" "col action";
+      padding: 10px 0; border-bottom: 1px solid var(--line);
+    }
+    table.cols td { border: 0; padding: 2px 0; max-width: none; width: auto; }
+    table.cols td.col { grid-area: col; }
+    table.cols td.header { grid-area: header; }
+    table.cols td.examples { grid-area: examples; white-space: normal; }
+    table.cols td.action { grid-area: action; padding-top: 6px; }
+  }
+  .note { font-size: 0.9rem; color: var(--muted); margin-top: 12px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Name Pseudonymiser</h1>
+    <p class="lede">Replaces names in an Excel workbook with pseudonyms, scrambled letters or initials, and gives you a key to reverse it.</p>
+    <span class="privacy">Runs entirely in this browser tab. Your file is never uploaded.</span>
+  </header>
+
+  <section class="panel" aria-labelledby="pick-title">
+    <div class="step">Step 1</div>
+    <h2 id="pick-title">Choose a workbook</h2>
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept=".xlsx,.xlsm,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+      <span><strong>Choose an Excel file</strong> or drop it here</span>
+      <span class="muted">.xlsx or .xlsm. Save .xls and .csv files as .xlsx first.</span>
+    </label>
+    <p class="file-name" id="file-name" hidden></p>
+    <p class="alert error" id="file-error" role="alert" hidden></p>
+  </section>
+
+  <section class="panel" id="configure" aria-labelledby="config-title" hidden>
+    <div class="step">Step 2</div>
+    <h2 id="config-title">Check the columns</h2>
+    <p class="legend">
+      Headers containing “name” get <b>pseudonyms</b> (e.g. Avery Carter). Staff columns get <b>initials</b> (e.g. JS).
+      <b>Scramble</b> swaps each name for random letters of the same length. Change anything that looks wrong.
+    </p>
+    <div id="sheets"></div>
+    <div class="actions">
+      <button type="button" id="run">Create pseudonymised file</button>
+      <span class="muted" id="run-status" role="status"></span>
+    </div>
+  </section>
+
+  <section class="panel" id="results" aria-labelledby="results-title" hidden>
+    <div class="step">Step 3</div>
+    <h2 id="results-title">Download</h2>
+    <div id="summary"></div>
+    <div class="actions">
+      <button type="button" id="download-file">Download pseudonymised file</button>
+      <button type="button" class="secondary" id="download-key">Download key</button>
+    </div>
+    <p class="note">
+      The key turns pseudonyms back into real names. Keep it private and never send it with the file.
+      Each run makes new pseudonyms, so keep the key from the same run as the file.
+    </p>
+    <details>
+      <summary>What this does not change</summary>
+      <ul class="summary">
+        <li>Names in other columns, free-text notes and cell comments.</li>
+        <li>Sheet names and column headers.</li>
+        <li>Charts are not copied into the new file.</li>
+        <li>Two staff with the same initials stay indistinguishable (they are listed above when it happens).</li>
+      </ul>
+      <p class="note">Check the file before you share it.</p>
+    </details>
+  </section>
+</main>
+
+<script src="vendor/exceljs.min.js"></script>
+<script src="src/names.js"></script>
+<script src="src/pseudonymiser.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
