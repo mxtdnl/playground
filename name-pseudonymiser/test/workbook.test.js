@@ -151,9 +151,11 @@ test('processing removes real names and keeps the workbook intact', async () => 
   assert.equal(ws.getCell('D4').value, ws.getCell('D6').value);
   assert.notEqual(ws.getCell('C4').value, ws.getCell('C6').value);
 
-  // Staff become initials.
-  assert.deepEqual([4, 5, 6, 7].map((r) => ws.getCell(r, 5).value), ['HB', 'TA', 'HB', 'HB']);
-  assert.deepEqual(result.initialsClashes, [{ initials: 'HB', names: ['Helen Bradshaw', 'Hannah Brooke'] }]);
+  // Staff become initials; the two HBs are numbered alphabetically by name.
+  assert.deepEqual([4, 5, 6, 7].map((r) => ws.getCell(r, 5).value), ['HB2', 'TA', 'HB2', 'HB1']);
+  assert.deepEqual(result.numberedInitials, [
+    { initials: 'HB', people: [{ code: 'HB1', name: 'Hannah Brooke' }, { code: 'HB2', name: 'Helen Bradshaw' }] },
+  ]);
 
   // Formatting, merges, placeholders and numbers are kept.
   assert.equal(ws.getCell('B4').font.bold, true);
@@ -240,7 +242,7 @@ test('the key lists every replacement once', async () => {
   const entry = (header, original) => result.key.find((e) => e.header === header && e.original === original);
   assert.equal(entry('Student Name', 'John Smith').replacement, ws.getCell('B4').value);
   assert.equal(entry('Staff', 'Helen Bradshaw').cells, 2);
-  assert.equal(entry('Staff', 'Helen Bradshaw').replacement, 'HB');
+  assert.equal(entry('Staff', 'Helen Bradshaw').replacement, 'HB2');
   assert.equal(entry('Student Name', 'Grace Okafor').replacement, ws.getCell('B8').value);
   const ids = result.key.map((e) => `${e.sheet}|${e.column}|${e.original}`);
   assert.equal(new Set(ids).size, ids.length);
@@ -250,6 +252,43 @@ test('the key lists every replacement once', async () => {
   assert.deepEqual(sheet.getRow(1).values.slice(1), ['Sheet', 'Column', 'Header', 'Method', 'Original', 'Replacement', 'Cells']);
   assert.equal(sheet.rowCount, result.key.length + 1);
   assert.match(keyBook.getWorksheet('About').getCell('A2').value, /test\.xlsx/);
+});
+
+test('shared initials are numbered the same way everywhere', () => {
+  const wb = new ExcelJS.Workbook();
+  const referrals = wb.addWorksheet('Referrals');
+  referrals.getRow(1).values = ['Ref', 'Staff'];
+  const names = [
+    'Helen Bradshaw',
+    'Hannah Brooke',
+    'Bradshaw, Helen',
+    'HELEN BRADSHAW',
+    'Mrs H Bradshaw', // written differently, so treated as a different person
+    'Tom Ashworth',
+    'Helen Bradshaw / Tom Ashworth',
+    'N/A',
+  ];
+  names.forEach((name, i) => (referrals.getRow(i + 2).values = [i + 1, name]));
+  const staff = wb.addWorksheet('Staff');
+  staff.getRow(1).values = ['Staff Name', 'Role'];
+  staff.getRow(2).values = ['Helen Bradshaw', 'Head of Year'];
+
+  const result = P.processWorkbook(wb, planFrom(P.analyseWorkbook(wb)), { random: seeded(10) });
+  assert.deepEqual(
+    names.map((_, i) => referrals.getCell(i + 2, 2).value),
+    ['HB3', 'HB2', 'HB3', 'HB3', 'HB1', 'TA', 'HB3 / TA', 'N/A']
+  );
+  assert.equal(staff.getCell('A2').value, 'HB3', 'same person, same number on another sheet');
+  assert.deepEqual(result.numberedInitials, [
+    {
+      initials: 'HB',
+      people: [
+        { code: 'HB1', name: 'Mrs H Bradshaw' },
+        { code: 'HB2', name: 'Hannah Brooke' },
+        { code: 'HB3', name: 'Helen Bradshaw' },
+      ],
+    },
+  ]);
 });
 
 test('each run makes different pseudonyms by default', async () => {

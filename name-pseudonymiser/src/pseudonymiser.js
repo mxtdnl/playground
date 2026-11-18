@@ -43,7 +43,8 @@
   const WORD_RE = /[\p{L}\p{M}]+(?:['’][\p{L}\p{M}]+)*/gu;
   const PERSON_SEP_RE = /[;/&+|\n\r]/;
   const HYPHEN_RE = /^[-‐‑–]$/;
-  const NAMEISH_RE = /^[\p{L}\p{M}][\p{L}\p{M}'’.\-\s,]*$/u;
+  // Letters plus what joins names: spaces, ' . - , and people separators (/ & ; +).
+  const NAMEISH_RE = /^[\p{L}\p{M}][\p{L}\p{M}'’.\-\s,/&;+]*$/u;
   const CONSONANTS = 'bcdfghjklmnprstvwz';
   const VOWELS = 'aeiou';
   const LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split('');
@@ -360,35 +361,61 @@
     return ` ${s} `;
   }
 
-  // Initials for one cell, plus each person's name (used to spot two people
-  // who end up with the same initials).
+  // Initials for one cell, plus each person in it. `name` identifies a person
+  // (case, titles and "Surname, Forename" order ignored); `display` is for
+  // showing to the user.
   function initialsDetail(text) {
     const { tokens, persons } = parseName(text.normalize('NFC'), null);
-    const people = persons
-      .filter((p) => p.words.length)
-      .map((p) => ({
-        joiner: p.joiner,
-        initials: p.words
-          .map((i) => (tokens[i].text.match(/\p{L}/u) || [''])[0])
-          .join('')
-          .toUpperCase(),
-        name: p.words.map((i) => wordKey(tokens[i].text)).join(' '),
-      }));
-    if (!people.length) return { text, people };
-    const out = people.map((p, k) => (k ? formatJoiner(p.joiner) : '') + p.initials).join('');
-    return { text: out, people };
+    const named = persons.filter((p) => p.words.length);
+    const people = named.map((p) => ({
+      joiner: p.joiner,
+      initials: p.words
+        .map((i) => (tokens[i].text.match(/\p{L}/u) || [''])[0])
+        .join('')
+        .toUpperCase(),
+      name: p.words.map((i) => wordKey(tokens[i].text)).join(' '),
+      display: named.length === 1 ? text.trim() : p.words.map((i) => tokens[i].text).join(' '),
+    }));
+    return { text: people.length ? joinInitials(people, (p) => p.initials) : text, people };
+  }
+
+  function joinInitials(people, codeFor) {
+    return people.map((p, k) => (k ? formatJoiner(p.joiner) : '') + codeFor(p)).join('');
   }
 
   function toInitials(text) {
     return isPlaceholder(text) ? text : initialsDetail(text).text;
   }
 
+  /*
+   * People who share initials get a number: HB1, HB2. Numbers follow the
+   * alphabetical order of the names, not row order, so the same people get the
+   * same numbers on every sheet and in every export that lists the same people.
+   * seen: Map(initials -> Map(name -> display))
+   */
+  function numberInitials(seen) {
+    const codes = new Map();
+    const numbered = [];
+    for (const [initials, people] of seen) {
+      const names = [...people.keys()].sort((a, b) => a.localeCompare(b, 'en'));
+      const shared = names.length > 1;
+      names.forEach((name, i) => codes.set(`${initials}\u0000${name}`, shared ? `${initials}${i + 1}` : initials));
+      if (shared) {
+        numbered.push({ initials, people: names.map((name, i) => ({ code: `${initials}${i + 1}`, name: people.get(name) })) });
+      }
+    }
+    numbered.sort((a, b) => a.initials.localeCompare(b.initials, 'en'));
+    return { codeFor: (p) => codes.get(`${p.initials}\u0000${p.name}`), numbered };
+  }
+
   /* ------------------------------------------------------------------ */
   /* Reading the workbook                                                */
   /* ------------------------------------------------------------------ */
 
+  // At least 80% of the first 50 values look like names. Placeholders such
+  // as N/A don't count either way.
   function looksLikeNames(samples) {
-    const texts = samples.filter((s) => typeof s === 'string' && s.trim()).slice(0, 50);
+    const texts = samples.filter((s) => typeof s === 'string' && s.trim() && !isPlaceholder(s)).slice(0, 50);
     if (!texts.length) return false;
     const ok = texts.filter((s) => NAMEISH_RE.test(s.trim())).length;
     return ok / texts.length >= 0.8;
@@ -555,25 +582,34 @@
       }
     }
 
-    // 2. Work out each replacement.
+    // 2. Collect everyone in initials columns first: whether initials need a
+    //    number depends on all the people in the workbook.
+    const initialsSeen = new Map();
+    for (const t of targets) {
+      if (t.job.action !== 'initials' || isPlaceholder(t.text)) continue;
+      t.initials = initialsDetail(t.text);
+      for (const p of t.initials.people) {
+        if (!initialsSeen.has(p.initials)) initialsSeen.set(p.initials, new Map());
+        const people = initialsSeen.get(p.initials);
+        if (!people.has(p.name)) people.set(p.name, p.display);
+      }
+    }
+    const numbering = numberInitials(initialsSeen);
+
+    // 3. Work out each replacement.
     const replacer = createReplacer(random, excluded);
     const keyEntries = new Map();
-    const initialsSeen = new Map(); // initials -> Map(person -> example text)
     const flattened = { formulas: 0, hyperlinks: 0, richText: 0 };
     const changes = [];
 
-    for (const { job, cell, text } of targets) {
+    for (const t of targets) {
+      const { job, cell, text } = t;
       let replacement;
       if (isPlaceholder(text)) {
         replacement = text;
       } else if (job.action === 'initials') {
-        const detail = initialsDetail(text);
-        replacement = detail.text;
-        for (const p of detail.people) {
-          if (!initialsSeen.has(p.initials)) initialsSeen.set(p.initials, new Map());
-          const people = initialsSeen.get(p.initials);
-          if (!people.has(p.name)) people.set(p.name, text.trim());
-        }
+        const { people } = t.initials;
+        replacement = people.length ? joinInitials(people, numbering.codeFor) : text;
       } else {
         replacement = replaceNames(text, job.action, job.role, replacer);
       }
@@ -607,7 +643,7 @@
       changes.push({ ws: job.ws, cell, value: replacement });
     }
 
-    // 3. A shared formula whose master cell is about to become plain text must
+    // 4. A shared formula whose master cell is about to become plain text must
     //    get its own copy of the formula first, or the file can't be saved.
     const changing = new Set(changes.map((c) => `${c.ws.name}!${c.cell.address}`));
     eachFormulaCell(workbook, (ws, cell) => {
@@ -619,10 +655,10 @@
       else cell.value = v.result === undefined ? { formula } : { formula, result: v.result };
     });
 
-    // 4. Write the replacements. Cell formatting is kept.
+    // 5. Write the replacements. Cell formatting is kept.
     for (const c of changes) c.cell.value = c.value;
 
-    // 5. Formulas elsewhere keep a cached copy of their last text result, which
+    // 6. Formulas elsewhere keep a cached copy of their last text result, which
     //    may contain a real name (e.g. =B2&" "&C2). Drop those cached results;
     //    Excel recalculates them from the pseudonymised cells on opening.
     let clearedResults = 0;
@@ -637,20 +673,15 @@
       workbook.calcProperties = Object.assign({}, workbook.calcProperties, { fullCalcOnLoad: true });
     }
 
-    // 6. The file's author fields often hold a staff member's name.
+    // 7. The file's author fields often hold a staff member's name.
     workbook.creator = '';
     workbook.lastModifiedBy = '';
 
-    // 7. Cell comments are not changed; count them so the user can check them.
+    // 8. Cell comments are not changed; count them so the user can check them.
     let comments = 0;
     eachCell(workbook, (ws, cell) => {
       if (cell.note) comments++;
     });
-
-    const initialsClashes = [];
-    for (const [initials, people] of initialsSeen) {
-      if (people.size > 1) initialsClashes.push({ initials, names: [...people.values()] });
-    }
 
     const key = [...keyEntries.values()].sort(
       (a, b) => a.order - b.order || a.original.localeCompare(b.original)
@@ -666,7 +697,7 @@
         unique: j.originals.size,
       })),
       key: key.map(({ order, ...rest }) => rest),
-      initialsClashes,
+      numberedInitials: numbering.numbered,
       clearedResults,
       flattened,
       comments,

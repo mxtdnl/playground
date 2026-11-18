@@ -248,8 +248,8 @@
     });
 
     const notes = [];
-    for (const clash of summary.initialsClashes) {
-      notes.push(`${clash.initials} is shared by ${clash.names.join(', ')}.`);
+    for (const group of summary.numberedInitials) {
+      notes.push(`Shared initials numbered: ${group.people.map((p) => `${p.code} ${p.name}`).join(', ')}.`);
     }
     const f = summary.flattened;
     if (f.formulas) notes.push(`${plural(f.formulas, 'formula', 'formulas')} in name columns replaced by plain text.`);

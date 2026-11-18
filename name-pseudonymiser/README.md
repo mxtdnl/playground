@@ -42,7 +42,8 @@ Default action per column (every choice can be changed before running):
 - **One replacement per word, everywhere.** Pseudonyms and scrambles are made word by word across the whole workbook, so `John Smith`, `Smith, John`, `SMITH` in a Surname column and the same person on another sheet all stay consistent. People who share a surname keep sharing a (different) one.
 - **Pseudonyms** use gender-neutral given names, so a pseudonym never suggests a gender, and a separate surname list (double-barrelled names once a list runs out). A pseudonym is never a word that appears in the chosen columns, and no two names share one.
 - **Kept as they are:** titles (Mr, Dr), lower-case particles (van, de), letter case (SMITH → CARTER), placeholders (N/A, Unknown, TBC, Total), numbers and dates. Single initials map to another letter (J. Smith → K. Carter).
-- **Initials** handle titles, `Surname, Forename`, hyphens (Mary-Jane O'Brien → MJO) and several people in one cell (`John Smith / Jane Doe` → `JS / JD`). Different people with the same initials are listed in the summary.
+- **Initials** handle titles, `Surname, Forename`, hyphens (Mary-Jane O'Brien → MJO) and several people in one cell (`John Smith / Jane Doe` → `JS / JD`).
+- **Shared initials are numbered** in alphabetical order of name: Hannah Brooke → HB1, Helen Bradshaw → HB2. Row order doesn't matter, so each person has the same number on every sheet, and in any other export that lists the same people. The summary and the key show who is who. People are matched by name as written, ignoring case, titles and `Surname, Forename` order, so `H Bradshaw` and `Helen Bradshaw` count as two people.
 - **Key:** a separate workbook listing sheet, column, header, method, original, replacement and cell count. Every run uses fresh random pseudonyms (`crypto.getRandomValues`), so a key only matches the file from the same run.
 
 To stop real names surviving elsewhere in the file:

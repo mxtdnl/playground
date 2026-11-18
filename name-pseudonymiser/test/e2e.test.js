@@ -17,6 +17,8 @@ try {
 
 const ROOT = path.join(__dirname, '..');
 const SAMPLE = path.join(ROOT, 'sample', 'referrals-sample.xlsx');
+// The sample has two staff with the initials HB.
+const NUMBERED = { 'Hannah Brooke': 'HB1', 'Helen Bradshaw': 'HB2' };
 
 async function readBook(file) {
   const wb = new ExcelJS.Workbook();
@@ -62,7 +64,7 @@ test('browser: sample workbook end to end', { skip: !chromium && 'Playwright is 
     await page.click('#run');
     await page.waitForSelector('#results:not([hidden])');
     const summary = await page.textContent('#summary');
-    assert.match(summary, /HB is shared by Helen Bradshaw, Hannah Brooke/);
+    assert.match(summary, /Shared initials numbered: HB1 Hannah Brooke, HB2 Helen Bradshaw/);
 
     const save = async (button) => {
       const [download] = await Promise.all([page.waitForEvent('download'), page.click(button)]);
@@ -80,13 +82,17 @@ test('browser: sample workbook end to end', { skip: !chromium && 'Playwright is 
     for (let r = 4; r <= 15; r++) {
       const student = before.getCell(r, 2).value;
       assert.notEqual(after.getCell(r, 2).value, student, `row ${r}`);
-      const initials = before.getCell(r, 5).value.split(/[\s-]+/).map((w) => w[0]).join('');
+      const staff = before.getCell(r, 5).value;
+      const initials = NUMBERED[staff] || staff.split(/[\s-]+/).map((w) => w[0]).join('');
       assert.equal(after.getCell(r, 5).value, initials, `row ${r}`);
       assert.equal(after.getCell(r, 7).value, before.getCell(r, 7).value, 'status unchanged');
       assert.equal(after.getCell(r, 8).result, undefined, 'summary result cleared');
     }
     assert.equal(after.getCell('B4').value, after.getCell('B13').value, 'repeat student, same pseudonym');
     assert.equal(after.getCell('D14').value, 'N/A');
+    const staffSheet = (await readBook(outFile)).getWorksheet('Staff');
+    assert.equal(staffSheet.getCell('A2').value, 'HB2', 'Helen Bradshaw, numbered the same on both sheets');
+    assert.equal(staffSheet.getCell('A6').value, 'HB1', 'Hannah Brooke');
 
     const key = (await readBook(keyFile)).getWorksheet('Key');
     assert.ok(key.rowCount > 20);

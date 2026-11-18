@@ -149,6 +149,7 @@ test('column suggestions follow the header rules', () => {
     ['Forename', ['John'], 'pseudonym'],
     ['Username', ['jsmith'], 'pseudonym'],
     ['Staff', names, 'initials'],
+    ['Staff', ['John Smith', 'N/A', 'Jane Doe / Tom Ash', 'TBC', 'Smith, John'], 'initials'],
     ['Staff Name', names, 'initials'],
     ['StaffName', names, 'initials'],
     ['Member of staff', names, 'initials'],
